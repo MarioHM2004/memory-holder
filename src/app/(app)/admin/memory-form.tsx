@@ -13,6 +13,11 @@ import type { MemoryForAdmin } from "@/lib/data/memories";
 
 const initialState: MemoryFormState = { error: null, memoryId: null };
 
+// Titles and descriptions are rendered inside fixed-size bubbles and cards, so
+// they're capped at the source rather than only being clipped in CSS.
+const TITLE_MAX = 70;
+const DESCRIPTION_MAX = 200;
+
 /**
  * Storage keys are URL paths, and a raw camera/phone filename can carry
  * spaces, accents or CJK characters that make the upload fail silently. The
@@ -145,6 +150,7 @@ export function MemoryForm({
         name="title"
         placeholder={t("titlePlaceholder")}
         defaultValue={memory?.title}
+        maxLength={TITLE_MAX}
         required
       />
 
@@ -191,10 +197,26 @@ export function MemoryForm({
         <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">{t("descriptionLabel")}</span>
         <textarea
           name="description"
-          rows={3}
+          rows={2}
+          maxLength={DESCRIPTION_MAX}
           placeholder={t("descriptionPlaceholder")}
           defaultValue={memory?.description}
           className="border-b-2 border-line bg-transparent px-1 py-2 text-ink outline-none focus:border-ink"
+        />
+      </label>
+
+      {/* The long-form entry. Unlike the description this never appears on a
+          card or bubble, so it has no length cap. */}
+      <label className="flex flex-col gap-1.5 text-sm sm:col-span-2">
+        <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
+          {t("bodyLabel")} · {t("bodyHint")}
+        </span>
+        <textarea
+          name="body"
+          rows={8}
+          placeholder={t("bodyPlaceholder")}
+          defaultValue={memory?.body}
+          className="border-2 border-line bg-transparent px-3 py-2 leading-relaxed text-ink outline-none focus:border-ink"
         />
       </label>
 

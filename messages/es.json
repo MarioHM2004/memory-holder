@@ -118,7 +118,8 @@
   "Memory": {
     "noCategory": "Sin categoría",
     "noMedia": "Sin fotos o vídeos todavía",
-    "mediaUnavailable": "No disponible"
+    "mediaUnavailable": "No disponible",
+    "entryHeading": "El día, al completo"
   },
   "Admin": {
     "eyebrow": "Panel de administración",
@@ -144,6 +145,9 @@
       "dateLabel": "Fecha",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "¿Qué pasó ese día?",
+      "bodyLabel": "Entrada",
+      "bodyPlaceholder": "Escribe sobre ese día, tan largo como quieras. Solo se ve en la página del recuerdo.",
+      "bodyHint": "Opcional",
       "showTimelineLabel": "Mostrar en la línea de tiempo",
       "showTimelineHint": "Aparecerá como un punto en la línea de tiempo",
       "showRouletteLabel": "Mostrar en la ruleta",

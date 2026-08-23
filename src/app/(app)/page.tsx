@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { getRecentMemories } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
+import { mediaUrl } from "@/lib/media-url";
 
 export default async function HomePage() {
   const context = await requireCoupleContext();
@@ -15,7 +16,7 @@ export default async function HomePage() {
         <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-muted">
           {context.couple.name}
         </p>
-        <h1 className="mt-5 text-balance font-marker text-3xl leading-[1.25] sm:text-[2.6rem]">
+        <h1 className="mt-5 text-balance font-marker text-3xl leading-tight sm:text-[2.6rem]">
           {t("heading")}
         </h1>
         <div className="drawn-rule mx-auto mt-6 h-2 w-40" aria-hidden />
@@ -56,10 +57,10 @@ export default async function HomePage() {
                       background: ["var(--wash-1)", "var(--wash-2)", "var(--wash-3)"][i % 3],
                     }}
                   >
-                    {memory.coverUrl && (
+                    {memory.coverMediaId && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={memory.coverUrl}
+                        src={mediaUrl(memory.coverMediaId, "thumb")}
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -70,7 +71,7 @@ export default async function HomePage() {
                         rather than a wash that eats half the picture. */}
                     <p
                       className={`relative font-mono text-[0.62rem] uppercase tracking-[0.14em] ${
-                        memory.coverUrl
+                        memory.coverMediaId
                           ? "bg-ink/75 px-1.5 py-0.5 text-ground"
                           : "text-ink-soft"
                       }`}

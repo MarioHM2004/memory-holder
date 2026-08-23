@@ -80,6 +80,9 @@ export interface Database {
           category_id: string | null;
           title: string;
           description: string;
+          // Long-form entry for the memory's own page; `description` is the
+          // short line used on cards and bubbles.
+          body: string;
           memory_date: string;
           show_in_timeline: boolean;
           show_in_ruleta: boolean;
@@ -92,6 +95,7 @@ export interface Database {
           category_id?: string | null;
           title: string;
           description?: string;
+          body?: string;
           memory_date: string;
           show_in_timeline?: boolean;
           show_in_ruleta?: boolean;
@@ -101,19 +105,33 @@ export interface Database {
           category_id?: string | null;
           title?: string;
           description?: string;
+          body?: string;
           memory_date?: string;
           show_in_timeline?: boolean;
           show_in_ruleta?: boolean;
         };
-        Relationships: [];
+        // Declared so `select("*, categories(...)")` type-checks. These mirror
+        // the actual foreign keys in 0001_init.sql — without them the client
+        // reports "could not find the relation" at the type level even though
+        // PostgREST resolves the embed fine at runtime.
+        Relationships: [
+          {
+            foreignKeyName: "memories_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       media: {
         Row: {
           id: string;
           memory_id: string;
           storage_path: string;
-          // Downscaled copies made at upload time. Null on rows created before
-          // 0002_media_derivatives.sql — fall back to storage_path.
+          // Downscaled copies made in the browser at upload time. Null when
+          // the browser couldn't produce one, and on rows that predate them —
+          // fall back to storage_path either way.
           thumbnail_path: string | null;
           preview_path: string | null;
           media_type: "image" | "video";
@@ -131,7 +149,15 @@ export interface Database {
         Update: {
           position?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "media_memory_id_fkey";
+            columns: ["memory_id"];
+            isOneToOne: false;
+            referencedRelation: "memories";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Functions: {

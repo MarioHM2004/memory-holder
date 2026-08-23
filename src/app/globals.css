@@ -36,6 +36,15 @@
   --wash-3: #e4e8f2;
   --wash-4: #f7ecd2;
 
+  /* The roulette needs real presence: the washes above are paper tints meant
+     to sit behind text, and as wheel segments on a white panel they were
+     almost invisible. Same muted family, enough chroma to read as distinct
+     slices. */
+  --wheel-1: #d4906f;
+  --wheel-2: #92ae8b;
+  --wheel-3: #88a5c7;
+  --wheel-4: #c9a747;
+
   --dot: rgba(23, 22, 20, 0.055);
   --rule-stroke: rgba(23, 22, 20, 0.4);
   --shadow-color: rgba(23, 22, 20, 0.55);
@@ -70,6 +79,11 @@
     --wash-3: #202834;
     --wash-4: #332b1c;
 
+    --wheel-1: #a05c45;
+    --wheel-2: #577650;
+    --wheel-3: #4d6a89;
+    --wheel-4: #977c3a;
+
     --dot: rgba(244, 241, 232, 0.05);
     --rule-stroke: rgba(244, 241, 232, 0.42);
     --shadow-color: rgba(0, 0, 0, 0.8);
@@ -103,6 +117,11 @@
   --wash-2: #26301f;
   --wash-3: #202834;
   --wash-4: #332b1c;
+
+  --wheel-1: #a05c45;
+  --wheel-2: #577650;
+  --wheel-3: #4d6a89;
+  --wheel-4: #977c3a;
 
   --dot: rgba(244, 241, 232, 0.05);
   --rule-stroke: rgba(244, 241, 232, 0.42);
@@ -282,6 +301,20 @@ body {
   &:hover {
     border-color: var(--ink);
     transform: rotate(-4deg);
+  }
+}
+
+/* Keyboard focus for the pan-by-drag canvases (timeline, category bubbles).
+   The default ring drew a hard blue box around the whole canvas, which fought
+   with everything else on the page. A pencilled dash still says "focused" —
+   removing it outright would leave keyboard users with no idea where they are,
+   since arrow keys act on this element. */
+@utility canvas-focus {
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px dashed var(--muted);
+    outline-offset: 6px;
   }
 }
 

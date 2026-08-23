@@ -20,6 +20,7 @@ export async function saveMemoryAction(
   const categoryId = String(formData.get("categoryId") ?? "").trim() || null;
   const memoryDate = String(formData.get("memoryDate") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
+  const body = String(formData.get("body") ?? "").trim();
   const showInTimeline = formData.get("showInTimeline") === "on";
   const showInRuleta = formData.get("showInRuleta") === "on";
 
@@ -35,6 +36,7 @@ export async function saveMemoryAction(
         category_id: categoryId,
         memory_date: memoryDate,
         description,
+        body,
         show_in_timeline: showInTimeline,
         show_in_ruleta: showInRuleta,
       })
@@ -54,6 +56,7 @@ export async function saveMemoryAction(
       category_id: categoryId,
       memory_date: memoryDate,
       description,
+      body,
       show_in_timeline: showInTimeline,
       show_in_ruleta: showInRuleta,
       created_by: context.userId,

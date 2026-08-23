@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { MemoryWithCover } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
+import { mediaUrl } from "@/lib/media-url";
 import { useHDragCarousel } from "@/lib/use-h-drag-carousel";
 import { CarouselArrows } from "@/components/carousel-arrows";
 
@@ -49,7 +50,7 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
       // w-full matters: as a flex child this would otherwise shrink to the
       // track's own width, and everything hanging off the nodes (cards, date
       // labels) would be clipped by overflow-hidden.
-      className="relative w-full touch-pan-y cursor-grab overflow-hidden py-[300px] outline-none focus-visible:ring-2 focus-visible:ring-accent-2 active:cursor-grabbing"
+      className="relative w-full touch-pan-y cursor-grab overflow-hidden py-[300px] canvas-focus active:cursor-grabbing"
     >
       {overflowing && <CarouselArrows onPrev={() => shift(1)} onNext={() => shift(-1)} />}
       <div
@@ -93,10 +94,10 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
                   up ? "bottom-11" : "top-11"
                 } ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
               >
-                {memory.coverUrl && (
+                {memory.coverMediaId && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={memory.coverUrl}
+                    src={mediaUrl(memory.coverMediaId, "thumb")}
                     alt=""
                     loading="lazy"
                     decoding="async"

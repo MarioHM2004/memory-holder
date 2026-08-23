@@ -1,6 +1,12 @@
--- Memory Holder — initial schema
--- Multi-tenant: every row of user content is scoped to a "couple" (a shared diary,
--- despite the name it can hold more than two members — see couple_members).
+-- Memory Holder — complete schema
+--
+-- Everything a new database needs, in one file: tables, Row Level Security,
+-- the onboarding functions and the private media bucket. Run it once against
+-- an empty Supabase project.
+--
+-- Multi-tenant: every row of user content is scoped to a "couple" (a shared
+-- diary, despite the name it can hold more than two members — see
+-- couple_members). RLS is what enforces that, not application code.
 
 create extension if not exists "pgcrypto";
 
@@ -191,7 +197,10 @@ create table public.memories (
   couple_id uuid not null references public.couples (id) on delete cascade,
   category_id uuid references public.categories (id) on delete set null,
   title text not null,
+  -- The short line shown on cards, bubbles and the roulette.
   description text not null default '',
+  -- Long-form entry, only ever rendered on the memory's own page.
+  body text not null default '',
   memory_date date not null,
   show_in_timeline boolean not null default true,
   show_in_ruleta boolean not null default false,
@@ -242,7 +251,14 @@ create trigger memories_set_updated_at
 create table public.media (
   id uuid primary key default gen_random_uuid(),
   memory_id uuid not null references public.memories (id) on delete cascade,
+  -- The untouched upload.
   storage_path text not null,
+  -- Downscaled WebP copies generated in the browser at upload time: a small
+  -- one for thumbnails and bubble hovers, a medium one for the viewer. Null
+  -- when the browser couldn't produce one (an undecodable format), in which
+  -- case the app falls back to storage_path.
+  thumbnail_path text,
+  preview_path text,
   media_type text not null check (media_type in ('image', 'video')),
   position int not null default 0,
   created_at timestamptz not null default now()

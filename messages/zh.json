@@ -118,7 +118,8 @@
   "Memory": {
     "noCategory": "无分类",
     "noMedia": "还没有照片或视频",
-    "mediaUnavailable": "无法显示"
+    "mediaUnavailable": "无法显示",
+    "entryHeading": "完整记录"
   },
   "Admin": {
     "eyebrow": "管理面板",
@@ -144,6 +145,9 @@
       "dateLabel": "日期",
       "descriptionLabel": "描述",
       "descriptionPlaceholder": "那天发生了什么？",
+      "bodyLabel": "正文",
+      "bodyPlaceholder": "记录这一天，想写多长都可以。仅在该回忆的页面显示。",
+      "bodyHint": "选填",
       "showTimelineLabel": "在时间轴中显示",
       "showTimelineHint": "将作为时间轴上的一个节点显示",
       "showRouletteLabel": "在转盘中显示",

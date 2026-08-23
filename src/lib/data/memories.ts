@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { mediaUrl } from "@/lib/media-url";
 import type { Category, Media, Memory } from "@/lib/types/database";
 
 export type CategoryWithCount = Category & { memoryCount: number };
@@ -44,11 +45,14 @@ export async function getUncategorizedCount(coupleId: string): Promise<number> {
   return count ?? 0;
 }
 
-export type MemoryWithCover = Memory & { coverUrl: string | null };
+export type MemoryWithCover = Memory & { coverMediaId: string | null };
 
 const SIGNED_URL_TTL_SECONDS = 60 * 60;
 
-/** One round trip for a batch of paths, deduplicated, keyed by path. */
+/**
+ * One round trip for a batch of paths, deduplicated, keyed by path. Only
+ * videos still need this — images go through the /media route instead.
+ */
 async function signPaths(
   supabase: Awaited<ReturnType<typeof createClient>>,
   paths: string[],
@@ -67,40 +71,29 @@ async function signPaths(
   return signed;
 }
 
+/** Shape of the `media(...)` embed added to the memory queries below. */
+type EmbeddedMedia = { id: string; media_type: "image" | "video"; position: number };
+
+/** Columns of that embed. Kept in one place so the queries can't drift apart. */
+const MEDIA_EMBED = "media(id, media_type, position)";
+
 /**
- * Signed URL of each memory's first photo, for the bubble hover preview.
- * One query for all the media, then one signing call per memory that has any.
+ * Picks each memory's first photo as its cover.
+ *
+ * The media rows arrive embedded in the same query as the memories, rather
+ * than in a follow-up round trip keyed by the ids we just fetched. Nothing is
+ * signed here either: the cover is addressed by media id through /media, so
+ * the URL is stable and the browser can cache it.
  */
-async function attachCovers<T extends Memory>(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  memories: T[],
-): Promise<(T & { coverUrl: string | null })[]> {
-  if (memories.length === 0) return [];
-
-  const { data: media } = await supabase
-    .from("media")
-    .select("memory_id, storage_path, thumbnail_path")
-    .in(
-      "memory_id",
-      memories.map((memory) => memory.id),
-    )
-    .eq("media_type", "image")
-    .order("position", { ascending: true });
-
-  const coverPaths = new Map<string, string>();
-  for (const item of media ?? []) {
-    // Thumbnail where one exists; the original is the fallback for rows
-    // uploaded before derivatives were generated.
-    if (!coverPaths.has(item.memory_id)) {
-      coverPaths.set(item.memory_id, item.thumbnail_path ?? item.storage_path);
-    }
-  }
-
-  const signedByPath = await signPaths(supabase, [...coverPaths.values()]);
-
-  return memories.map((memory) => {
-    const path = coverPaths.get(memory.id);
-    return { ...memory, coverUrl: path ? (signedByPath.get(path) ?? null) : null };
+function withCover<T extends Memory & { media?: EmbeddedMedia[] | null }>(
+  rows: T[],
+): (Omit<T, "media"> & { coverMediaId: string | null })[] {
+  return rows.map((row) => {
+    const { media, ...memory } = row;
+    const cover = (media ?? [])
+      .filter((item) => item.media_type === "image")
+      .sort((a, b) => a.position - b.position)[0];
+    return { ...(memory as Omit<T, "media">), coverMediaId: cover?.id ?? null };
   });
 }
 
@@ -111,11 +104,11 @@ export async function getCategoryMemories(
   const supabase = await createClient();
   const { data } = await supabase
     .from("memories")
-    .select("*")
+    .select(`*, ${MEDIA_EMBED}`)
     .eq("couple_id", coupleId)
     .eq("category_id", categoryId)
     .order("memory_date", { ascending: true });
-  return attachCovers(supabase, data ?? []);
+  return withCover(data ?? []);
 }
 
 export async function getUncategorizedMemories(coupleId: string): Promise<MemoryWithCover[]> {
@@ -126,28 +119,28 @@ export async function getUncategorizedMemories(coupleId: string): Promise<Memory
     .eq("couple_id", coupleId)
     .is("category_id", null)
     .order("memory_date", { ascending: true });
-  return attachCovers(supabase, data ?? []);
+  return withCover(data ?? []);
 }
 
 export async function getTimelineMemories(coupleId: string): Promise<MemoryWithCover[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("memories")
-    .select("*")
+    .select(`*, ${MEDIA_EMBED}`)
     .eq("couple_id", coupleId)
     .eq("show_in_timeline", true)
     .order("memory_date", { ascending: true });
-  return attachCovers(supabase, data ?? []);
+  return withCover(data ?? []);
 }
 
 export async function getRuletaMemories(coupleId: string): Promise<MemoryWithCover[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("memories")
-    .select("*")
+    .select(`*, ${MEDIA_EMBED}`)
     .eq("couple_id", coupleId)
     .eq("show_in_ruleta", true);
-  return attachCovers(supabase, data ?? []);
+  return withCover(data ?? []);
 }
 
 export type MemoryForAdmin = MemoryWithCategory & { media: Media[] };
@@ -162,17 +155,17 @@ export async function getAllMemoriesForAdmin(coupleId: string): Promise<MemoryFo
   return (data as unknown as MemoryForAdmin[]) ?? [];
 }
 
-export type RecentMemory = MemoryWithCategory & { coverUrl: string | null };
+export type RecentMemory = MemoryWithCategory & { coverMediaId: string | null };
 
 export async function getRecentMemories(coupleId: string, limit = 20): Promise<RecentMemory[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("memories")
-    .select("*, categories(name, color)")
+    .select(`*, categories(name, color), ${MEDIA_EMBED}`)
     .eq("couple_id", coupleId)
     .order("created_at", { ascending: false })
     .limit(limit);
-  return attachCovers(supabase, (data as unknown as MemoryWithCategory[]) ?? []);
+  return withCover((data as unknown as (MemoryWithCategory & { media: EmbeddedMedia[] })[]) ?? []);
 }
 
 /** `url` drives the main viewer, `thumbUrl` the filmstrip beside it. */
@@ -183,40 +176,31 @@ export async function getMemory(
   memoryId: string,
 ): Promise<{ memory: MemoryWithCategory; media: GalleryItem[] } | null> {
   const supabase = await createClient();
-  const { data: memory } = await supabase
+  // Media comes back embedded, so the page costs one round trip instead of
+  // memory → media → sign.
+  const { data } = await supabase
     .from("memories")
-    .select("*, categories(name, color)")
+    .select("*, categories(name, color), media(*)")
     .eq("couple_id", coupleId)
     .eq("id", memoryId)
     .single();
 
-  if (!memory) return null;
+  if (!data) return null;
 
-  const { data: media } = await supabase
-    .from("media")
-    .select("*")
-    .eq("memory_id", memoryId)
-    .order("position", { ascending: true });
+  const { media, ...memory } = data as unknown as MemoryWithCategory & { media: Media[] };
+  const items = [...(media ?? [])].sort((a, b) => a.position - b.position);
 
-  const items = media ?? [];
+  // Only videos still need signing, and only because the /media route can't
+  // serve range requests — without those, seeking a video breaks. When a
+  // memory has no video (the common case) this costs nothing.
+  const videoPaths = items.filter((i) => i.media_type === "video").map((i) => i.storage_path);
+  const signedByPath = await signPaths(supabase, videoPaths);
 
-  // The viewer gets the medium copy and the strip the small one, so opening a
-  // memory no longer pulls every full-resolution original. Videos have no
-  // derivatives, and pre-migration rows have none either: both fall back to
-  // storage_path.
-  const viewerPath = (item: Media) => item.preview_path ?? item.storage_path;
-  const stripPath = (item: Media) => item.thumbnail_path ?? item.preview_path ?? item.storage_path;
+  const mediaWithUrls: GalleryItem[] = items.map((item) =>
+    item.media_type === "video"
+      ? { ...item, url: signedByPath.get(item.storage_path) ?? null, thumbUrl: null }
+      : { ...item, url: mediaUrl(item.id, "preview"), thumbUrl: mediaUrl(item.id, "thumb") },
+  );
 
-  const signedByPath = await signPaths(supabase, [
-    ...items.map(viewerPath),
-    ...items.map(stripPath),
-  ]);
-
-  const mediaWithUrls: GalleryItem[] = items.map((item) => ({
-    ...item,
-    url: signedByPath.get(viewerPath(item)) ?? null,
-    thumbUrl: signedByPath.get(stripPath(item)) ?? null,
-  }));
-
-  return { memory: memory as unknown as MemoryWithCategory, media: mediaWithUrls };
+  return { memory: memory as MemoryWithCategory, media: mediaWithUrls };
 }

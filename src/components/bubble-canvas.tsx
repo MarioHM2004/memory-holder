@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { MemoryWithCover } from "@/lib/data/memories";
+import { mediaUrl } from "@/lib/media-url";
 import { useHDragCarousel } from "@/lib/use-h-drag-carousel";
 import { CarouselArrows } from "@/components/carousel-arrows";
 
@@ -77,7 +78,7 @@ export function BubbleCanvas({ memories }: { memories: MemoryWithCover[] }) {
           aria-label={t("eyebrow")}
           // Vertical padding has to clear the ±48px scatter, since the wrapper
           // clips (it hides the panned overflow horizontally).
-          className="relative w-full touch-pan-y cursor-grab overflow-hidden py-16 outline-none focus-visible:ring-2 focus-visible:ring-accent-2 active:cursor-grabbing"
+          className="relative w-full touch-pan-y cursor-grab overflow-hidden py-16 canvas-focus active:cursor-grabbing"
         >
           {overflowing && <CarouselArrows onPrev={() => shift(1)} onNext={() => shift(-1)} />}
           {/* w-max so the track's offsetWidth is its real content width, which
@@ -101,11 +102,11 @@ export function BubbleCanvas({ memories }: { memories: MemoryWithCover[] }) {
                     size > 118 ? "text-lg" : "text-base"
                   } ${dimmed ? "opacity-25 grayscale" : "opacity-100"}`}
                 >
-                  {memory.coverUrl && (
+                  {memory.coverMediaId && (
                     <>
                       <span
                         aria-hidden
-                        style={{ backgroundImage: `url("${memory.coverUrl}")` }}
+                        style={{ backgroundImage: `url("${mediaUrl(memory.coverMediaId, "thumb")}")` }}
                         className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                       />
                       {/* Paper scrim so the title stays readable over the photo
@@ -116,7 +117,12 @@ export function BubbleCanvas({ memories }: { memories: MemoryWithCover[] }) {
                       />
                     </>
                   )}
-                  <span className="relative">{memory.title}</span>
+                  {/* Clamped, not just small: a circle has far less room than
+                      a box, so a long title used to spill outside the bubble.
+                      The form caps titles too — this is the visual backstop. */}
+                  <span className="relative line-clamp-4 break-words hyphens-auto">
+                    {memory.title}
+                  </span>
                 </button>
               );
             })}

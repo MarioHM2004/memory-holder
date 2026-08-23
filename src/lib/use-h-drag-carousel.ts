@@ -99,11 +99,35 @@ export function useHDragCarousel(
       shift(e.key === "ArrowLeft" ? 1 : -1);
     }
 
+    function onWheel(e: WheelEvent) {
+      // Nothing to pan: let the page scroll normally.
+      if (bounds.current.min === bounds.current.max) return;
+
+      // A two-finger sideways swipe on a trackpad arrives as deltaX. Holding
+      // shift with a mouse wheel is the same gesture for people without one.
+      const dx = e.deltaX !== 0 ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+      if (dx === 0) return;
+
+      // A diagonal swipe that's mostly vertical is someone scrolling the page,
+      // not panning this canvas — don't steal it.
+      if (e.deltaX !== 0 && Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+
+      e.preventDefault();
+      bounds.current.current = Math.max(
+        bounds.current.min,
+        Math.min(bounds.current.max, bounds.current.current - dx),
+      );
+      applyTransform(false);
+    }
+
     wrap.addEventListener("pointerdown", onPointerDown);
     wrap.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
     wrap.addEventListener("click", onClickCapture, true);
     wrap.addEventListener("keydown", onKeyDown);
+    // Not passive: the handler calls preventDefault to keep a sideways swipe
+    // from also scrolling the page behind it.
+    wrap.addEventListener("wheel", onWheel, { passive: false });
 
     // Measuring once on mount is not enough: inside a flex column the wrapper
     // can still be 0px wide at that point, which centred the track on half of
@@ -120,6 +144,7 @@ export function useHDragCarousel(
       window.removeEventListener("pointerup", onPointerUp);
       wrap.removeEventListener("click", onClickCapture, true);
       wrap.removeEventListener("keydown", onKeyDown);
+      wrap.removeEventListener("wheel", onWheel);
       observer.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

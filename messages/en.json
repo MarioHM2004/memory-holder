@@ -118,7 +118,8 @@
   "Memory": {
     "noCategory": "No category",
     "noMedia": "No photos or videos yet",
-    "mediaUnavailable": "Not available"
+    "mediaUnavailable": "Not available",
+    "entryHeading": "The day, in full"
   },
   "Admin": {
     "eyebrow": "Admin panel",
@@ -144,6 +145,9 @@
       "dateLabel": "Date",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "What happened that day?",
+      "bodyLabel": "Entry",
+      "bodyPlaceholder": "Write about the day — as long as you like. Only shows on the memory's own page.",
+      "bodyHint": "Optional",
       "showTimelineLabel": "Show on the timeline",
       "showTimelineHint": "Appears as a point on the timeline",
       "showRouletteLabel": "Show in the roulette",

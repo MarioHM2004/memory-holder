@@ -4,6 +4,7 @@ export function Field({
   type = "text",
   required,
   minLength,
+  maxLength,
   defaultValue,
   placeholder,
 }: {
@@ -12,6 +13,7 @@ export function Field({
   type?: string;
   required?: boolean;
   minLength?: number;
+  maxLength?: number;
   defaultValue?: string;
   placeholder?: string;
 }) {
@@ -25,6 +27,7 @@ export function Field({
         type={type}
         required={required}
         minLength={minLength}
+        maxLength={maxLength}
         defaultValue={defaultValue}
         placeholder={placeholder}
         className="border-b-2 border-line bg-transparent px-1 py-2 text-ink outline-none placeholder:text-muted focus:border-ink"
