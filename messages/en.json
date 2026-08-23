@@ -1,0 +1,176 @@
+{
+  "Nav": {
+    "home": "Home",
+    "roulette": "Roulette",
+    "timeline": "Timeline",
+    "categories": "Categories",
+    "admin": "Admin panel",
+    "signOut": "Sign out"
+  },
+  "Common": {
+    "adminPanel": "admin panel",
+    "goToAdmin": "Go to admin panel",
+    "back": "Back"
+  },
+  "Language": {
+    "label": "Language"
+  },
+  "Theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "Auth": {
+    "login": {
+      "subtitle": "Sign in to your diary",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "error": "Incorrect email or password.",
+      "errorFields": "Enter your email and password.",
+      "noAccount": "First time here?",
+      "createAccount": "Create an account"
+    },
+    "signup": {
+      "subtitle": "Create your account",
+      "name": "Your name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "errorFields": "Fill in every field.",
+      "errorPasswordLength": "Password must be at least 8 characters.",
+      "confirmEmail": "We've sent you an email to confirm your account. Confirm it, then sign in with your password.",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "Onboarding": {
+    "heading": "Let's start your diary",
+    "subtitle": "Create a new diary, or join one with the code you were given.",
+    "create": {
+      "title": "Create a new diary",
+      "description": "You go first — a code is generated afterwards so you can invite whoever you want.",
+      "nameLabel": "Diary name",
+      "namePlaceholder": "E.g. Elena & Marc",
+      "submit": "Create diary",
+      "submitting": "Creating…",
+      "errorName": "Give your diary a name.",
+      "errorGeneric": "Couldn't create the diary. Try again."
+    },
+    "join": {
+      "title": "Join with a code",
+      "description": "If a diary already exists, ask for the invite code and join it here.",
+      "codeLabel": "Invite code",
+      "submit": "Join",
+      "submitting": "Joining…",
+      "errorCode": "Enter an invite code.",
+      "errorInvalid": "Invalid code. Double-check it with whoever shared it with you."
+    }
+  },
+  "Home": {
+    "heading": "A personal archive of your life together: firsts, highlights and fragments.",
+    "rouletteCardTitle": "Memory roulette",
+    "rouletteCardDescription": "A random spin brings up a unique moment: your first day skiing, your first anniversary…",
+    "rouletteCardCta": "Spin the roulette",
+    "timelineCardTitle": "Timeline",
+    "timelineCardDescription": "Every memory you add, in chronological order.",
+    "timelineCardCta": "View timeline",
+    "recentTitle": "Recently added"
+  },
+  "Roulette": {
+    "eyebrow": "Memory roulette",
+    "heading": "Spin and discover a moment",
+    "spin": "Spin",
+    "spinning": "…",
+    "empty": "No memories are marked for the roulette yet.",
+    "emptyHint": "Add one and turn on “Show in roulette”.",
+    "prompt": "Press Spin to discover a featured memory.",
+    "viewFull": "View full memory"
+  },
+  "Timeline": {
+    "eyebrow": "Timeline",
+    "heading": "Your story, in order",
+    "hint": "Tap a point to expand the memory. Drag sideways or use the arrows to see more dates.",
+    "empty": "There are no memories on the timeline yet.",
+    "emptyHint": "Add one and turn on “Show on timeline”.",
+    "viewFull": "View full memory"
+  },
+  "Categories": {
+    "eyebrow": "Categories",
+    "heading": "Explore by topic",
+    "empty": "You haven't created any categories yet.",
+    "emptyHint": "Add the first one from the admin panel.",
+    "memoryCountOne": "{count} memory",
+    "memoryCountOther": "{count} memories",
+    "uncategorized": "Uncategorized",
+    "uncategorizedHint": "Memories with no category yet"
+  },
+  "CategoryDetail": {
+    "eyebrow": "Category",
+    "backLabel": "Back to categories",
+    "searchPlaceholder": "Search for a memory…",
+    "empty": "No memories in this category yet. Add one from the admin panel."
+  },
+  "Memory": {
+    "noCategory": "No category",
+    "noMedia": "No photos or videos yet",
+    "mediaUnavailable": "Not available"
+  },
+  "Admin": {
+    "eyebrow": "Admin panel",
+    "heading": "Manage your diary",
+    "tabs": {
+      "memories": "Memories",
+      "categories": "Categories",
+      "invite": "Invite"
+    },
+    "memoriesTab": {
+      "countOne": "{count} memory saved",
+      "countOther": "{count} memories saved",
+      "addButton": "Add memory",
+      "empty": "No memories yet — add the first one.",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "form": {
+      "titleLabel": "Title",
+      "titlePlaceholder": "E.g. Our first trip together",
+      "categoryLabel": "Category",
+      "noCategory": "No category",
+      "dateLabel": "Date",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "What happened that day?",
+      "showTimelineLabel": "Show on the timeline",
+      "showTimelineHint": "Appears as a point on the timeline",
+      "showRouletteLabel": "Show in the roulette",
+      "showRouletteHint": "Can come up when spinning the roulette",
+      "mediaLabel": "Photos and videos",
+      "mediaHint": "Choose files to upload",
+      "cancel": "Cancel",
+      "save": "Save memory",
+      "saving": "Saving…",
+      "newTitle": "New memory",
+      "editTitle": "Edit memory",
+      "errorRequired": "Title and date are required.",
+      "errorGeneric": "Something went wrong. Try again."
+    },
+    "categoriesTab": {
+      "nameLabel": "Name",
+      "namePlaceholder": "E.g. Travel",
+      "colorLabel": "Color",
+      "add": "Add",
+      "delete": "Delete",
+      "empty": "No categories yet.",
+      "errorName": "Give the category a name."
+    },
+    "inviteTab": {
+      "description": "Share this link with anyone you'd like to add to your diary. Anyone with the code can join — membership isn't limited to one other person.",
+      "copy": "Copy invite link",
+      "copied": "Copied!"
+    }
+  }
+}

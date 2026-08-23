@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+/* Paper-and-ink scrapbook palette. The interface stays near-monochrome on
+   purpose: colour comes from the photos people upload, not from the chrome.
+   Tokens are duplicated per theme rather than using light-dark(): under
+   Tailwind v4's `@theme inline` re-registration, light-dark() resolved
+   inconsistently between properties on the same element (verified in
+   browser — a button's background and a card's border picked different
+   branches under the same color-scheme). Plain overrides are boring but
+   reliable. */
+:root {
+  /* Only for native form-control chrome (date picker, scrollbar) — the
+     palette itself is hand-rolled above, not derived from this. */
+  color-scheme: light dark;
+
+  --ground: #fbfaf7;
+  --ground-2: #f3f1ea;
+  --surface: #ffffff;
+  --surface-2: #f5f3ec;
+  --ink: #171614;
+  --ink-soft: #56534c;
+  --muted: #8e8a80;
+  --line: rgba(23, 22, 20, 0.18);
+
+  /* Used the way pens are used on paper: sparingly, for marks and labels. */
+  --accent-1: #c8452f;
+  --accent-1-ink: #ffffff;
+  --accent-2: #3a5b8c;
+  --accent-2-ink: #ffffff;
+  --accent-3: #f4e69a;
+  --accent-3-ink: #4a3f14;
+
+  --tape: rgba(226, 208, 128, 0.55);
+  --wash-1: #f6e7e2;
+  --wash-2: #e6ecdf;
+  --wash-3: #e4e8f2;
+  --wash-4: #f7ecd2;
+
+  --dot: rgba(23, 22, 20, 0.055);
+  --rule-stroke: rgba(23, 22, 20, 0.4);
+  --shadow-color: rgba(23, 22, 20, 0.55);
+  --sketch-shadow: 0 10px 26px -18px var(--shadow-color);
+}
+
+/* Night desk: the same paper, lit badly. Same ink logic, inverted ground.
+   Applies from the OS preference, then the explicit toggle (via data-theme)
+   overrides it in either direction — that's why both the media query and
+   the [data-theme="dark"] block repeat the same values. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #171612;
+    --ground-2: #1f1d18;
+    --surface: #22201a;
+    --surface-2: #272419;
+    --ink: #f4f1e8;
+    --ink-soft: #b8b2a4;
+    --muted: #857f72;
+    --line: rgba(244, 241, 232, 0.22);
+
+    --accent-1: #e5705a;
+    --accent-1-ink: #2a0f09;
+    --accent-2: #8fabd8;
+    --accent-2-ink: #101a2b;
+    --accent-3: #6e6330;
+    --accent-3-ink: #f6efd4;
+
+    --tape: rgba(226, 208, 128, 0.28);
+    --wash-1: #35281f;
+    --wash-2: #26301f;
+    --wash-3: #202834;
+    --wash-4: #332b1c;
+
+    --dot: rgba(244, 241, 232, 0.05);
+    --rule-stroke: rgba(244, 241, 232, 0.42);
+    --shadow-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #171612;
+  --ground-2: #1f1d18;
+  --surface: #22201a;
+  --surface-2: #272419;
+  --ink: #f4f1e8;
+  --ink-soft: #b8b2a4;
+  --muted: #857f72;
+  --line: rgba(244, 241, 232, 0.22);
+
+  --accent-1: #e5705a;
+  --accent-1-ink: #2a0f09;
+  --accent-2: #8fabd8;
+  --accent-2-ink: #101a2b;
+  --accent-3: #6e6330;
+  --accent-3-ink: #f6efd4;
+
+  --tape: rgba(226, 208, 128, 0.28);
+  --wash-1: #35281f;
+  --wash-2: #26301f;
+  --wash-3: #202834;
+  --wash-4: #332b1c;
+
+  --dot: rgba(244, 241, 232, 0.05);
+  --rule-stroke: rgba(244, 241, 232, 0.42);
+  --shadow-color: rgba(0, 0, 0, 0.8);
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-ground-2: var(--ground-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-accent-1: var(--accent-1);
+  --color-accent-1-ink: var(--accent-1-ink);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-ink: var(--accent-2-ink);
+  --color-accent-3: var(--accent-3);
+  --color-accent-3-ink: var(--accent-3-ink);
+  --color-line: var(--line);
+  --color-tape: var(--tape);
+  --color-wash-1: var(--wash-1);
+  --color-wash-2: var(--wash-2);
+  --color-wash-3: var(--wash-3);
+  --color-wash-4: var(--wash-4);
+
+  --font-marker: var(--font-permanent-marker);
+  --font-display: var(--font-caveat);
+  --font-sans: var(--font-karla);
+  --font-mono: var(--font-space-mono);
+
+  /* Corners are nearly square — the softness comes from the drawn borders,
+     not from border-radius. */
+  --radius-lg: 6px;
+  --radius-md: 4px;
+  --radius-sm: 3px;
+}
+
+body {
+  background-color: var(--ground);
+  background-image: radial-gradient(circle at 1px 1px, var(--dot) 1px, transparent 0);
+  background-size: 22px 22px;
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--accent-3);
+  color: var(--accent-3-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Hand-drawn boxes. Uneven border-radius on each corner reads as a rectangle
+   sketched by hand rather than a UI card. Three variants so that repeated
+   boxes on one screen don't look stamped from the same template.
+   --------------------------------------------------------------------------- */
+@utility sketch {
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+@utility sketch-2 {
+  border: 2px solid var(--ink);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+
+@utility sketch-3 {
+  border: 2px solid var(--ink);
+  border-radius: 200px 25px 240px 20px / 20px 240px 25px 200px;
+}
+
+/* Same shape, pencil weight — for secondary boxes that shouldn't shout. */
+@utility sketch-soft {
+  border: 1.5px solid var(--line);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+@utility sketch-soft-2 {
+  border: 1.5px solid var(--line);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+
+/* A photo pinned into the album: white margin, heavier at the foot.
+   The border is inked rather than hairline-grey — a white frame on near-white
+   paper was effectively invisible. */
+@utility polaroid {
+  background: var(--surface);
+  padding: 10px 10px 30px;
+  border: 1.5px solid var(--ink);
+  box-shadow: 0 14px 28px -20px var(--shadow-color);
+}
+
+/* Strip of washi tape, for corners of pinned things. */
+@utility taped {
+  position: relative;
+}
+
+@utility tape-strip {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  translate: -50% 0;
+  width: 76px;
+  height: 20px;
+  background: var(--tape);
+  rotate: -2deg;
+}
+
+/* Buttons are drawn boxes too: an inked one for the primary action on a
+   screen, a pencilled one for everything else. */
+@utility btn-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: var(--ink);
+  color: var(--ground);
+  padding: 0.6rem 1.3rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  /* Only transform transitions — background/color must flip immediately
+     with the theme, not tween between two potentially-registered custom
+     property values (that produced a stuck-on-the-old-theme render). */
+  transition: transform 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px) rotate(-0.4deg);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+@utility btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1.5px solid var(--line);
+  border-radius: 15px 225px 15px 255px / 225px 15px 255px 15px;
+  background: transparent;
+  color: var(--ink);
+  padding: 0.55rem 1.15rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--ink);
+    transform: translateY(-1px) rotate(0.4deg);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+}
+
+/* Small circular pen-stroke button: back arrows, row actions, theme toggle. */
+@utility btn-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  &:hover {
+    border-color: var(--ink);
+    transform: rotate(-4deg);
+  }
+}
+
+/* Highlighter swipe behind text — used to mark the current nav item. */
+@utility highlighted {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 52%,
+    var(--accent-3) 52%,
+    var(--accent-3) 93%,
+    transparent 93%
+  );
+}
+
+/* A wobbly ruled line, for the timeline spine and section dividers. Drawn on
+   a pseudo-element so the mask can't clip anything positioned inside. */
+@utility drawn-rule {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: var(--rule-stroke);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='8' viewBox='0 0 200 8'%3E%3Cpath d='M0 4 C 25 1.8, 50 6.2, 75 4 S 125 1.8, 150 4 S 185 6, 200 4' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    mask-repeat: repeat-x;
+    mask-position: center;
+    mask-size: 200px 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

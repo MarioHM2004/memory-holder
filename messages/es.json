@@ -1,0 +1,176 @@
+{
+  "Nav": {
+    "home": "Inicio",
+    "roulette": "Ruleta",
+    "timeline": "Línea de tiempo",
+    "categories": "Categorías",
+    "admin": "Panel admin",
+    "signOut": "Cerrar sesión"
+  },
+  "Common": {
+    "adminPanel": "panel admin",
+    "goToAdmin": "Ir al panel admin",
+    "back": "Volver"
+  },
+  "Language": {
+    "label": "Idioma"
+  },
+  "Theme": {
+    "label": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "toLight": "Cambiar a modo claro",
+    "toDark": "Cambiar a modo oscuro"
+  },
+  "Auth": {
+    "login": {
+      "subtitle": "Entra en vuestro diario",
+      "email": "Email",
+      "password": "Contraseña",
+      "submit": "Entrar",
+      "submitting": "Entrando…",
+      "error": "Email o contraseña incorrectos.",
+      "errorFields": "Introduce tu email y contraseña.",
+      "noAccount": "¿Primera vez?",
+      "createAccount": "Crea una cuenta"
+    },
+    "signup": {
+      "subtitle": "Crea tu cuenta",
+      "name": "Tu nombre",
+      "email": "Email",
+      "password": "Contraseña",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta…",
+      "errorFields": "Rellena todos los campos.",
+      "errorPasswordLength": "La contraseña debe tener al menos 8 caracteres.",
+      "confirmEmail": "Te hemos enviado un email para confirmar tu cuenta. Confírmalo y entra con tu contraseña.",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "signIn": "Entra"
+    }
+  },
+  "Onboarding": {
+    "heading": "Empecemos vuestro diario",
+    "subtitle": "Cread un diario nuevo, o unios a uno con el código que os hayan compartido.",
+    "create": {
+      "title": "Crear un diario nuevo",
+      "description": "Empezáis vosotros: se genera un código para invitar a quien queráis después.",
+      "nameLabel": "Nombre del diario",
+      "namePlaceholder": "Ej. Elena & Marc",
+      "submit": "Crear diario",
+      "submitting": "Creando…",
+      "errorName": "Ponle un nombre a vuestro diario.",
+      "errorGeneric": "No se ha podido crear el diario. Inténtalo de nuevo."
+    },
+    "join": {
+      "title": "Unirme con un código",
+      "description": "Si ya tenéis un diario creado, pide el código de invitación y únete aquí.",
+      "codeLabel": "Código de invitación",
+      "submit": "Unirme",
+      "submitting": "Uniéndote…",
+      "errorCode": "Introduce un código de invitación.",
+      "errorInvalid": "Código no válido. Revísalo con quien te lo haya compartido."
+    }
+  },
+  "Home": {
+    "heading": "Un archivo personal de vuestra vida juntos: primeras veces, momentos destacados y fragmentos.",
+    "rouletteCardTitle": "Ruleta de recuerdos",
+    "rouletteCardDescription": "Un giro al azar saca a la luz un momento único: el primer día esquiando, el primer aniversario…",
+    "rouletteCardCta": "Girar la ruleta",
+    "timelineCardTitle": "Línea de tiempo",
+    "timelineCardDescription": "Todos los recuerdos que añadáis, ordenados por fecha.",
+    "timelineCardCta": "Ver línea de tiempo",
+    "recentTitle": "Últimos recuerdos añadidos"
+  },
+  "Roulette": {
+    "eyebrow": "Ruleta de recuerdos",
+    "heading": "Gira y descubre un momento",
+    "spin": "Girar",
+    "spinning": "…",
+    "empty": "Todavía no hay recuerdos marcados para la ruleta.",
+    "emptyHint": "Añade uno y activa «Mostrar en la ruleta».",
+    "prompt": "Pulsa Girar para descubrir un recuerdo destacado.",
+    "viewFull": "Ver recuerdo completo"
+  },
+  "Timeline": {
+    "eyebrow": "Línea de tiempo",
+    "heading": "Vuestra historia, en orden",
+    "hint": "Tocad un punto para expandir el recuerdo. Arrastrad hacia los lados o usad las flechas para ver más fechas.",
+    "empty": "Todavía no hay recuerdos en la línea de tiempo.",
+    "emptyHint": "Añade uno y activa «Mostrar en la línea de tiempo».",
+    "viewFull": "Ver recuerdo completo"
+  },
+  "Categories": {
+    "eyebrow": "Categorías",
+    "heading": "Explorad por tema",
+    "empty": "Todavía no habéis creado ninguna categoría.",
+    "emptyHint": "Añadid la primera desde el panel admin.",
+    "memoryCountOne": "{count} recuerdo",
+    "memoryCountOther": "{count} recuerdos",
+    "uncategorized": "Sin categoría",
+    "uncategorizedHint": "Recuerdos que aún no tienen categoría"
+  },
+  "CategoryDetail": {
+    "eyebrow": "Categoría",
+    "backLabel": "Volver a categorías",
+    "searchPlaceholder": "Buscar un recuerdo…",
+    "empty": "No hay recuerdos en esta categoría todavía. Añade uno desde el panel admin."
+  },
+  "Memory": {
+    "noCategory": "Sin categoría",
+    "noMedia": "Sin fotos o vídeos todavía",
+    "mediaUnavailable": "No disponible"
+  },
+  "Admin": {
+    "eyebrow": "Panel de administración",
+    "heading": "Gestionad vuestro diario",
+    "tabs": {
+      "memories": "Recuerdos",
+      "categories": "Categorías",
+      "invite": "Invitar"
+    },
+    "memoriesTab": {
+      "countOne": "{count} recuerdo guardado",
+      "countOther": "{count} recuerdos guardados",
+      "addButton": "Añadir recuerdo",
+      "empty": "Todavía no hay recuerdos: añade el primero.",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "form": {
+      "titleLabel": "Título",
+      "titlePlaceholder": "Ej. Nuestro primer viaje juntos",
+      "categoryLabel": "Categoría",
+      "noCategory": "Sin categoría",
+      "dateLabel": "Fecha",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "¿Qué pasó ese día?",
+      "showTimelineLabel": "Mostrar en la línea de tiempo",
+      "showTimelineHint": "Aparecerá como un punto en la línea de tiempo",
+      "showRouletteLabel": "Mostrar en la ruleta",
+      "showRouletteHint": "Podrá salir al girar la ruleta",
+      "mediaLabel": "Fotos y vídeos",
+      "mediaHint": "Elige los archivos que quieras subir",
+      "cancel": "Cancelar",
+      "save": "Guardar recuerdo",
+      "saving": "Guardando…",
+      "newTitle": "Nuevo recuerdo",
+      "editTitle": "Editar recuerdo",
+      "errorRequired": "El título y la fecha son obligatorios.",
+      "errorGeneric": "Algo ha ido mal. Inténtalo de nuevo."
+    },
+    "categoriesTab": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ej. Viajes",
+      "colorLabel": "Color",
+      "add": "Añadir",
+      "delete": "Eliminar",
+      "empty": "Todavía no hay categorías.",
+      "errorName": "Ponle un nombre a la categoría."
+    },
+    "inviteTab": {
+      "description": "Comparte este enlace con quien quieras sumar a vuestro diario. Puede unirse cualquiera con el código, no solo una segunda persona.",
+      "copy": "Copiar enlace de invitación",
+      "copied": "¡Copiado!"
+    }
+  }
+}

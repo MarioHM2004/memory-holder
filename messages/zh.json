@@ -1,0 +1,176 @@
+{
+  "Nav": {
+    "home": "首页",
+    "roulette": "回忆转盘",
+    "timeline": "时间轴",
+    "categories": "分类",
+    "admin": "管理面板",
+    "signOut": "退出登录"
+  },
+  "Common": {
+    "adminPanel": "管理面板",
+    "goToAdmin": "前往管理面板",
+    "back": "返回"
+  },
+  "Language": {
+    "label": "语言"
+  },
+  "Theme": {
+    "label": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "toLight": "切换到浅色模式",
+    "toDark": "切换到深色模式"
+  },
+  "Auth": {
+    "login": {
+      "subtitle": "登录你们的日记本",
+      "email": "邮箱",
+      "password": "密码",
+      "submit": "登录",
+      "submitting": "登录中…",
+      "error": "邮箱或密码不正确。",
+      "errorFields": "请输入邮箱和密码。",
+      "noAccount": "第一次使用？",
+      "createAccount": "创建账号"
+    },
+    "signup": {
+      "subtitle": "创建账号",
+      "name": "你的名字",
+      "email": "邮箱",
+      "password": "密码",
+      "submit": "创建账号",
+      "submitting": "创建中…",
+      "errorFields": "请填写所有字段。",
+      "errorPasswordLength": "密码至少需要 8 个字符。",
+      "confirmEmail": "我们已发送确认邮件到你的邮箱。请确认后使用密码登录。",
+      "haveAccount": "已经有账号了？",
+      "signIn": "登录"
+    }
+  },
+  "Onboarding": {
+    "heading": "开始创建你们的日记本",
+    "subtitle": "创建一个新的日记本，或使用他人分享的邀请码加入。",
+    "create": {
+      "title": "创建新的日记本",
+      "description": "由你先创建——之后会生成一个邀请码，方便邀请其他人加入。",
+      "nameLabel": "日记本名称",
+      "namePlaceholder": "例如：Elena & Marc",
+      "submit": "创建日记本",
+      "submitting": "创建中…",
+      "errorName": "请给你们的日记本起个名字。",
+      "errorGeneric": "创建失败，请重试。"
+    },
+    "join": {
+      "title": "使用邀请码加入",
+      "description": "如果日记本已经存在，向对方要邀请码，然后在这里加入。",
+      "codeLabel": "邀请码",
+      "submit": "加入",
+      "submitting": "加入中…",
+      "errorCode": "请输入邀请码。",
+      "errorInvalid": "邀请码无效，请与分享者再次确认。"
+    }
+  },
+  "Home": {
+    "heading": "记录你们共同生活的个人档案：初次经历、高光时刻与生活片段。",
+    "rouletteCardTitle": "回忆转盘",
+    "rouletteCardDescription": "随机一转，唤醒一个独特的瞬间：第一次一起滑雪、第一个纪念日……",
+    "rouletteCardCta": "转动转盘",
+    "timelineCardTitle": "时间轴",
+    "timelineCardDescription": "你们添加的所有回忆，按时间顺序排列。",
+    "timelineCardCta": "查看时间轴",
+    "recentTitle": "最近添加的回忆"
+  },
+  "Roulette": {
+    "eyebrow": "回忆转盘",
+    "heading": "转动转盘，发现一个瞬间",
+    "spin": "转动",
+    "spinning": "…",
+    "empty": "还没有标记为转盘展示的回忆。",
+    "emptyHint": "添加一条回忆并开启「在转盘中显示」。",
+    "prompt": "点击「转动」来发现一段精选回忆。",
+    "viewFull": "查看完整回忆"
+  },
+  "Timeline": {
+    "eyebrow": "时间轴",
+    "heading": "你们的故事，按时间展开",
+    "hint": "点击一个节点展开回忆。左右拖动或使用箭头查看更多日期。",
+    "empty": "时间轴上还没有任何回忆。",
+    "emptyHint": "添加一条回忆并开启「在时间轴中显示」。",
+    "viewFull": "查看完整回忆"
+  },
+  "Categories": {
+    "eyebrow": "分类",
+    "heading": "按主题浏览",
+    "empty": "你们还没有创建任何分类。",
+    "emptyHint": "从管理面板添加第一个分类。",
+    "memoryCountOne": "{count} 条回忆",
+    "memoryCountOther": "{count} 条回忆",
+    "uncategorized": "未分类",
+    "uncategorizedHint": "尚未归类的回忆"
+  },
+  "CategoryDetail": {
+    "eyebrow": "分类",
+    "backLabel": "返回分类列表",
+    "searchPlaceholder": "搜索一条回忆…",
+    "empty": "这个分类下还没有回忆。从管理面板添加一条吧。"
+  },
+  "Memory": {
+    "noCategory": "无分类",
+    "noMedia": "还没有照片或视频",
+    "mediaUnavailable": "无法显示"
+  },
+  "Admin": {
+    "eyebrow": "管理面板",
+    "heading": "管理你们的日记本",
+    "tabs": {
+      "memories": "回忆",
+      "categories": "分类",
+      "invite": "邀请"
+    },
+    "memoriesTab": {
+      "countOne": "已保存 {count} 条回忆",
+      "countOther": "已保存 {count} 条回忆",
+      "addButton": "添加回忆",
+      "empty": "还没有回忆——添加第一条吧。",
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "form": {
+      "titleLabel": "标题",
+      "titlePlaceholder": "例如：我们的第一次旅行",
+      "categoryLabel": "分类",
+      "noCategory": "无分类",
+      "dateLabel": "日期",
+      "descriptionLabel": "描述",
+      "descriptionPlaceholder": "那天发生了什么？",
+      "showTimelineLabel": "在时间轴中显示",
+      "showTimelineHint": "将作为时间轴上的一个节点显示",
+      "showRouletteLabel": "在转盘中显示",
+      "showRouletteHint": "转动转盘时可能会出现",
+      "mediaLabel": "照片和视频",
+      "mediaHint": "选择要上传的文件",
+      "cancel": "取消",
+      "save": "保存回忆",
+      "saving": "保存中…",
+      "newTitle": "新回忆",
+      "editTitle": "编辑回忆",
+      "errorRequired": "标题和日期为必填项。",
+      "errorGeneric": "出了点问题，请重试。"
+    },
+    "categoriesTab": {
+      "nameLabel": "名称",
+      "namePlaceholder": "例如：旅行",
+      "colorLabel": "颜色",
+      "add": "添加",
+      "delete": "删除",
+      "empty": "还没有分类。",
+      "errorName": "请给这个分类起个名字。"
+    },
+    "inviteTab": {
+      "description": "把这个链接分享给你想加入日记本的人。任何拥有邀请码的人都可以加入，并不限于一位伙伴。",
+      "copy": "复制邀请链接",
+      "copied": "已复制！"
+    }
+  }
+}
