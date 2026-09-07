@@ -1,0 +1,60 @@
+# Keeps the Supabase project from being paused for inactivity.
+#
+# Supabase pauses Free Plan projects after ~7 days of low activity, and their
+# docs say "a few user requests to the database each day over the previous
+# week" is enough to prevent it. So this runs daily and makes a real query.
+#
+# It queries a table rather than hitting a health endpoint on purpose: only
+# database activity counts, and /auth/v1/health never touches Postgres.
+# Row Level Security will filter the result to nothing for an anonymous
+# caller — that's fine, the query still ran.
+#
+# Setup (one time), under Settings → Secrets and variables → Actions:
+#   SUPABASE_URL       the project URL, e.g. https://xxxx.supabase.co
+#   SUPABASE_ANON_KEY  the anon/public key from Settings → API
+#
+# Then run it once by hand (Actions → this workflow → Run workflow) to confirm
+# it works, rather than assuming it does and finding out in seven days.
+
+name: Keep Supabase awake
+
+on:
+  schedule:
+    # Daily. Deliberately not on the hour: GitHub delays scheduled jobs most
+    # at the top of the hour, when everyone else's crons fire.
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query the database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::SUPABASE_URL or SUPABASE_ANON_KEY is not set. Add both under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          # -f isn't used: we want to inspect the status ourselves so the log
+          # says what actually came back.
+          status=$(curl -s -o response.txt -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/categories?select=id&limit=1")
+
+          echo "HTTP ${status}"
+
+          if [ "${status}" != "200" ]; then
+            # Failing loudly matters: a keep-alive that quietly does nothing is
+            # worse than none, because you'd believe you were covered.
+            echo "::error::Expected HTTP 200, got ${status}. Response: $(head -c 300 response.txt)"
+            exit 1
+          fi
+
+          echo "Database reached — the project stays awake."
