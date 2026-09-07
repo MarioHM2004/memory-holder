@@ -49,6 +49,11 @@
   --rule-stroke: rgba(23, 22, 20, 0.4);
   --shadow-color: rgba(23, 22, 20, 0.55);
   --sketch-shadow: 0 10px 26px -18px var(--shadow-color);
+
+  /* Whatever good Chinese face the machine already has, in order of
+     preference: macOS/iOS, older macOS, Windows, Linux/Android. */
+  --font-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    "Source Han Sans SC", sans-serif;
 }
 
 /* Night desk: the same paper, lit badly. Same ink logic, inverted ground.
@@ -149,10 +154,16 @@
   --color-wash-3: var(--wash-3);
   --color-wash-4: var(--wash-4);
 
-  --font-marker: var(--font-permanent-marker);
-  --font-display: var(--font-caveat);
-  --font-sans: var(--font-karla);
-  --font-mono: var(--font-space-mono);
+  /* Latin face first, then its Chinese counterpart, then whatever the system
+     has. Font matching is per glyph, so a title like "First Date 什刹海"
+     renders each script in the right face without any locale switching.
+     Body and label text falls to the system's Chinese font on purpose: the
+     web ones for that job run to ~8MB, and PingFang/YaHei are already good
+     and cost nothing. The personality lives in the two display faces. */
+  --font-marker: var(--font-permanent-marker), var(--font-zcool-kuaile), var(--font-cjk);
+  --font-display: var(--font-caveat), var(--font-zhi-mang-xing), var(--font-cjk);
+  --font-sans: var(--font-karla), var(--font-cjk);
+  --font-mono: var(--font-space-mono), var(--font-cjk);
 
   /* Corners are nearly square — the softness comes from the drawn borders,
      not from border-radius. */

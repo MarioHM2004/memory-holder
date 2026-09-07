@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { MemoryWithCover } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media-url";
@@ -14,6 +14,7 @@ const SPIN_MS = 2450;
 
 export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
   const t = useTranslations("Roulette");
+  const locale = useLocale();
   const tCommon = useTranslations("Common");
   const [rotation, setRotation] = useState(0);
   const [landedIndex, setLandedIndex] = useState<number | null>(null);
@@ -138,7 +139,7 @@ export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
         {landed ? (
           <div className="relative flex flex-col gap-3">
             <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent-1">
-              {formatDate(landed.memory_date)}
+              {formatDate(landed.memory_date, locale)}
             </p>
             <h3 className="font-display text-3xl font-bold leading-none">{landed.title}</h3>
             <p className="text-sm text-ink-soft">{landed.description}</p>

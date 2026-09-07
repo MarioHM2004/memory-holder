@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { MemoryWithCover } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media-url";
@@ -15,6 +15,7 @@ const LEAD = 130;
 
 export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
   const t = useTranslations("Timeline");
+  const locale = useLocale();
   const tCommon = useTranslations("Common");
   const wrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -82,7 +83,7 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
                   up ? "bottom-5" : "top-5"
                 }`}
               >
-                {formatDate(memory.memory_date)}
+                {formatDate(memory.memory_date, locale)}
               </span>
               {/* The whole card is the link — expanding it is the first tap,
                   going to the memory is the second, anywhere on the card. */}

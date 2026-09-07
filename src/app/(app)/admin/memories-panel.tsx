@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { formatDate } from "@/lib/format";
 import { deleteMemoryAction } from "./actions";
 import { MemoryForm } from "./memory-form";
@@ -18,6 +18,7 @@ export function MemoriesPanel({
   categories: Pick<Category, "id" | "name">[];
 }) {
   const t = useTranslations("Admin.memoriesTab");
+  const locale = useLocale();
   const [editing, setEditing] = useState<MemoryForAdmin | "new" | null>(null);
 
   if (editing) {
@@ -62,7 +63,7 @@ export function MemoriesPanel({
                 <div className="min-w-0">
                   <p className="truncate font-display text-xl font-bold leading-tight">{memory.title}</p>
                   <p className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-                    {memory.categories?.name ?? "—"} · {formatDate(memory.memory_date)}
+                    {memory.categories?.name ?? "—"} · {formatDate(memory.memory_date, locale)}
                   </p>
                 </div>
               </div>

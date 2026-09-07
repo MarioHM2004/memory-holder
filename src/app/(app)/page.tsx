@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { getRecentMemories } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
@@ -9,6 +9,7 @@ export default async function HomePage() {
   const context = await requireCoupleContext();
   const recent = await getRecentMemories(context.couple.id, 3);
   const t = await getTranslations("Home");
+  const locale = await getLocale();
 
   return (
     <div>
@@ -16,7 +17,7 @@ export default async function HomePage() {
         <p className="font-mono text-[0.68rem] uppercase tracking-[0.3em] text-muted">
           {context.couple.name}
         </p>
-        <h1 className="mt-5 text-balance font-marker text-3xl leading-tight sm:text-[2.6rem]">
+        <h1 className="mt-5 whitespace-pre-line text-balance font-marker text-3xl leading-tight sm:text-[2.6rem]">
           {t("heading")}
         </h1>
         <div className="drawn-rule mx-auto mt-6 h-2 w-40" aria-hidden />
@@ -76,7 +77,7 @@ export default async function HomePage() {
                           : "text-ink-soft"
                       }`}
                     >
-                      {formatDate(memory.memory_date)}
+                      {formatDate(memory.memory_date, locale)}
                     </p>
                   </div>
                   <p className="mt-2.5 px-0.5 font-display text-lg font-bold leading-tight">

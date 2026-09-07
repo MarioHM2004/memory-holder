@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { getMemory } from "@/lib/data/memories";
 import { formatDate } from "@/lib/format";
@@ -14,6 +14,7 @@ export default async function MemoryPage({ params }: { params: Promise<{ memoryI
 
   const { memory, media } = result;
   const t = await getTranslations("Memory");
+  const locale = await getLocale();
 
   return (
     <div>
@@ -31,7 +32,7 @@ export default async function MemoryPage({ params }: { params: Promise<{ memoryI
 
       <div className="mt-8">
         <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent-1">
-          {formatDate(memory.memory_date)}
+          {formatDate(memory.memory_date, locale)}
         </p>
         <p className="mt-2.5 max-w-[60ch] text-ink-soft">{memory.description}</p>
       </div>
