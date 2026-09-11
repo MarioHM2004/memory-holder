@@ -184,6 +184,18 @@ body {
   color: var(--accent-3-ink);
 }
 
+/* iOS Safari zooms the page in when you focus a form control whose font is
+   under 16px, and then leaves you scrolled sideways. The design uses 14px for
+   inputs, which triggers it on every form in the app, so bump them on phone
+   widths only — desktop keeps the intended size. */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Hand-drawn boxes. Uneven border-radius on each corner reads as a rectangle
    sketched by hand rather than a UI card. Three variants so that repeated

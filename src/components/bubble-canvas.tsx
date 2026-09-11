@@ -55,8 +55,8 @@ export function BubbleCanvas({ memories }: { memories: MemoryWithCover[] }) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="mb-4 flex justify-end">
-        <div className="sketch-soft-2 flex min-w-[240px] items-center gap-2 bg-surface px-4 py-2">
+      <div className="mb-4 flex justify-stretch sm:justify-end">
+        <div className="sketch-soft-2 flex w-full items-center gap-2 bg-surface px-4 py-2 sm:w-auto sm:min-w-[240px]">
           <span aria-hidden className="text-muted">
             ⌕
           </span>
@@ -78,12 +78,12 @@ export function BubbleCanvas({ memories }: { memories: MemoryWithCover[] }) {
           aria-label={t("eyebrow")}
           // Vertical padding has to clear the ±48px scatter, since the wrapper
           // clips (it hides the panned overflow horizontally).
-          className="relative w-full touch-pan-y cursor-grab overflow-hidden py-16 canvas-focus active:cursor-grabbing"
+          className="relative w-full touch-pan-y cursor-grab overflow-hidden py-12 canvas-focus active:cursor-grabbing sm:py-16"
         >
           {overflowing && <CarouselArrows onPrev={() => shift(1)} onNext={() => shift(-1)} />}
           {/* w-max so the track's offsetWidth is its real content width, which
               is what the carousel centers on. */}
-          <div ref={trackRef} className="flex w-max items-center gap-7 px-14 py-3">
+          <div ref={trackRef} className="flex w-max items-center gap-5 px-10 py-3 sm:gap-7 sm:px-14">
             {bubbles.map(({ memory, size, offset, tilt, wash }) => {
               const dimmed =
                 query.length > 0 && !memory.title.toLowerCase().includes(query.toLowerCase());

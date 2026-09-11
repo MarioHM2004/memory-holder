@@ -8,10 +8,14 @@ import { formatDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media-url";
 import { useHDragCarousel } from "@/lib/use-h-drag-carousel";
 import { CarouselArrows } from "@/components/carousel-arrows";
+import { useIsCompact } from "@/lib/use-is-compact";
 
-const STEP = 180;
-// Half a card (w-60) plus a little, so end cards stay inside the track.
-const LEAD = 130;
+// Desktop spacing. On a phone both shrink: a 240px card centred on a node
+// needs more room than a 375px screen has, so the card narrows and the
+// spacing follows it.
+const STEP = { base: 132, sm: 180 };
+// Half a card plus a little, so end cards stay inside the track.
+const LEAD = { base: 96, sm: 130 };
 
 export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
   const t = useTranslations("Timeline");
@@ -20,7 +24,10 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [openId, setOpenId] = useState<string | null>(null);
-  const { overflowing, shift } = useHDragCarousel(wrapRef, trackRef, [memories.length]);
+  const compact = useIsCompact();
+  const step = compact ? STEP.base : STEP.sm;
+  const lead = compact ? LEAD.base : LEAD.sm;
+  const { overflowing, shift } = useHDragCarousel(wrapRef, trackRef, [memories.length, compact]);
 
   if (memories.length === 0) {
     return (
@@ -51,13 +58,13 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
       // w-full matters: as a flex child this would otherwise shrink to the
       // track's own width, and everything hanging off the nodes (cards, date
       // labels) would be clipped by overflow-hidden.
-      className="relative w-full touch-pan-y cursor-grab overflow-hidden py-[300px] canvas-focus active:cursor-grabbing"
+      className="relative w-full touch-pan-y cursor-grab overflow-hidden py-[280px] sm:py-[300px] canvas-focus active:cursor-grabbing"
     >
       {overflowing && <CarouselArrows onPrev={() => shift(1)} onNext={() => shift(-1)} />}
       <div
         ref={trackRef}
         className="drawn-rule relative h-2"
-        style={{ width: `${LEAD * 2 + (memories.length - 1) * STEP}px` }}
+        style={{ width: `${lead * 2 + (memories.length - 1) * step}px` }}
       >
         {memories.map((memory, i) => {
           const up = i % 2 === 0;
@@ -68,16 +75,23 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
             <div
               key={memory.id}
               className="absolute top-1/2 h-0"
-              style={{ left: `${LEAD + i * STEP}px` }}
+              style={{ left: `${lead + i * step}px` }}
             >
+              {/* The button is a 44px transparent box so it can be tapped with
+                  a thumb; the 15px circle inside is what you actually see. */}
               <button
                 onClick={() => setOpenId(open ? null : memory.id)}
                 aria-label={memory.title}
                 aria-expanded={open}
-                className={`absolute left-0 top-0 h-[15px] w-[15px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-ink transition-transform hover:scale-125 ${
-                  open ? "bg-accent-1" : "bg-surface"
-                }`}
-              />
+                className="absolute left-0 top-0 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full"
+              >
+                <span
+                  aria-hidden
+                  className={`block h-[15px] w-[15px] rounded-full border-2 border-ink transition-transform ${
+                    open ? "bg-accent-1" : "bg-surface"
+                  }`}
+                />
+              </button>
               <span
                 className={`absolute left-0 -translate-x-1/2 whitespace-nowrap font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted ${
                   up ? "bottom-5" : "top-5"
@@ -91,7 +105,7 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
                 href={`/memories/${memory.id}`}
                 tabIndex={open ? undefined : -1}
                 aria-hidden={!open}
-                className={`sketch-soft absolute left-0 block w-60 -translate-x-1/2 bg-surface p-4 transition-opacity hover:-rotate-[0.4deg] ${
+                className={`sketch-soft absolute left-0 block w-48 -translate-x-1/2 bg-surface p-3 transition-opacity hover:-rotate-[0.4deg] sm:w-60 sm:p-4 ${
                   up ? "bottom-11" : "top-11"
                 } ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
               >
@@ -102,10 +116,10 @@ export function Timeline({ memories }: { memories: MemoryWithCover[] }) {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    className="mb-2.5 h-24 w-full border border-ink/25 object-cover"
+                    className="mb-2.5 h-16 w-full border border-ink/25 object-cover sm:h-24"
                   />
                 )}
-                <h4 className="font-display text-xl font-bold leading-tight">{memory.title}</h4>
+                <h4 className="font-display text-lg font-bold leading-tight sm:text-xl">{memory.title}</h4>
                 <p className="mt-1 line-clamp-3 text-xs text-ink-soft">{memory.description}</p>
                 <span className="mt-2.5 inline-block font-mono text-[0.62rem] uppercase tracking-[0.16em] text-accent-1">
                   {t("viewFull")} →

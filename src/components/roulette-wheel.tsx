@@ -67,9 +67,9 @@ export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
   }
 
   return (
-    <div className="grid items-start gap-12 sm:grid-cols-[auto_1fr]">
+    <div className="grid items-start gap-8 sm:grid-cols-[auto_1fr] sm:gap-12">
       <div className="flex flex-col items-center gap-6">
-        <div className="relative h-64 w-64">
+        <div className="relative h-56 w-56 sm:h-64 sm:w-64">
           <div
             className="absolute -top-1 left-1/2 z-10 h-0 w-0 -translate-x-1/2 border-x-[9px] border-t-[18px] border-x-transparent border-t-ink"
             aria-hidden
@@ -93,7 +93,7 @@ export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
 
         {/* Capped and scrollable: with a full roulette this list ran far
             past the fold and pushed everything else down. */}
-        <ul className="flex max-h-64 w-64 flex-col gap-1 overflow-y-auto pr-1">
+        <ul className="flex max-h-56 w-full flex-col gap-1 overflow-y-auto pr-1 sm:max-h-64 sm:w-64">
           {memories.map((memory, i) => (
             <li
               key={memory.id}
@@ -112,7 +112,7 @@ export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
         </ul>
       </div>
 
-      <div className="sketch-soft-2 relative flex min-h-[300px] flex-col justify-center gap-3 overflow-hidden bg-surface-2 p-8">
+      <div className="sketch-soft-2 relative flex min-h-[240px] flex-col justify-center gap-3 overflow-hidden bg-surface-2 p-5 sm:min-h-[300px] sm:p-8">
         {landed?.coverMediaId && (
           <>
             {/* One of the memory's own photos behind the text. The preview
@@ -141,7 +141,7 @@ export function RouletteWheel({ memories }: { memories: MemoryWithCover[] }) {
             <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent-1">
               {formatDate(landed.memory_date, locale)}
             </p>
-            <h3 className="font-display text-3xl font-bold leading-none">{landed.title}</h3>
+            <h3 className="font-display text-2xl font-bold leading-none sm:text-3xl">{landed.title}</h3>
             <p className="text-sm text-ink-soft">{landed.description}</p>
             <Link href={`/memories/${landed.id}`} className="btn-ink mt-3 w-fit no-underline">
               {t("viewFull")}
