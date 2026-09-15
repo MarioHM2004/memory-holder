@@ -9,14 +9,25 @@ import { useEffect, useRef, useState, type RefObject } from "react";
  * `align` decides where an overflowing track rests. The timeline and bubbles
  * sit centred; a filmstrip starts at its first item, since that's the photo
  * on screen when the page opens. Content that fits is centred either way.
+ *
+ * `followPointer` pans with the mouse: the cursor's position across the
+ * wrapper picks the matching position along the track, so the far left shows
+ * the start and the far right the end. Touch is unaffected and keeps dragging.
  */
 export function useHDragCarousel(
   wrapRef: RefObject<HTMLDivElement | null>,
   trackRef: RefObject<HTMLDivElement | null>,
   deps: unknown[] = [],
-  { align = "center" }: { align?: "center" | "start" } = {},
+  {
+    align = "center",
+    followPointer = false,
+  }: { align?: "center" | "start"; followPointer?: boolean } = {},
 ) {
   const bounds = useRef({ min: 0, max: 0, current: 0 });
+  // Where the pointer wants the track to be. The track eases towards it
+  // frame by frame rather than jumping, so it glides behind the cursor. Any
+  // other way of moving (drag, wheel, arrows) clears it and takes over.
+  const pointerTarget = useRef<number | null>(null);
   const measured = useRef(false);
   const [overflowing, setOverflowing] = useState(false);
 
@@ -38,6 +49,8 @@ export function useHDragCarousel(
     // offsetWidth, not scrollWidth: the timeline's cards and date labels are
     // absolutely positioned and overhang the track, and counting them would
     // bias the centering away from the line itself.
+    // A resize changes the bounds the pending target was computed from.
+    pointerTarget.current = null;
     const overshoot = wrap.clientWidth - track.offsetWidth;
     const resting = overshoot / 2;
 
@@ -69,6 +82,7 @@ export function useHDragCarousel(
     if (!wrap) return;
 
     let dragging = false;
+    let frame = 0;
     let dragged = false;
     let startX = 0;
     let startCurrent = 0;
@@ -78,13 +92,46 @@ export function useHDragCarousel(
       dragged = false;
       startX = e.clientX;
       startCurrent = bounds.current.current;
+      pointerTarget.current = null;
       // Deliberately no setPointerCapture here. Capturing on pointerdown
       // retargets the whole gesture to the wrapper, so the click that follows
       // never reaches the memory button inside the track and a plain click
       // does nothing at all. Capture is taken below, only once the gesture
       // has actually become a drag.
     }
+    function followFrame() {
+      const target = pointerTarget.current;
+      if (target === null) {
+        frame = 0;
+        return;
+      }
+      const gap = target - bounds.current.current;
+      bounds.current.current = Math.abs(gap) < 0.5 ? target : bounds.current.current + gap * 0.12;
+      applyTransform(false);
+      frame = bounds.current.current === target ? 0 : requestAnimationFrame(followFrame);
+    }
+
+    function follow(e: PointerEvent) {
+      if (!followPointer || e.pointerType !== "mouse" || dragging) return;
+      if (bounds.current.min === bounds.current.max) return;
+      // Over an open card the track holds still. Otherwise heading for its
+      // link would slide the card out from under the cursor.
+      if ((e.target as Element).closest("a")) return;
+
+      const rect = wrap!.getBoundingClientRect();
+      // A margin at each side where the track is already at its end, so
+      // reaching the first or last memory doesn't need the exact edge pixel.
+      const margin = Math.min(96, rect.width * 0.15);
+      const ratio = Math.max(
+        0,
+        Math.min(1, (e.clientX - rect.left - margin) / (rect.width - margin * 2)),
+      );
+      pointerTarget.current = bounds.current.max + (bounds.current.min - bounds.current.max) * ratio;
+      if (!frame) frame = requestAnimationFrame(followFrame);
+    }
+
     function onPointerMove(e: PointerEvent) {
+      follow(e);
       if (!dragging) return;
       const dx = e.clientX - startX;
       if (!dragged) {
@@ -130,6 +177,7 @@ export function useHDragCarousel(
       if (e.deltaX !== 0 && Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
 
       e.preventDefault();
+      pointerTarget.current = null;
       bounds.current.current = Math.max(
         bounds.current.min,
         Math.min(bounds.current.max, bounds.current.current - dx),
@@ -163,6 +211,7 @@ export function useHDragCarousel(
       wrap.removeEventListener("keydown", onKeyDown);
       wrap.removeEventListener("wheel", onWheel);
       observer.disconnect();
+      cancelAnimationFrame(frame);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
@@ -171,6 +220,7 @@ export function useHDragCarousel(
     const wrap = wrapRef.current;
     if (!wrap) return;
     const delta = wrap.clientWidth * 0.55 * direction;
+    pointerTarget.current = null;
     bounds.current.current = Math.max(
       bounds.current.min,
       Math.min(bounds.current.max, bounds.current.current + delta),
@@ -200,6 +250,7 @@ export function useHDragCarousel(
     else if (right + margin > viewRight) next = -(right + margin - wrap.clientWidth);
     if (next === bounds.current.current) return;
 
+    pointerTarget.current = null;
     bounds.current.current = clamp(next);
     applyTransform(true);
   }
