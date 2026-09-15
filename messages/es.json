@@ -158,7 +158,7 @@
       "showRouletteLabel": "Mostrar en la ruleta",
       "showRouletteHint": "Podrá salir al girar la ruleta",
       "mediaLabel": "Fotos y vídeos",
-      "mediaHint": "Elige los archivos que quieras subir",
+      "mediaHint": "Arrastra aquí fotos y vídeos, o pulsa para elegirlos",
       "cancel": "Cancelar",
       "save": "Guardar recuerdo",
       "saving": "Guardando…",
@@ -166,7 +166,10 @@
       "editTitle": "Editar recuerdo",
       "errorRequired": "El título y la fecha son obligatorios.",
       "errorGeneric": "Algo ha ido mal. Inténtalo de nuevo.",
-      "errorUpload": "{count, plural, one {No se ha podido subir # archivo} other {No se han podido subir # archivos}}. El recuerdo está guardado: pulsa guardar para volver a intentarlo."
+      "errorUpload": "{count, plural, one {No se ha podido subir # archivo} other {No se han podido subir # archivos}}. El recuerdo está guardado: pulsa guardar para volver a intentarlo.",
+      "mediaDrop": "Suéltalos para añadirlos",
+      "removeFile": "Quitar",
+      "mediaIgnored": "{count, plural, one {Se ha ignorado # archivo} other {Se han ignorado # archivos}}: solo se pueden añadir fotos y vídeos."
     },
     "categoriesTab": {
       "nameLabel": "Nombre",

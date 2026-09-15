@@ -1,6 +1,13 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type DragEvent,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -31,6 +38,20 @@ function safeFileName(name: string) {
       .replace(/^-+|-+$/g, "")
       .slice(-80) || "file"
   );
+}
+
+/** Identifies a picked file, so adding the same one twice doesn't queue it twice. */
+function fileKey(file: File) {
+  return `${file.name}:${file.size}:${file.lastModified}`;
+}
+
+/**
+ * A drop isn't filtered by the input's accept attribute, so this does it.
+ * HEIC photos from an iPhone can arrive with an empty type on Windows, hence
+ * the extension check.
+ */
+function isMedia(file: File) {
+  return /^(image|video)\//.test(file.type) || /\.(heic|heif)$/i.test(file.name);
 }
 
 /** Uploads a generated copy; null blob or a failed upload just means none. */
@@ -65,6 +86,9 @@ export function MemoryForm({
   const [existingMedia, setExistingMedia] = useState(memory?.media ?? []);
   // Files that didn't make it on the last save, with the reason for each.
   const [failed, setFailed] = useState<{ name: string; reason: string }[]>([]);
+  const [dragging, setDragging] = useState(false);
+  // How many files of the last pick or drop were left out for not being media.
+  const [ignored, setIgnored] = useState(0);
   const hasSubmitted = useRef(false);
   // Keyed on the state object, not the memory id: retrying after a failed
   // upload saves the same memory again, and must still upload.
@@ -72,6 +96,7 @@ export function MemoryForm({
   // Once a new memory has been created, saving again has to update that row.
   // Otherwise retrying failed uploads would create a second copy of it.
   const savedId = memory?.id ?? state.memoryId;
+  const busy = pending || uploading;
 
   useEffect(() => {
     if (!hasSubmitted.current || !state.memoryId || state.error) return;
@@ -144,13 +169,57 @@ export function MemoryForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
+  // Dropping a file anywhere outside the drop zone makes the browser open it,
+  // navigating away from the form and losing everything typed into it.
+  useEffect(() => {
+    function blockFileDrop(e: globalThis.DragEvent) {
+      if (e.dataTransfer?.types.includes("Files")) e.preventDefault();
+    }
+    window.addEventListener("dragover", blockFileDrop);
+    window.addEventListener("drop", blockFileDrop);
+    return () => {
+      window.removeEventListener("dragover", blockFileDrop);
+      window.removeEventListener("drop", blockFileDrop);
+    };
+  }, []);
+
+  // Picking and dropping both add to the queue rather than replacing it, so
+  // photos can be gathered from several folders before saving.
+  function addFiles(list: FileList | null) {
+    const incoming = Array.from(list ?? []);
+    const media = incoming.filter(isMedia);
+    setIgnored(incoming.length - media.length);
+    setFiles((current) => {
+      const queued = new Set(current.map(fileKey));
+      return [...current, ...media.filter((file) => !queued.has(fileKey(file)))];
+    });
+  }
+
+  function onZoneDragOver(e: DragEvent<HTMLLabelElement>) {
+    if (!e.dataTransfer.types.includes("Files")) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = busy ? "none" : "copy";
+    if (!busy) setDragging(true);
+  }
+
+  function onZoneDragLeave(e: DragEvent<HTMLLabelElement>) {
+    // dragleave also fires when moving onto a child of the zone; only a real
+    // exit should drop the highlight.
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragging(false);
+  }
+
+  function onZoneDrop(e: DragEvent<HTMLLabelElement>) {
+    e.preventDefault();
+    setDragging(false);
+    // While uploading, the loop is working through a snapshot of the queue.
+    if (!busy) addFiles(e.dataTransfer.files);
+  }
+
   async function handleDeleteMedia(mediaId: string) {
     setExistingMedia((prev) => prev.filter((item) => item.id !== mediaId));
     await deleteMediaAction(mediaId);
     router.refresh();
   }
-
-  const busy = pending || uploading;
 
   return (
     <form
@@ -268,16 +337,55 @@ export function MemoryForm({
           </ul>
         )}
 
-        <label className="mt-3 block cursor-pointer border-2 border-dashed border-line px-4 py-8 text-center font-display text-lg text-ink-soft hover:border-ink hover:text-ink">
-          {files.length > 0 ? files.map((f) => f.name).join(", ") : t("mediaHint")}
+        <label
+          onDragOver={onZoneDragOver}
+          onDragLeave={onZoneDragLeave}
+          onDrop={onZoneDrop}
+          className={`mt-3 block cursor-pointer border-2 border-dashed px-4 py-8 text-center font-display text-lg transition-colors hover:border-ink hover:text-ink ${
+            dragging ? "border-ink bg-ground-2 text-ink" : "border-line text-ink-soft"
+          }`}
+        >
+          {dragging ? t("mediaDrop") : t("mediaHint")}
           <input
             type="file"
             accept="image/*,video/*"
             multiple
+            disabled={busy}
             className="hidden"
-            onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+            onChange={(e) => {
+              addFiles(e.target.files);
+              // Cleared so choosing the same file again after removing it
+              // still fires a change.
+              e.target.value = "";
+            }}
           />
         </label>
+
+        {ignored > 0 && (
+          <p className="mt-2 text-xs text-accent-1">{t("mediaIgnored", { count: ignored })}</p>
+        )}
+
+        {files.length > 0 && (
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {files.map((file) => (
+              <li
+                key={fileKey(file)}
+                className="flex items-center gap-2 border border-dashed border-line px-3 py-1.5 text-xs"
+              >
+                {file.type.startsWith("video") ? "🎬" : "🖼️"} {file.name}
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => setFiles((current) => current.filter((f) => fileKey(f) !== fileKey(file)))}
+                  aria-label={t("removeFile")}
+                  className="text-accent-1 disabled:opacity-40"
+                >
+                  ×
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {state.error && (

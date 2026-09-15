@@ -158,7 +158,7 @@
       "showRouletteLabel": "Show in the roulette",
       "showRouletteHint": "Can come up when spinning the roulette",
       "mediaLabel": "Photos and videos",
-      "mediaHint": "Choose files to upload",
+      "mediaHint": "Drag photos and videos here, or click to choose them",
       "cancel": "Cancel",
       "save": "Save memory",
       "saving": "Saving…",
@@ -166,7 +166,10 @@
       "editTitle": "Edit memory",
       "errorRequired": "Title and date are required.",
       "errorGeneric": "Something went wrong. Try again.",
-      "errorUpload": "{count, plural, one {# file couldn't be uploaded} other {# files couldn't be uploaded}}. The memory is saved — press save to try again."
+      "errorUpload": "{count, plural, one {# file couldn't be uploaded} other {# files couldn't be uploaded}}. The memory is saved — press save to try again.",
+      "mediaDrop": "Drop to add them",
+      "removeFile": "Remove",
+      "mediaIgnored": "{count, plural, one {# file was skipped} other {# files were skipped}}: only photos and videos can be added."
     },
     "categoriesTab": {
       "nameLabel": "Name",

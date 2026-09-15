@@ -158,7 +158,7 @@
       "showRouletteLabel": "在转盘中显示",
       "showRouletteHint": "转动转盘时可能会出现",
       "mediaLabel": "照片和视频",
-      "mediaHint": "选择要上传的文件",
+      "mediaHint": "把照片和视频拖到这里，或点击选择",
       "cancel": "取消",
       "save": "保存回忆",
       "saving": "保存中…",
@@ -166,7 +166,10 @@
       "editTitle": "编辑回忆",
       "errorRequired": "标题和日期为必填项。",
       "errorGeneric": "出了点问题，请重试。",
-      "errorUpload": "有 {count} 个文件上传失败。回忆已经保存，再点一次保存即可重试。"
+      "errorUpload": "有 {count} 个文件上传失败。回忆已经保存，再点一次保存即可重试。",
+      "mediaDrop": "松开即可添加",
+      "removeFile": "移除",
+      "mediaIgnored": "已忽略 {count} 个文件：只能添加照片和视频。"
     },
     "categoriesTab": {
       "nameLabel": "名称",
