@@ -119,7 +119,10 @@
     "noCategory": "无分类",
     "noMedia": "还没有照片或视频",
     "mediaUnavailable": "无法显示",
-    "entryHeading": "完整记录"
+    "entryHeading": "完整记录",
+    "previousPhoto": "上一张",
+    "nextPhoto": "下一张",
+    "photoStrip": "这段回忆的照片"
   },
   "Admin": {
     "eyebrow": "管理面板",

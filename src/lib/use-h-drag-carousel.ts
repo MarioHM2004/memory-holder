@@ -3,17 +3,26 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 
 /**
- * Drag-to-pan + arrow-button horizontal carousel with no visible scrollbar,
- * centered on its content at rest. Shared by the timeline and the category
- * bubble canvas.
+ * Drag-to-pan + arrow-button horizontal carousel with no visible scrollbar.
+ * Shared by the timeline, the category bubble canvas and the photo filmstrip.
+ *
+ * `align` decides where an overflowing track rests. The timeline and bubbles
+ * sit centred; a filmstrip starts at its first item, since that's the photo
+ * on screen when the page opens. Content that fits is centred either way.
  */
 export function useHDragCarousel(
   wrapRef: RefObject<HTMLDivElement | null>,
   trackRef: RefObject<HTMLDivElement | null>,
   deps: unknown[] = [],
+  { align = "center" }: { align?: "center" | "start" } = {},
 ) {
   const bounds = useRef({ min: 0, max: 0, current: 0 });
+  const measured = useRef(false);
   const [overflowing, setOverflowing] = useState(false);
+
+  function clamp(x: number) {
+    return Math.max(bounds.current.min, Math.min(bounds.current.max, x));
+  }
 
   function applyTransform(animated: boolean) {
     const track = trackRef.current;
@@ -41,7 +50,15 @@ export function useHDragCarousel(
       bounds.current.max = resting;
     }
 
-    bounds.current.current = resting;
+    if (overshoot >= 0 || align === "center") {
+      bounds.current.current = resting;
+    } else {
+      // Start-aligned: begin at the first item, and on later re-measures (a
+      // window resize, fonts loading) stay where the person had moved to
+      // instead of snapping back — they may be several photos in.
+      bounds.current.current = measured.current ? clamp(bounds.current.current) : 0;
+    }
+    measured.current = true;
     setOverflowing(overshoot < 0);
     applyTransform(false);
   }
@@ -161,5 +178,31 @@ export function useHDragCarousel(
     applyTransform(true);
   }
 
-  return { overflowing, shift, measure };
+  /**
+   * Pans just far enough to bring `el` fully into view, with some breathing
+   * room past the arrows. For keeping a selection visible when it's changed
+   * from outside the strip — e.g. the filmstrip following prev/next on the
+   * main photo. `el` must sit inside a positioned track so offsetLeft is
+   * measured from it.
+   */
+  function reveal(el: HTMLElement | null | undefined) {
+    const wrap = wrapRef.current;
+    if (!wrap || !el || bounds.current.min === bounds.current.max) return;
+
+    const margin = 52;
+    const viewLeft = -bounds.current.current;
+    const viewRight = viewLeft + wrap.clientWidth;
+    const left = el.offsetLeft;
+    const right = left + el.offsetWidth;
+
+    let next = bounds.current.current;
+    if (left - margin < viewLeft) next = -(left - margin);
+    else if (right + margin > viewRight) next = -(right + margin - wrap.clientWidth);
+    if (next === bounds.current.current) return;
+
+    bounds.current.current = clamp(next);
+    applyTransform(true);
+  }
+
+  return { overflowing, shift, measure, reveal };
 }

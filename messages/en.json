@@ -119,7 +119,10 @@
     "noCategory": "No category",
     "noMedia": "No photos or videos yet",
     "mediaUnavailable": "Not available",
-    "entryHeading": "The day, in full"
+    "entryHeading": "The day, in full",
+    "previousPhoto": "Previous photo",
+    "nextPhoto": "Next photo",
+    "photoStrip": "Photos in this memory"
   },
   "Admin": {
     "eyebrow": "Admin panel",

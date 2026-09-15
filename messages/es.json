@@ -119,7 +119,10 @@
     "noCategory": "Sin categoría",
     "noMedia": "Sin fotos o vídeos todavía",
     "mediaUnavailable": "No disponible",
-    "entryHeading": "El día, al completo"
+    "entryHeading": "El día, al completo",
+    "previousPhoto": "Foto anterior",
+    "nextPhoto": "Foto siguiente",
+    "photoStrip": "Fotos de este recuerdo"
   },
   "Admin": {
     "eyebrow": "Panel de administración",
