@@ -11,11 +11,15 @@ type Tab = "memories" | "categories" | "invite";
 
 export function AdminTabs({
   coupleId,
+  userId,
+  displayName,
   inviteCode,
   memories,
   categories,
 }: {
   coupleId: string;
+  userId: string;
+  displayName: string;
   inviteCode: string;
   memories: MemoryForAdmin[];
   categories: CategoryWithCount[];
@@ -49,7 +53,13 @@ export function AdminTabs({
       </div>
 
       {tab === "memories" && (
-        <MemoriesPanel coupleId={coupleId} memories={memories} categories={categories} />
+        <MemoriesPanel
+          coupleId={coupleId}
+          userId={userId}
+          displayName={displayName}
+          memories={memories}
+          categories={categories}
+        />
       )}
       {tab === "categories" && <CategoriesPanel categories={categories} />}
       {tab === "invite" && <InvitePanel inviteCode={inviteCode} />}

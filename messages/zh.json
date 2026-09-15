@@ -138,7 +138,9 @@
       "addButton": "添加回忆",
       "empty": "还没有回忆——添加第一条吧。",
       "edit": "编辑",
-      "delete": "删除"
+      "delete": "删除",
+      "beingEdited": "{name} 正在编辑这段回忆。",
+      "beingEditedSelf": "你已经在另一个标签页或设备上编辑这段回忆。"
     },
     "form": {
       "titleLabel": "标题",

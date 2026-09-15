@@ -138,7 +138,9 @@
       "addButton": "Add memory",
       "empty": "No memories yet — add the first one.",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "beingEdited": "{name} is editing this memory right now.",
+      "beingEditedSelf": "You're already editing this memory in another tab or device."
     },
     "form": {
       "titleLabel": "Title",

@@ -18,6 +18,8 @@ export default async function AdminPage() {
       <div className="mt-9">
         <AdminTabs
           coupleId={context.couple.id}
+          userId={context.userId}
+          displayName={context.displayName}
           inviteCode={context.couple.invite_code}
           memories={memories}
           categories={categories}

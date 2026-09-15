@@ -138,7 +138,9 @@
       "addButton": "Añadir recuerdo",
       "empty": "Todavía no hay recuerdos: añade el primero.",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "beingEdited": "{name} está editando este recuerdo ahora mismo.",
+      "beingEditedSelf": "Ya estás editando este recuerdo en otra pestaña o dispositivo."
     },
     "form": {
       "titleLabel": "Título",

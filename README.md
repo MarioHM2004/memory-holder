@@ -28,6 +28,10 @@ It creates every table, the Row Level Security policies, the `create_couple` /
 `join_couple_by_code` functions used by onboarding, and the private `media` storage
 bucket used for photos and videos.
 
+Then run [`supabase/migrations/0002_editing_presence.sql`](supabase/migrations/0002_editing_presence.sql)
+as well. It lets members of a diary join the realtime channel that stops two
+people from editing the same memory at once.
+
 If you have the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
 set up instead, `supabase db push` applies the same migration.
 
