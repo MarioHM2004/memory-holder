@@ -9,7 +9,13 @@ import type { CategoryWithCount } from "@/lib/data/memories";
 const initialState: CategoryFormState = { error: null };
 const SWATCHES = ["#F6E7E2", "#E6ECDF", "#E4E8F2", "#F7ECD2", "#C8452F", "#3A5B8C"];
 
-export function CategoriesPanel({ categories }: { categories: CategoryWithCount[] }) {
+export function CategoriesPanel({
+  coupleId,
+  categories,
+}: {
+  coupleId: string;
+  categories: CategoryWithCount[];
+}) {
   const t = useTranslations("Admin.categoriesTab");
   const [state, formAction, pending] = useActionState(saveCategoryAction, initialState);
 
@@ -29,6 +35,7 @@ export function CategoriesPanel({ categories }: { categories: CategoryWithCount[
               <span className="h-3 w-3 rounded-full border border-ink" style={{ background: category.color }} />
               {category.name}
               <form action={deleteCategoryAction}>
+                <input type="hidden" name="coupleId" value={coupleId} />
                 <input type="hidden" name="id" value={category.id} />
                 <button type="submit" aria-label={t("delete")} className="text-ink-soft">
                   ×
@@ -40,6 +47,7 @@ export function CategoriesPanel({ categories }: { categories: CategoryWithCount[
       )}
 
       <form action={formAction} className="sketch-soft flex flex-wrap items-end gap-6 bg-surface-2 p-6">
+        <input type="hidden" name="coupleId" value={coupleId} />
         <Field label={t("nameLabel")} name="name" placeholder={t("namePlaceholder")} required />
         <div className="flex flex-col gap-1.5">
           <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">{t("colorLabel")}</span>

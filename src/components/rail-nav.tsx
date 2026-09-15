@@ -4,11 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { signOut } from "@/app/(app)/actions";
+import type { DiarySummary } from "@/lib/data/couple-context";
+import { DiarySwitcher } from "@/components/diary-switcher";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-export function RailNav({ coupleName }: { coupleName: string }) {
+export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; activeDiaryId: string }) {
   const pathname = usePathname();
   const t = useTranslations("Nav");
 
@@ -27,13 +29,11 @@ export function RailNav({ coupleName }: { coupleName: string }) {
       aria-label="Main navigation"
       className="sketch flex w-full shrink-0 flex-col gap-0.5 bg-surface p-4 lg:sticky lg:top-8 lg:w-[216px] lg:p-5"
     >
-      {/* On the bar, the wordmark and the couple's name sit side by side
+      {/* On the bar, the wordmark and the diary's name sit side by side
           rather than stacked, to keep the header shallow on a phone. */}
-      <div className="flex items-baseline justify-between gap-3 px-1 lg:block">
+      <div className="flex items-center justify-between gap-3 px-1 lg:block">
         <Wordmark size="sm" />
-        <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-muted lg:mb-4 lg:pt-1">
-          {coupleName}
-        </p>
+        <DiarySwitcher diaries={diaries} activeId={activeDiaryId} />
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 lg:mt-0 lg:flex-col lg:items-start lg:gap-0.5">

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { MemoriesPanel } from "./memories-panel";
 import { CategoriesPanel } from "./categories-panel";
 import { InvitePanel } from "./invite-panel";
+import { LeaveDiary } from "./leave-diary";
 import type { CategoryWithCount, MemoryForAdmin } from "@/lib/data/memories";
 
 type Tab = "memories" | "categories" | "invite";
@@ -14,6 +15,8 @@ export function AdminTabs({
   userId,
   displayName,
   inviteCode,
+  diaryName,
+  memberCount,
   memories,
   categories,
 }: {
@@ -21,6 +24,8 @@ export function AdminTabs({
   userId: string;
   displayName: string;
   inviteCode: string;
+  diaryName: string;
+  memberCount: number;
   memories: MemoryForAdmin[];
   categories: CategoryWithCount[];
 }) {
@@ -61,8 +66,15 @@ export function AdminTabs({
           categories={categories}
         />
       )}
-      {tab === "categories" && <CategoriesPanel categories={categories} />}
-      {tab === "invite" && <InvitePanel inviteCode={inviteCode} />}
+      {tab === "categories" && <CategoriesPanel coupleId={coupleId} categories={categories} />}
+      {/* The tab is labelled "Diary": inviting people in and leaving it.
+          Side by side once there's room, stacked on a phone. */}
+      {tab === "invite" && (
+        <div className="flex flex-col gap-6 md:flex-row md:items-start">
+          <InvitePanel inviteCode={inviteCode} />
+          <LeaveDiary coupleId={coupleId} diaryName={diaryName} memberCount={memberCount} />
+        </div>
+      )}
     </div>
   );
 }

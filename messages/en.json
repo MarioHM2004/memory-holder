@@ -5,7 +5,9 @@
     "timeline": "Timeline",
     "categories": "Categories",
     "admin": "Admin panel",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "diary": "Diary",
+    "newDiary": "New diary or join one"
   },
   "Common": {
     "adminPanel": "admin panel",
@@ -69,7 +71,10 @@
       "submitting": "Joining…",
       "errorCode": "Enter an invite code.",
       "errorInvalid": "Invalid code. Double-check it with whoever shared it with you."
-    }
+    },
+    "headingAnother": "Start another diary",
+    "subtitleAnother": "Create a diary to share with other people, or join one with the code someone shared with you.",
+    "back": "Back to {name}"
   },
   "Home": {
     "heading": "A personal archive of your life together: firsts, highlights and fragments.",
@@ -130,7 +135,7 @@
     "tabs": {
       "memories": "Memories",
       "categories": "Categories",
-      "invite": "Invite"
+      "invite": "Diary"
     },
     "memoriesTab": {
       "countOne": "{count} memory saved",
@@ -184,6 +189,30 @@
       "description": "Share this link with anyone you'd like to add to your diary. Anyone with the code can join — membership isn't limited to one other person.",
       "copy": "Copy invite link",
       "copied": "Copied!"
+    },
+    "leaveDiary": {
+      "title": "Leave this diary",
+      "description": "{count, plural, one {The other member keeps the diary and everything in it.} other {The other # members keep the diary and everything in it.}} You can come back later with its invite code.",
+      "descriptionLast": "You're the only person in this diary, so leaving deletes it for good.",
+      "button": "Leave diary",
+      "warning": "You'll stop seeing {name} and its memories until someone invites you again.",
+      "warningLast": "{name} will be deleted forever with all its memories, photos and categories. This can't be undone.",
+      "confirmNameLabel": "Type “{name}” to confirm",
+      "confirm": "Yes, leave",
+      "confirmLast": "Delete and leave",
+      "leaving": "Leaving…",
+      "cancel": "Cancel",
+      "errorConfirmName": "The name doesn't match.",
+      "errorGeneric": "Couldn't leave the diary. Try again."
     }
+  },
+  "DatePicker": {
+    "placeholder": "Choose a date",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "previousYear": "Previous year",
+    "nextYear": "Next year",
+    "chooseMonth": "Choose month and year",
+    "today": "Today"
   }
 }

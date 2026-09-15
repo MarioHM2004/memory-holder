@@ -20,7 +20,7 @@ export function MemoriesPanel({
   userId: string;
   displayName: string;
   memories: MemoryForAdmin[];
-  categories: Pick<Category, "id" | "name">[];
+  categories: Pick<Category, "id" | "name" | "color">[];
 }) {
   const t = useTranslations("Admin.memoriesTab");
   const locale = useLocale();
@@ -104,6 +104,7 @@ export function MemoriesPanel({
                       ✎
                     </button>
                     <form action={deleteMemoryAction}>
+                      <input type="hidden" name="coupleId" value={coupleId} />
                       <input type="hidden" name="id" value={memory.id} />
                       <button
                         type="submit"

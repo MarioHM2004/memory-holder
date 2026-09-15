@@ -32,6 +32,9 @@ Then run [`supabase/migrations/0002_editing_presence.sql`](supabase/migrations/0
 as well. It lets members of a diary join the realtime channel that stops two
 people from editing the same memory at once.
 
+And [`supabase/migrations/0003_leave_diary.sql`](supabase/migrations/0003_leave_diary.sql),
+the function behind leaving a diary.
+
 If you have the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
 set up instead, `supabase db push` applies the same migration.
 

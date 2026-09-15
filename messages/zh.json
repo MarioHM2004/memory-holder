@@ -5,7 +5,9 @@
     "timeline": "时间轴",
     "categories": "分类",
     "admin": "管理面板",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "diary": "日记",
+    "newDiary": "新建或加入日记"
   },
   "Common": {
     "adminPanel": "管理面板",
@@ -69,7 +71,10 @@
       "submitting": "加入中…",
       "errorCode": "请输入邀请码。",
       "errorInvalid": "邀请码无效，请与分享者再次确认。"
-    }
+    },
+    "headingAnother": "再开始一本日记",
+    "subtitleAnother": "新建一本和其他人共享的日记，或者用别人分享给你的邀请码加入。",
+    "back": "返回 {name}"
   },
   "Home": {
     "heading": "你们生活的共享档案：\n彼此的第一次、高光时刻与生活片段",
@@ -130,7 +135,7 @@
     "tabs": {
       "memories": "回忆",
       "categories": "分类",
-      "invite": "邀请"
+      "invite": "日记"
     },
     "memoriesTab": {
       "countOne": "已保存 {count} 条回忆",
@@ -184,6 +189,30 @@
       "description": "把这个链接分享给你想加入日记本的人。任何拥有邀请码的人都可以加入，并不限于一位伙伴。",
       "copy": "复制邀请链接",
       "copied": "已复制！"
+    },
+    "leaveDiary": {
+      "title": "退出这本日记",
+      "description": "其他 {count} 位成员会保留这本日记和里面的所有内容。之后你可以用邀请码重新加入。",
+      "descriptionLast": "你是这本日记里唯一的成员，退出后日记将被永久删除。",
+      "button": "退出日记",
+      "warning": "退出后你将看不到“{name}”和里面的回忆，除非有人再次邀请你。",
+      "warningLast": "“{name}”及其所有回忆、照片和分类将被永久删除，无法恢复。",
+      "confirmNameLabel": "输入“{name}”以确认",
+      "confirm": "确定退出",
+      "confirmLast": "删除并退出",
+      "leaving": "正在退出…",
+      "cancel": "取消",
+      "errorConfirmName": "名称不一致。",
+      "errorGeneric": "无法退出日记，请重试。"
     }
+  },
+  "DatePicker": {
+    "placeholder": "选择日期",
+    "previousMonth": "上个月",
+    "nextMonth": "下个月",
+    "previousYear": "上一年",
+    "nextYear": "下一年",
+    "chooseMonth": "选择年月",
+    "today": "今天"
   }
 }

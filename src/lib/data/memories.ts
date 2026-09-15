@@ -5,6 +5,16 @@ import type { Category, Media, Memory } from "@/lib/types/database";
 export type CategoryWithCount = Category & { memoryCount: number };
 export type MemoryWithCategory = Memory & { categories: { name: string; color: string } | null };
 
+/** How many people belong to a diary, the viewer included. */
+export async function getDiaryMemberCount(coupleId: string): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("couple_members")
+    .select("user_id", { count: "exact", head: true })
+    .eq("couple_id", coupleId);
+  return count ?? 1;
+}
+
 export async function getCategories(coupleId: string): Promise<CategoryWithCount[]> {
   const supabase = await createClient();
   const { data } = await supabase

@@ -13,6 +13,8 @@ import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { makePreview, makeThumbnail } from "@/lib/image-resize";
 import { Field } from "@/components/ui/field";
+import { Select } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Switch } from "@/components/ui/switch";
 import { saveMemoryAction, attachMediaAction, deleteMediaAction, type MemoryFormState } from "./actions";
 import type { Category } from "@/lib/types/database";
@@ -74,7 +76,7 @@ export function MemoryForm({
   onDone,
 }: {
   coupleId: string;
-  categories: Pick<Category, "id" | "name">[];
+  categories: Pick<Category, "id" | "name" | "color">[];
   memory?: MemoryForAdmin;
   onDone: () => void;
 }) {
@@ -234,12 +236,13 @@ export function MemoryForm({
         const formData = new FormData(e.currentTarget);
         startTransition(() => formAction(formData));
       }}
-      className="sketch grid gap-6 bg-surface p-8 sm:grid-cols-2"
+      className="sketch grid gap-6 bg-surface p-5 sm:grid-cols-2 sm:p-8"
     >
       <h3 className="font-display text-2xl font-bold leading-none sm:col-span-2">
         {memory ? t("editTitle") : t("newTitle")}
       </h3>
 
+      <input type="hidden" name="coupleId" value={coupleId} />
       {savedId && <input type="hidden" name="id" value={savedId} />}
 
       <Field
@@ -251,26 +254,23 @@ export function MemoryForm({
         required
       />
 
-      <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">{t("categoryLabel")}</span>
-        <select
-          name="categoryId"
-          defaultValue={memory?.category_id ?? ""}
-          className="border-b-2 border-line bg-transparent px-1 py-2 text-ink outline-none focus:border-ink"
-        >
-          <option value="">{t("noCategory")}</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <Select
+        label={t("categoryLabel")}
+        name="categoryId"
+        defaultValue={memory?.category_id ?? ""}
+        options={[
+          { value: "", label: t("noCategory"), color: null },
+          ...categories.map((category) => ({
+            value: category.id,
+            label: category.name,
+            color: category.color,
+          })),
+        ]}
+      />
 
-      <Field
+      <DatePicker
         label={t("dateLabel")}
         name="memoryDate"
-        type="date"
         defaultValue={memory?.memory_date}
         required
       />

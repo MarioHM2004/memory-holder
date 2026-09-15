@@ -169,6 +169,10 @@ export interface Database {
         Args: { p_code: string };
         Returns: string;
       };
+      leave_couple: {
+        Args: { p_couple_id: string };
+        Returns: boolean;
+      };
       is_couple_member: {
         Args: { p_couple_id: string };
         Returns: boolean;

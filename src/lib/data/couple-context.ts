@@ -1,13 +1,23 @@
 import { cache } from "react";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ACTIVE_DIARY_COOKIE } from "@/lib/data/active-diary";
 import type { Couple } from "@/lib/types/database";
+
+export interface DiarySummary {
+  id: string;
+  name: string;
+}
 
 export interface CoupleContext {
   userId: string;
   displayName: string;
+  /** The diary being viewed. Every page and action works on this one. */
   couple: Couple;
   role: "owner" | "member";
+  /** Every diary the user belongs to, oldest membership first. */
+  diaries: DiarySummary[];
 }
 
 interface LoadedContext {
@@ -17,7 +27,7 @@ interface LoadedContext {
 }
 
 /**
- * Resolves the signed-in user and their diary.
+ * Resolves the signed-in user and the diary they're looking at.
  *
  * Wrapped in React's cache() because the app layout and every page under it
  * both need this, and without deduplication each render repeated the whole
@@ -31,25 +41,40 @@ const loadContext = cache(async (): Promise<LoadedContext> => {
   } = await supabase.auth.getUser();
   if (!user) return { userId: null, context: null };
 
-  const [{ data: membership }, { data: profile }] = await Promise.all([
+  const [{ data: memberships }, { data: profile }, cookieStore] = await Promise.all([
     supabase
       .from("couple_members")
       .select("role, couples(*)")
       .eq("user_id", user.id)
-      .limit(1)
-      .maybeSingle(),
+      // Ordered so the fallback diary is always the same one. Without an
+      // order Postgres may return the rows in any order, and someone in two
+      // diaries could land in either from one visit to the next. couple_id
+      // breaks ties between diaries joined in the same instant.
+      .order("joined_at", { ascending: true })
+      .order("couple_id", { ascending: true }),
     supabase.from("profiles").select("display_name").eq("id", user.id).single(),
+    cookies(),
   ]);
 
-  if (!membership || !membership.couples) return { userId: user.id, context: null };
+  const rows = (memberships ?? [])
+    .filter((membership) => membership.couples)
+    .map((membership) => ({
+      couple: membership.couples as unknown as Couple,
+      role: membership.role as "owner" | "member",
+    }));
+  if (rows.length === 0) return { userId: user.id, context: null };
+
+  const wanted = cookieStore.get(ACTIVE_DIARY_COOKIE)?.value;
+  const active = rows.find((row) => row.couple.id === wanted) ?? rows[0];
 
   return {
     userId: user.id,
     context: {
       userId: user.id,
       displayName: profile?.display_name ?? user.email ?? "Tú",
-      couple: membership.couples as unknown as Couple,
-      role: membership.role as "owner" | "member",
+      couple: active.couple,
+      role: active.role,
+      diaries: rows.map((row) => ({ id: row.couple.id, name: row.couple.name })),
     },
   };
 });
