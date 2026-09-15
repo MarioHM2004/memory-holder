@@ -165,7 +165,8 @@
       "newTitle": "New memory",
       "editTitle": "Edit memory",
       "errorRequired": "Title and date are required.",
-      "errorGeneric": "Something went wrong. Try again."
+      "errorGeneric": "Something went wrong. Try again.",
+      "errorUpload": "{count, plural, one {# file couldn't be uploaded} other {# files couldn't be uploaded}}. The memory is saved — press save to try again."
     },
     "categoriesTab": {
       "nameLabel": "Name",

@@ -165,7 +165,8 @@
       "newTitle": "Nuevo recuerdo",
       "editTitle": "Editar recuerdo",
       "errorRequired": "El título y la fecha son obligatorios.",
-      "errorGeneric": "Algo ha ido mal. Inténtalo de nuevo."
+      "errorGeneric": "Algo ha ido mal. Inténtalo de nuevo.",
+      "errorUpload": "{count, plural, one {No se ha podido subir # archivo} other {No se han podido subir # archivos}}. El recuerdo está guardado: pulsa guardar para volver a intentarlo."
     },
     "categoriesTab": {
       "nameLabel": "Nombre",

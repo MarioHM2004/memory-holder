@@ -86,9 +86,9 @@ export async function attachMediaAction(input: {
   thumbnailPath?: string | null;
   previewPath?: string | null;
   mediaType: "image" | "video";
-}) {
+}): Promise<{ error: string | null }> {
   const supabase = await createClient();
-  await supabase.from("media").insert({
+  const { error } = await supabase.from("media").insert({
     memory_id: input.memoryId,
     storage_path: input.storagePath,
     thumbnail_path: input.thumbnailPath ?? null,
@@ -96,6 +96,7 @@ export async function attachMediaAction(input: {
     media_type: input.mediaType,
   });
   revalidatePath("/", "layout");
+  return { error: error?.message ?? null };
 }
 
 export async function deleteMediaAction(mediaId: string) {

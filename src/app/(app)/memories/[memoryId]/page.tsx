@@ -34,15 +34,18 @@ export default async function MemoryPage({ params }: { params: Promise<{ memoryI
         <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-accent-1">
           {formatDate(memory.memory_date, locale)}
         </p>
-        <p className="mt-2.5 max-w-[60ch] text-ink-soft">{memory.description}</p>
+        <p className="mt-2.5 text-ink-soft">{memory.description}</p>
       </div>
 
       {/* The long-form entry, only ever shown here. whitespace-pre-line keeps
-          the paragraph breaks someone typed without needing a rich editor. */}
+          the paragraph breaks someone typed without needing a rich editor.
+          No ch-based max width: everything above it spans the full column,
+          and a text capped at 65ch stopped well short of that edge, which
+          read as a layout bug rather than a comfortable measure. */}
       {memory.body && (
         <div className="mt-10 border-t-2 border-line pt-8">
           <h2 className="font-display text-2xl font-bold leading-none">{t("entryHeading")}</h2>
-          <div className="mt-4 max-w-[65ch] whitespace-pre-line leading-relaxed text-ink">
+          <div className="mt-4 whitespace-pre-line leading-relaxed text-ink">
             {memory.body}
           </div>
         </div>

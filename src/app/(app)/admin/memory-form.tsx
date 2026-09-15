@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -63,8 +63,15 @@ export function MemoryForm({
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [existingMedia, setExistingMedia] = useState(memory?.media ?? []);
+  // Files that didn't make it on the last save, with the reason for each.
+  const [failed, setFailed] = useState<{ name: string; reason: string }[]>([]);
   const hasSubmitted = useRef(false);
-  const uploadedForId = useRef<string | null>(null);
+  // Keyed on the state object, not the memory id: retrying after a failed
+  // upload saves the same memory again, and must still upload.
+  const uploadedFor = useRef<MemoryFormState | null>(null);
+  // Once a new memory has been created, saving again has to update that row.
+  // Otherwise retrying failed uploads would create a second copy of it.
+  const savedId = memory?.id ?? state.memoryId;
 
   useEffect(() => {
     if (!hasSubmitted.current || !state.memoryId || state.error) return;
@@ -75,50 +82,64 @@ export function MemoryForm({
       return;
     }
 
-    if (uploadedForId.current === state.memoryId) return;
-    uploadedForId.current = state.memoryId;
+    if (uploadedFor.current === state) return;
+    uploadedFor.current = state;
 
     void (async () => {
       setUploading(true);
+      setFailed([]);
       const supabase = createClient();
       const memoryId = state.memoryId!;
+      const stillPending: File[] = [];
+      const failures: { name: string; reason: string }[] = [];
 
       for (const file of files) {
-        const isVideo = file.type.startsWith("video");
-        const key = crypto.randomUUID();
-        const folder = `${coupleId}/${memoryId}`;
-        const path = `${folder}/${key}-${safeFileName(file.name)}`;
+        // Every failure used to be skipped with a bare `continue`, after
+        // which the form closed as if all had gone well: photos vanished
+        // with no message. Each one is now caught, reported and kept for
+        // another try.
+        try {
+          const isVideo = file.type.startsWith("video");
+          const key = crypto.randomUUID();
+          const folder = `${coupleId}/${memoryId}`;
+          const path = `${folder}/${key}-${safeFileName(file.name)}`;
 
-        const { error } = await supabase.storage.from("media").upload(path, file);
-        if (error) continue;
+          const { error } = await supabase.storage.from("media").upload(path, file);
+          if (error) throw error;
 
-        // Downscaled copies for the gallery and the filmstrip. Each is
-        // best-effort: if the browser can't produce or upload one, the row
-        // keeps a null and the app falls back to this original.
-        let thumbnailPath: string | null = null;
-        let previewPath: string | null = null;
+          // Downscaled copies for the gallery and the filmstrip. Each is
+          // best-effort: if the browser can't produce or upload one, the row
+          // keeps a null and the app falls back to this original.
+          let thumbnailPath: string | null = null;
+          let previewPath: string | null = null;
 
-        if (!isVideo) {
-          const [thumb, preview] = await Promise.all([makeThumbnail(file), makePreview(file)]);
-          [thumbnailPath, previewPath] = await Promise.all([
-            uploadDerivative(supabase, `${folder}/${key}-thumb.webp`, thumb),
-            uploadDerivative(supabase, `${folder}/${key}-preview.webp`, preview),
-          ]);
+          if (!isVideo) {
+            const [thumb, preview] = await Promise.all([makeThumbnail(file), makePreview(file)]);
+            [thumbnailPath, previewPath] = await Promise.all([
+              uploadDerivative(supabase, `${folder}/${key}-thumb.webp`, thumb),
+              uploadDerivative(supabase, `${folder}/${key}-preview.webp`, preview),
+            ]);
+          }
+
+          const attached = await attachMediaAction({
+            memoryId,
+            storagePath: path,
+            thumbnailPath,
+            previewPath,
+            mediaType: isVideo ? "video" : "image",
+          });
+          if (attached.error) throw new Error(attached.error);
+        } catch (err) {
+          stillPending.push(file);
+          failures.push({ name: file.name, reason: err instanceof Error ? err.message : String(err) });
         }
-
-        await attachMediaAction({
-          memoryId,
-          storagePath: path,
-          thumbnailPath,
-          previewPath,
-          mediaType: isVideo ? "video" : "image",
-        });
       }
 
       setUploading(false);
-      setFiles([]);
+      setFiles(stillPending);
       router.refresh();
-      onDone();
+      if (failures.length === 0) onDone();
+      else setFailed(failures);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
@@ -133,9 +154,16 @@ export function MemoryForm({
 
   return (
     <form
-      action={formAction}
-      onSubmit={() => {
+      // Submitted by hand instead of through the action prop, which makes
+      // React clear every field once the action finishes. That was invisible
+      // while the form always closed afterwards, but when an upload fails the
+      // form now stays open for a retry, and a new memory's title would be
+      // gone by then.
+      onSubmit={(e) => {
+        e.preventDefault();
         hasSubmitted.current = true;
+        const formData = new FormData(e.currentTarget);
+        startTransition(() => formAction(formData));
       }}
       className="sketch grid gap-6 bg-surface p-8 sm:grid-cols-2"
     >
@@ -143,7 +171,7 @@ export function MemoryForm({
         {memory ? t("editTitle") : t("newTitle")}
       </h3>
 
-      {memory && <input type="hidden" name="id" value={memory.id} />}
+      {savedId && <input type="hidden" name="id" value={savedId} />}
 
       <Field
         label={t("titleLabel")}
@@ -256,6 +284,24 @@ export function MemoryForm({
         <p className="border-l-2 border-accent-1 px-3 py-1.5 text-sm font-medium text-accent-1 sm:col-span-2">
           {state.error}
         </p>
+      )}
+
+      {failed.length > 0 && !busy && (
+        <div
+          role="alert"
+          className="border-l-2 border-accent-1 px-3 py-1.5 text-sm text-accent-1 sm:col-span-2"
+        >
+          <p className="font-medium">{t("errorUpload", { count: failed.length })}</p>
+          {/* The raw reason is for us, not for her: it's what tells a blocked
+              connection apart from a rejected file when she sends a screenshot. */}
+          <ul className="mt-1 font-mono text-[0.68rem] text-ink-soft">
+            {failed.map((item, i) => (
+              <li key={i} className="break-all">
+                {item.name}: {item.reason}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <div className="flex justify-end gap-2 sm:col-span-2">

@@ -165,7 +165,8 @@
       "newTitle": "新回忆",
       "editTitle": "编辑回忆",
       "errorRequired": "标题和日期为必填项。",
-      "errorGeneric": "出了点问题，请重试。"
+      "errorGeneric": "出了点问题，请重试。",
+      "errorUpload": "有 {count} 个文件上传失败。回忆已经保存，再点一次保存即可重试。"
     },
     "categoriesTab": {
       "nameLabel": "名称",
