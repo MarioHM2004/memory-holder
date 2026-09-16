@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
-import { makePreview, makeThumbnail } from "@/lib/image-resize";
+import { makeDerivatives } from "@/lib/image-resize";
 import { Field } from "@/components/ui/field";
 import { Select } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -141,7 +141,7 @@ export function MemoryForm({
           let previewPath: string | null = null;
 
           if (!isVideo) {
-            const [thumb, preview] = await Promise.all([makeThumbnail(file), makePreview(file)]);
+            const { thumb, preview } = await makeDerivatives(file);
             [thumbnailPath, previewPath] = await Promise.all([
               uploadDerivative(supabase, `${folder}/${key}-thumb.webp`, thumb),
               uploadDerivative(supabase, `${folder}/${key}-preview.webp`, preview),
