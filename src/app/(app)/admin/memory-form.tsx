@@ -48,41 +48,12 @@ function fileKey(file: File) {
 }
 
 /**
- * Neither a drop nor the unfiltered picker used on touch screens goes through
- * an accept attribute, so this does the filtering.
+ * A drop isn't filtered by the input's accept attribute, so this does it.
  * HEIC photos from an iPhone can arrive with an empty type on Windows, hence
  * the extension check.
  */
 function isMedia(file: File) {
   return /^(image|video)\//.test(file.type) || /\.(heic|heif)$/i.test(file.name);
-}
-
-/** A hidden multi-file input, meant to sit inside the <label> that opens it. */
-function MediaInput({
-  accept,
-  disabled,
-  onFiles,
-}: {
-  /** Omitted for no filter at all. */
-  accept?: string;
-  disabled: boolean;
-  onFiles: (files: FileList | null) => void;
-}) {
-  return (
-    <input
-      type="file"
-      accept={accept}
-      multiple
-      disabled={disabled}
-      className="hidden"
-      onChange={(e) => {
-        onFiles(e.target.files);
-        // Cleared so choosing the same file again after removing it still
-        // fires a change.
-        e.target.value = "";
-      }}
-    />
-  );
 }
 
 /** Uploads a generated copy; null blob or a failed upload just means none. */
@@ -366,33 +337,28 @@ export function MemoryForm({
           </ul>
         )}
 
-        {/* Mouse and trackpad: one zone to drop onto or click. */}
         <label
           onDragOver={onZoneDragOver}
           onDragLeave={onZoneDragLeave}
           onDrop={onZoneDrop}
-          className={`mt-3 block cursor-pointer border-2 border-dashed px-4 py-8 text-center font-display text-lg transition-colors hover:border-ink hover:text-ink pointer-coarse:hidden ${
+          className={`mt-3 block cursor-pointer border-2 border-dashed px-4 py-8 text-center font-display text-lg transition-colors hover:border-ink hover:text-ink ${
             dragging ? "border-ink bg-ground-2 text-ink" : "border-line text-ink-soft"
           }`}
         >
           {dragging ? t("mediaDrop") : t("mediaHint")}
-          <MediaInput accept="image/*,video/*" disabled={busy} onFiles={addFiles} />
-        </label>
-
-        {/* Touch screens: the same zone, but without an accept filter. Given
-            one, Chrome on Android answers a mix of images and videos with a
-            chooser holding only camera, camcorder and a file browser — no
-            gallery. Unfiltered, every app that can hand over a file is
-            offered, gallery included, and addFiles already turns away
-            anything that isn't a photo or video. There's nothing to drag on
-            a phone, hence the different hint. */}
-        <label
-          className={`mt-3 hidden cursor-pointer border-2 border-dashed border-line px-4 py-8 text-center font-display text-lg text-ink-soft active:border-ink active:text-ink pointer-coarse:block ${
-            busy ? "opacity-50" : ""
-          }`}
-        >
-          {t("mediaHintTouch")}
-          <MediaInput disabled={busy} onFiles={addFiles} />
+          <input
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            disabled={busy}
+            className="hidden"
+            onChange={(e) => {
+              addFiles(e.target.files);
+              // Cleared so choosing the same file again after removing it
+              // still fires a change.
+              e.target.value = "";
+            }}
+          />
         </label>
 
         {ignored > 0 && (

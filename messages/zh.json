@@ -174,8 +174,7 @@
       "errorUpload": "有 {count} 个文件上传失败。回忆已经保存，再点一次保存即可重试。",
       "mediaDrop": "松开即可添加",
       "removeFile": "移除",
-      "mediaIgnored": "已忽略 {count} 个文件：只能添加照片和视频。",
-      "mediaHintTouch": "点击添加照片和视频"
+      "mediaIgnored": "已忽略 {count} 个文件：只能添加照片和视频。"
     },
     "categoriesTab": {
       "nameLabel": "名称",

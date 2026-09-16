@@ -174,8 +174,7 @@
       "errorUpload": "{count, plural, one {# file couldn't be uploaded} other {# files couldn't be uploaded}}. The memory is saved — press save to try again.",
       "mediaDrop": "Drop to add them",
       "removeFile": "Remove",
-      "mediaIgnored": "{count, plural, one {# file was skipped} other {# files were skipped}}: only photos and videos can be added.",
-      "mediaHintTouch": "Tap to add photos and videos"
+      "mediaIgnored": "{count, plural, one {# file was skipped} other {# files were skipped}}: only photos and videos can be added."
     },
     "categoriesTab": {
       "nameLabel": "Name",
