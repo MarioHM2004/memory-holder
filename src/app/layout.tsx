@@ -9,8 +9,9 @@ import {
   Zhi_Mang_Xing,
 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { themeInitScript } from "@/lib/theme";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Marker for the few places that should look hand-lettered rather than typeset.
@@ -60,10 +61,29 @@ const zhiMangXing = Zhi_Mang_Xing({
   preload: false,
 });
 
-export const metadata: Metadata = {
-  title: "Memory Holder",
-  description: "A personal archive of your life together: firsts, highlights and fragments.",
-};
+// Built per request rather than as a constant, so the title and description
+// — the two lines a search result or a pasted link shows — come out in the
+// reader's language.
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Meta");
+
+  return {
+    // Without this, every relative URL below (the social card among them)
+    // would be resolved against localhost at build time.
+    metadataBase: new URL(SITE_URL),
+    title: { default: t("title"), template: "%s · Memory Holder" },
+    description: t("description"),
+    applicationName: "Memory Holder",
+    openGraph: {
+      type: "website",
+      siteName: "Memory Holder",
+      title: t("title"),
+      description: t("description"),
+      url: "/",
+    },
+    twitter: { card: "summary_large_image" },
+  };
+}
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getLocale();

@@ -294,5 +294,9 @@
       "title": "Getting in touch",
       "body": "Questions about any of this: hola@memory-holder.com"
     }
+  },
+  "Meta": {
+    "title": "Memory Holder — a shared photo diary",
+    "description": "A private diary for two: photos, dates and the small moments, in one place only the people you invite can see."
   }
 }

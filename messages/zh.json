@@ -294,5 +294,9 @@
       "title": "联系方式",
       "body": "有任何疑问请联系：hola@memory-holder.com"
     }
+  },
+  "Meta": {
+    "title": "Memory Holder — 共享照片日记",
+    "description": "两个人的私密日记：照片、日期和那些小瞬间，只有你邀请的人才能看到。"
   }
 }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- A taped-up polaroid, the motif the whole diary is built on. Shapes
+       only, no lettering: at 16px in a tab a word is a smudge, and the one
+       thing that survives is a high-contrast silhouette. It carries its own
+       dark background so it reads on a light or dark tab strip alike. -->
+  <rect width="32" height="32" rx="7" fill="#171614" />
+  <g transform="rotate(-8 16 16)">
+    <rect x="8" y="6.5" width="16" height="19" rx="1" fill="#fbfaf7" />
+    <rect x="10" y="8.5" width="12" height="11" fill="#c8452f" />
+  </g>
+</svg>

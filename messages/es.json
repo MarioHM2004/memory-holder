@@ -294,5 +294,9 @@
       "title": "Contacto",
       "body": "Cualquier duda sobre esto: hola@memory-holder.com"
     }
+  },
+  "Meta": {
+    "title": "Memory Holder — un diario de fotos compartido",
+    "description": "Un diario privado para dos: fotos, fechas y los momentos pequeños, en un sitio que solo ven las personas que invites."
   }
 }
