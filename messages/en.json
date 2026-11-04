@@ -34,7 +34,9 @@
       "error": "Incorrect email or password.",
       "errorFields": "Enter your email and password.",
       "noAccount": "First time here?",
-      "createAccount": "Create an account"
+      "createAccount": "Create an account",
+      "linkError": "That link has expired or was already used. Sign in below, or sign up again to get a new one.",
+      "notConfirmed": "Confirm your email before signing in — check for the message we sent you, spam folder included."
     },
     "signup": {
       "subtitle": "Create your account",
@@ -45,9 +47,13 @@
       "submitting": "Creating account…",
       "errorFields": "Fill in every field.",
       "errorPasswordLength": "Password must be at least 8 characters.",
-      "confirmEmail": "We've sent you an email to confirm your account. Confirm it, then sign in with your password.",
+      "confirmEmail": "Check your inbox — we've sent you a link to confirm your account. Look in your spam folder too.",
       "haveAccount": "Already have an account?",
-      "signIn": "Sign in"
+      "signIn": "Sign in",
+      "errorExists": "There's already an account with that email. Sign in with your password instead.",
+      "errorEmailInvalid": "That email address doesn't look valid.",
+      "errorRateLimit": "Too many emails have gone to that address. Wait a few minutes and try again.",
+      "errorGeneric": "Couldn't create the account. Try again."
     }
   },
   "Onboarding": {

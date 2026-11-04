@@ -47,7 +47,26 @@ cp .env.example .env.local
 Fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your
 Supabase project's **Settings → API** page.
 
-### 3. Install and run
+### 3. Set up the auth emails
+
+Sign-ups are confirmed by email, and the stock Supabase setup doesn't work for
+this app — its template returns the session in a URL fragment, which a
+server-rendered app never sees, so the link looks dead. Three things to change:
+
+1. **Custom SMTP.** Under **Project Settings → Authentication → SMTP Settings**,
+   point Supabase at a real sender (Resend, Brevo, SES…) and verify the sending
+   domain. Supabase's built-in sender is capped at
+   [2 emails per hour for the whole project](https://supabase.com/docs/guides/auth/rate-limits),
+   which is fine while developing and nowhere near enough in production.
+2. **URL configuration**, under **Authentication → URL Configuration**: set the
+   Site URL to the live site, and add `/auth/confirm` on every host the app runs
+   on to the Redirect URLs, including `http://localhost:3000/auth/confirm`.
+3. **Templates.** Paste [`supabase/emails/confirm-signup.html`](supabase/emails/confirm-signup.html)
+   into **Authentication → Emails → Confirm signup**. It links to
+   [`/auth/confirm`](src/app/auth/confirm/route.ts), which exchanges the token
+   for a session server-side.
+
+### 4. Install and run
 
 ```bash
 npm install

@@ -34,7 +34,9 @@
       "error": "Email o contraseña incorrectos.",
       "errorFields": "Introduce tu email y contraseña.",
       "noAccount": "¿Primera vez?",
-      "createAccount": "Crea una cuenta"
+      "createAccount": "Crea una cuenta",
+      "linkError": "Ese enlace ha caducado o ya se había usado. Entra abajo, o vuelve a registrarte para recibir uno nuevo.",
+      "notConfirmed": "Confirma tu correo antes de entrar: busca el mensaje que te enviamos, mira también en spam."
     },
     "signup": {
       "subtitle": "Crea tu cuenta",
@@ -45,9 +47,13 @@
       "submitting": "Creando cuenta…",
       "errorFields": "Rellena todos los campos.",
       "errorPasswordLength": "La contraseña debe tener al menos 8 caracteres.",
-      "confirmEmail": "Te hemos enviado un email para confirmar tu cuenta. Confírmalo y entra con tu contraseña.",
+      "confirmEmail": "Revisa tu correo: te hemos enviado un enlace para confirmar tu cuenta. Mira también en spam.",
       "haveAccount": "¿Ya tienes cuenta?",
-      "signIn": "Entra"
+      "signIn": "Entra",
+      "errorExists": "Ya hay una cuenta con ese correo. Entra con tu contraseña.",
+      "errorEmailInvalid": "Ese correo no parece válido.",
+      "errorRateLimit": "Se han enviado demasiados correos a esa dirección. Espera unos minutos y vuelve a intentarlo.",
+      "errorGeneric": "No se ha podido crear la cuenta. Inténtalo de nuevo."
     }
   },
   "Onboarding": {

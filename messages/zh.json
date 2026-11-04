@@ -34,7 +34,9 @@
       "error": "邮箱或密码不正确。",
       "errorFields": "请输入邮箱和密码。",
       "noAccount": "第一次使用？",
-      "createAccount": "创建账号"
+      "createAccount": "创建账号",
+      "linkError": "该链接已过期或已被使用。请在下方登录，或重新注册以获取新链接。",
+      "notConfirmed": "登录前请先确认邮箱：查收我们发送的邮件，也请检查垃圾邮件文件夹。"
     },
     "signup": {
       "subtitle": "创建账号",
@@ -45,9 +47,13 @@
       "submitting": "创建中…",
       "errorFields": "请填写所有字段。",
       "errorPasswordLength": "密码至少需要 8 个字符。",
-      "confirmEmail": "我们已发送确认邮件到你的邮箱。请确认后使用密码登录。",
+      "confirmEmail": "请查收邮件，我们已发送确认账号的链接。也请检查垃圾邮件文件夹。",
       "haveAccount": "已经有账号了？",
-      "signIn": "登录"
+      "signIn": "登录",
+      "errorExists": "该邮箱已注册，请直接用密码登录。",
+      "errorEmailInvalid": "该邮箱地址似乎无效。",
+      "errorRateLimit": "发送到该地址的邮件过多，请几分钟后再试。",
+      "errorGeneric": "无法创建账号，请重试。"
     }
   },
   "Onboarding": {

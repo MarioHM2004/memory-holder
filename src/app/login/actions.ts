@@ -21,8 +21,10 @@ export async function login(
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
+  // An unconfirmed account fails here like a wrong password, and "email or
+  // password incorrect" sends people off checking a password that was fine.
   if (error) {
-    return { error: t("error") };
+    return { error: error.code === "email_not_confirmed" ? t("notConfirmed") : t("error") };
   }
 
   redirect("/");

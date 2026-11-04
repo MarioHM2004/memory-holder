@@ -1,12 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Field } from "@/components/ui/field";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LoginNotice } from "./login-notice";
 import { login, type AuthActionState } from "./actions";
 
 const initialState: AuthActionState = { error: null };
@@ -22,6 +23,10 @@ export default function LoginPage() {
           <Wordmark />
           <p className="mt-2 font-display text-lg text-ink-soft">{t("subtitle")}</p>
         </div>
+
+        <Suspense>
+          <LoginNotice />
+        </Suspense>
 
         <form action={formAction} className="flex flex-col gap-5">
           <Field label={t("email")} name="email" type="email" required />
