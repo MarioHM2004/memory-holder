@@ -141,9 +141,15 @@ export async function deleteMediaAction(mediaId: string) {
   if (media) {
     // Remove the downscaled copies alongside the original, or they'd be left
     // orphaned in the bucket.
-    const paths = [media.storage_path, media.thumbnail_path, media.preview_path].filter(
-      (path): path is string => Boolean(path),
-    );
+    // Deduplicated: preview_path points at storage_path for anything stored
+    // downscaled, which is most photos.
+    const paths = [
+      ...new Set(
+        [media.storage_path, media.thumbnail_path, media.preview_path].filter(
+          (path): path is string => Boolean(path),
+        ),
+      ),
+    ];
     await supabase.storage.from("media").remove(paths);
     await supabase.from("media").delete().eq("id", mediaId);
   }

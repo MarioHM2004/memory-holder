@@ -1,4 +1,7 @@
-export type MediaVariant = "thumb" | "preview" | "original";
+// No "original": uploads are stored downscaled, so there is rarely an
+// original to ask for, and a variant that quietly served a smaller copy
+// would be a trap. See the upload in admin/memory-form.tsx.
+export type MediaVariant = "thumb" | "preview";
 
 /**
  * Points at our own /media route rather than a Supabase signed URL.

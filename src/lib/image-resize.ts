@@ -4,8 +4,9 @@
  * Downscaled copies of a photo, made in the browser before upload.
  *
  * A phone photo is several megabytes; the gallery only ever draws it at ~440px
- * tall, and the filmstrip at 80px. Generating the small copies here means the
- * heavy original is uploaded once and then essentially never downloaded again.
+ * tall, and the filmstrip at 80px. Making the small copies here means the
+ * megabytes never leave the phone: the preview is what gets stored, and the
+ * original is only uploaded when no preview could be made.
  */
 
 /** Filmstrip thumbnails and the bubble hover preview. */

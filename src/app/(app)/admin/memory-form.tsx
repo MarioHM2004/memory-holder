@@ -56,6 +56,9 @@ function isMedia(file: File) {
   return /^(image|video)\//.test(file.type) || /\.(heic|heif)$/i.test(file.name);
 }
 
+/** A video has no downscaled copies: the browser only resizes still images. */
+const NO_DERIVATIVES = { thumb: null, preview: null };
+
 /** Uploads a generated copy; null blob or a failed upload just means none. */
 async function uploadDerivative(
   supabase: ReturnType<typeof createClient>,
@@ -129,30 +132,38 @@ export function MemoryForm({
           const isVideo = file.type.startsWith("video");
           const key = crypto.randomUUID();
           const folder = `${coupleId}/${memoryId}`;
-          const path = `${folder}/${key}-${safeFileName(file.name)}`;
 
-          const { error } = await supabase.storage.from("media").upload(path, file);
+          const { thumb, preview } = isVideo ? NO_DERIVATIVES : await makeDerivatives(file);
+
+          // Which copy of this file the diary actually keeps. Nothing in the
+          // app ever draws the untouched upload — the viewer uses the preview
+          // and everything else the thumbnail — while a phone photo is around
+          // ninety per cent of what a memory costs in storage, and the free
+          // tier only holds a gigabyte in total. So the original is stored
+          // only when no preview can stand in for it: a video, a photo
+          // already smaller than the preview size, or a format the browser
+          // couldn't decode. Whoever took the photo still has it.
+          const main = preview
+            ? { blob: preview, name: `${key}-preview.webp`, type: "image/webp" }
+            : { blob: file, name: `${key}-${safeFileName(file.name)}`, type: file.type };
+
+          const storagePath = `${folder}/${main.name}`;
+          const { error } = await supabase.storage
+            .from("media")
+            .upload(storagePath, main.blob, { contentType: main.type || undefined });
           if (error) throw error;
 
-          // Downscaled copies for the gallery and the filmstrip. Each is
-          // best-effort: if the browser can't produce or upload one, the row
-          // keeps a null and the app falls back to this original.
-          let thumbnailPath: string | null = null;
-          let previewPath: string | null = null;
-
-          if (!isVideo) {
-            const { thumb, preview } = await makeDerivatives(file);
-            [thumbnailPath, previewPath] = await Promise.all([
-              uploadDerivative(supabase, `${folder}/${key}-thumb.webp`, thumb),
-              uploadDerivative(supabase, `${folder}/${key}-preview.webp`, preview),
-            ]);
-          }
+          // Best-effort, unlike the one above: without a thumbnail the
+          // filmstrip falls back to the larger copy rather than breaking.
+          const thumbnailPath = await uploadDerivative(supabase, `${folder}/${key}-thumb.webp`, thumb);
 
           const attached = await attachMediaAction({
             memoryId,
-            storagePath: path,
+            storagePath,
             thumbnailPath,
-            previewPath,
+            // The same object as storagePath whenever the preview is all we
+            // kept, so the row still says plainly where the viewer's copy is.
+            previewPath: preview ? storagePath : null,
             mediaType: isVideo ? "video" : "image",
           });
           if (attached.error) throw new Error(attached.error);

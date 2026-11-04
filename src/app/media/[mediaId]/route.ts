@@ -11,8 +11,9 @@ import type { MediaVariant } from "@/lib/media-url";
  * a leaked URL is worth nothing.
  */
 
-// Derivatives are always WebP (we set that on upload); originals keep whatever
-// extension they came with.
+// Stored copies are WebP (we set that on upload); the files kept untouched —
+// videos, and photos the browser couldn't downscale — keep whatever extension
+// they came with.
 const CONTENT_TYPES: Record<string, string> = {
   webp: "image/webp",
   jpg: "image/jpeg",
@@ -50,13 +51,12 @@ export async function GET(request: Request, ctx: { params: Promise<{ mediaId: st
   // break. Images are the ones worth proxying.
   if (media.media_type === "video") return new Response("Not found", { status: 404 });
 
-  // Rows created before the derivatives migration only have the original.
+  // The fallbacks cover rows from before the derivatives migration, and
+  // photos the browser couldn't downscale, where storage_path is all there is.
   const path =
     variant === "thumb"
       ? (media.thumbnail_path ?? media.preview_path ?? media.storage_path)
-      : variant === "original"
-        ? media.storage_path
-        : (media.preview_path ?? media.storage_path);
+      : (media.preview_path ?? media.storage_path);
 
   const { data: stream, error } = await supabase.storage.from("media").download(path).asStream();
   if (error || !stream) return new Response("Not found", { status: 404 });
