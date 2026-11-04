@@ -20,6 +20,7 @@ export default async function AdminPage() {
         <AdminTabs
           coupleId={context.couple.id}
           userId={context.userId}
+          email={context.email}
           displayName={context.displayName}
           inviteCode={context.couple.invite_code}
           diaryName={context.couple.name}

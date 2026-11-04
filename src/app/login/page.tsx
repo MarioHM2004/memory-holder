@@ -15,6 +15,7 @@ const initialState: AuthActionState = { error: null };
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState);
   const t = useTranslations("Auth.login");
+  const tCommon = useTranslations("Common");
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -43,6 +44,12 @@ export default function LoginPage() {
           </button>
         </form>
 
+        <p className="mt-4 text-center text-sm">
+          <Link href="/forgot-password" className="text-ink-soft underline underline-offset-2 hover:text-ink">
+            {t("forgot")}
+          </Link>
+        </p>
+
         <p className="mt-7 text-center text-sm text-ink-soft">
           {t("noAccount")}{" "}
           <Link
@@ -58,6 +65,14 @@ export default function LoginPage() {
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
+        <p className="mt-5 text-center">
+          <Link
+            href="/privacy"
+            className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted hover:text-ink"
+          >
+            {tCommon("privacy")}
+          </Link>
+        </p>
       </div>
     </div>
   );

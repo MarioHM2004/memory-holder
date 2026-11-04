@@ -7,12 +7,14 @@
     "admin": "Panel admin",
     "signOut": "Cerrar sesión",
     "diary": "Diario",
-    "newDiary": "Nuevo diario o unirse a uno"
+    "newDiary": "Nuevo diario o unirse a uno",
+    "privacy": "Privacidad"
   },
   "Common": {
     "adminPanel": "panel admin",
     "goToAdmin": "Ir al panel admin",
-    "back": "Volver"
+    "back": "Volver",
+    "privacy": "Privacidad"
   },
   "Language": {
     "label": "Idioma"
@@ -36,7 +38,9 @@
       "noAccount": "¿Primera vez?",
       "createAccount": "Crea una cuenta",
       "linkError": "Ese enlace ha caducado o ya se había usado. Entra abajo, o vuelve a registrarte para recibir uno nuevo.",
-      "notConfirmed": "Confirma tu correo antes de entrar: busca el mensaje que te enviamos, mira también en spam."
+      "notConfirmed": "Confirma tu correo antes de entrar: busca el mensaje que te enviamos, mira también en spam.",
+      "forgot": "¿Has olvidado tu contraseña?",
+      "accountDeleted": "Tu cuenta ya no existe, ni nada que solo tú pudieras ver. Gracias por haber escrito aquí."
     },
     "signup": {
       "subtitle": "Crea tu cuenta",
@@ -54,6 +58,27 @@
       "errorEmailInvalid": "Ese correo no parece válido.",
       "errorRateLimit": "Se han enviado demasiados correos a esa dirección. Espera unos minutos y vuelve a intentarlo.",
       "errorGeneric": "No se ha podido crear la cuenta. Inténtalo de nuevo."
+    },
+    "forgot": {
+      "subtitle": "Vuelve a entrar en tu diario",
+      "description": "Dinos el correo con el que te registraste y te enviamos un enlace para poner una contraseña nueva.",
+      "email": "Email",
+      "submit": "Enviar el enlace",
+      "submitting": "Enviando…",
+      "sent": "Si ese correo tiene cuenta, el enlace va de camino. Caduca en una hora; mira también en spam.",
+      "back": "Volver a entrar",
+      "errorEmail": "Escribe tu correo electrónico.",
+      "errorRateLimit": "Se han enviado demasiados correos a esa dirección. Espera unos minutos y vuelve a intentarlo."
+    },
+    "password": {
+      "subtitle": "Elige una contraseña nueva",
+      "newPassword": "Contraseña nueva",
+      "submit": "Guardar contraseña",
+      "submitting": "Guardando…",
+      "back": "Ir al diario",
+      "errorLength": "La contraseña debe tener al menos 8 caracteres.",
+      "errorSame": "Esa es la contraseña que ya tenías. Elige otra distinta.",
+      "errorGeneric": "No se ha podido cambiar la contraseña. Puede que el enlace haya caducado: pide uno nuevo."
     }
   },
   "Onboarding": {
@@ -141,7 +166,8 @@
     "tabs": {
       "memories": "Recuerdos",
       "categories": "Categorías",
-      "invite": "Diario"
+      "invite": "Diario",
+      "account": "Cuenta"
     },
     "memoriesTab": {
       "countOne": "{count} recuerdo guardado",
@@ -210,6 +236,20 @@
       "cancel": "Cancelar",
       "errorConfirmName": "El nombre no coincide.",
       "errorGeneric": "No se ha podido salir del diario. Inténtalo de nuevo."
+    },
+    "account": {
+      "title": "Tu cuenta",
+      "changePassword": "Cambiar contraseña",
+      "deleteTitle": "Borrar tu cuenta",
+      "deleteDescription": "Los diarios que compartes con alguien se quedan con esa persona: esos recuerdos también son suyos. Los diarios en los que no hay nadie más se borran, con sus fotos.",
+      "deleteButton": "Borrar cuenta",
+      "deleteWarning": "Esto no se puede deshacer. Tu cuenta, tu nombre y todos los diarios en los que estabas solo desaparecen para siempre.",
+      "passwordLabel": "Tu contraseña, para confirmar",
+      "deleteConfirm": "Borrar mi cuenta",
+      "deleting": "Borrando…",
+      "cancel": "Cancelar",
+      "errorPassword": "Esa contraseña no es correcta.",
+      "errorGeneric": "No se ha podido borrar la cuenta. Inténtalo de nuevo."
     }
   },
   "DatePicker": {
@@ -220,5 +260,39 @@
     "nextYear": "Año siguiente",
     "chooseMonth": "Elegir mes y año",
     "today": "Hoy"
+  },
+  "Privacy": {
+    "title": "Privacidad",
+    "updated": "Actualizado en noviembre de 2026",
+    "intro": "Memory Holder es un diario privado. Esto es todo lo que guarda, dónde está y cómo quitarlo. Sin letra pequeña.",
+    "back": "Volver al diario",
+    "what": {
+      "title": "Qué se guarda",
+      "body": "Tu cuenta: correo electrónico, nombre y contraseña (cifrada, nadie puede leerla).\nLo que escribes: diarios, recuerdos, fechas, categorías y las fotos y vídeos que subes.\nNada más. Ni tu ubicación, ni tus contactos, ni seguimiento de lo que haces en otras webs."
+    },
+    "where": {
+      "title": "Dónde está",
+      "body": "La base de datos y los archivos están en Supabase, en servidores de Singapur. La web se sirve desde Vercel. Los correos de confirmación y de contraseña los envía Resend.\nEsas tres empresas tratan los datos para que la aplicación funcione. No se venden ni se ceden para ninguna otra cosa."
+    },
+    "who": {
+      "title": "Quién puede verlo",
+      "body": "Solo las personas que están en tu diario. Cada diario está aislado en la base de datos: alguien de otro diario no puede leer tus recuerdos ni abrir tus fotos, ni con el enlace.\nQuien mantiene la aplicación tiene acceso técnico a la base de datos, como en cualquier servicio. Nadie lee el diario de nadie, pero conviene que lo sepas."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "body": "Solo las imprescindibles: la que te mantiene con la sesión iniciada, el idioma que eliges, el diario que estás viendo y el tema claro u oscuro.\nNo hay cookies de analítica ni de publicidad, ni de terceros. Por eso no verás ningún aviso de cookies pidiéndote permiso."
+    },
+    "keep": {
+      "title": "Cuánto tiempo",
+      "body": "Mientras tengas la cuenta. Al borrar un recuerdo se borran también sus fotos. Al borrar tu cuenta se borra todo lo tuyo, y los diarios en los que estabas solo desaparecen con sus fotos.\nLos diarios que compartes se quedan con quien siga en ellos: esos recuerdos también son suyos."
+    },
+    "rights": {
+      "title": "Tus derechos",
+      "body": "Puedes borrar tu cuenta cuando quieras, desde Panel admin → Cuenta. Sin pedir permiso a nadie y sin esperar.\nTambién puedes pedir una copia de tus datos, corregirlos u oponerte a su tratamiento, escribiendo a la dirección de abajo."
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": "Cualquier duda sobre esto: hola@memory-holder.com"
+    }
   }
 }

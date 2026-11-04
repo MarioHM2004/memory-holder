@@ -33,7 +33,9 @@ as well. It lets members of a diary join the realtime channel that stops two
 people from editing the same memory at once.
 
 And [`supabase/migrations/0003_leave_diary.sql`](supabase/migrations/0003_leave_diary.sql),
-the function behind leaving a diary.
+the function behind leaving a diary, then
+[`supabase/migrations/0004_delete_account.sql`](supabase/migrations/0004_delete_account.sql),
+the one behind closing an account.
 
 If you have the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
 set up instead, `supabase db push` applies the same migration.
@@ -62,9 +64,10 @@ server-rendered app never sees, so the link looks dead. Three things to change:
    Site URL to the live site, and add `/auth/confirm` on every host the app runs
    on to the Redirect URLs, including `http://localhost:3000/auth/confirm`.
 3. **Templates.** Paste [`supabase/emails/confirm-signup.html`](supabase/emails/confirm-signup.html)
-   into **Authentication → Emails → Confirm signup**. It links to
-   [`/auth/confirm`](src/app/auth/confirm/route.ts), which exchanges the token
-   for a session server-side.
+   into **Authentication → Emails → Confirm signup**, and
+   [`supabase/emails/reset-password.html`](supabase/emails/reset-password.html) into
+   **Reset password**. Both link to [`/auth/confirm`](src/app/auth/confirm/route.ts),
+   which exchanges the token for a session server-side.
 
 ### 4. Install and run
 

@@ -14,6 +14,7 @@ const initialState: SignUpActionState = { error: null, info: null };
 export default function SignUpPage() {
   const [state, formAction, pending] = useActionState(signUp, initialState);
   const t = useTranslations("Auth.signup");
+  const tCommon = useTranslations("Common");
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -60,6 +61,14 @@ export default function SignUpPage() {
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
+        <p className="mt-5 text-center">
+          <Link
+            href="/privacy"
+            className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted hover:text-ink"
+          >
+            {tCommon("privacy")}
+          </Link>
+        </p>
       </div>
     </div>
   );

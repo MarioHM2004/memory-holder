@@ -64,14 +64,24 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
           <ThemeToggle />
         </div>
 
-        <form action={signOut} className="lg:pt-3">
-          <button
-            type="submit"
-            className="px-1 py-1 text-left font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-accent-1"
+        {/* Side by side on the phone bar, stacked on the rail. */}
+        <div className="flex items-center gap-4 lg:block">
+          <Link
+            href="/privacy"
+            className="px-1 py-1 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-ink lg:block lg:pt-3"
           >
-            {t("signOut")}
-          </button>
-        </form>
+            {t("privacy")}
+          </Link>
+
+          <form action={signOut} className="lg:pt-3">
+            <button
+              type="submit"
+              className="px-1 py-1 text-left font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-accent-1"
+            >
+              {t("signOut")}
+            </button>
+          </form>
+        </div>
       </div>
     </nav>
   );

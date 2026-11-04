@@ -7,12 +7,14 @@
     "admin": "Admin panel",
     "signOut": "Sign out",
     "diary": "Diary",
-    "newDiary": "New diary or join one"
+    "newDiary": "New diary or join one",
+    "privacy": "Privacy"
   },
   "Common": {
     "adminPanel": "admin panel",
     "goToAdmin": "Go to admin panel",
-    "back": "Back"
+    "back": "Back",
+    "privacy": "Privacy"
   },
   "Language": {
     "label": "Language"
@@ -36,7 +38,9 @@
       "noAccount": "First time here?",
       "createAccount": "Create an account",
       "linkError": "That link has expired or was already used. Sign in below, or sign up again to get a new one.",
-      "notConfirmed": "Confirm your email before signing in — check for the message we sent you, spam folder included."
+      "notConfirmed": "Confirm your email before signing in — check for the message we sent you, spam folder included.",
+      "forgot": "Forgotten your password?",
+      "accountDeleted": "Your account is gone, along with everything only you could see. Thanks for keeping a diary here."
     },
     "signup": {
       "subtitle": "Create your account",
@@ -54,6 +58,27 @@
       "errorEmailInvalid": "That email address doesn't look valid.",
       "errorRateLimit": "Too many emails have gone to that address. Wait a few minutes and try again.",
       "errorGeneric": "Couldn't create the account. Try again."
+    },
+    "forgot": {
+      "subtitle": "Get back into your diary",
+      "description": "Give us the email you signed up with and we'll send you a link to set a new password.",
+      "email": "Email",
+      "submit": "Send the link",
+      "submitting": "Sending…",
+      "sent": "If that email has an account, the link is on its way. It's good for one hour — check your spam folder too.",
+      "back": "Back to sign in",
+      "errorEmail": "Enter your email address.",
+      "errorRateLimit": "Too many emails have gone to that address. Wait a few minutes and try again."
+    },
+    "password": {
+      "subtitle": "Choose a new password",
+      "newPassword": "New password",
+      "submit": "Save password",
+      "submitting": "Saving…",
+      "back": "Go to the diary",
+      "errorLength": "The password must be at least 8 characters.",
+      "errorSame": "That's the password you already had. Choose a different one.",
+      "errorGeneric": "Couldn't change the password. The link may have expired — ask for a new one."
     }
   },
   "Onboarding": {
@@ -141,7 +166,8 @@
     "tabs": {
       "memories": "Memories",
       "categories": "Categories",
-      "invite": "Diary"
+      "invite": "Diary",
+      "account": "Account"
     },
     "memoriesTab": {
       "countOne": "{count} memory saved",
@@ -210,6 +236,20 @@
       "cancel": "Cancel",
       "errorConfirmName": "The name doesn't match.",
       "errorGeneric": "Couldn't leave the diary. Try again."
+    },
+    "account": {
+      "title": "Your account",
+      "changePassword": "Change password",
+      "deleteTitle": "Delete your account",
+      "deleteDescription": "Diaries you share with someone else stay with them — those memories are theirs too. Diaries nobody else is in are deleted, photos and all.",
+      "deleteButton": "Delete account",
+      "deleteWarning": "This can't be undone. Your account, your name and every diary only you were in disappear for good.",
+      "passwordLabel": "Your password, to confirm",
+      "deleteConfirm": "Delete my account",
+      "deleting": "Deleting…",
+      "cancel": "Cancel",
+      "errorPassword": "That password isn't right.",
+      "errorGeneric": "Couldn't delete the account. Try again."
     }
   },
   "DatePicker": {
@@ -220,5 +260,39 @@
     "nextYear": "Next year",
     "chooseMonth": "Choose month and year",
     "today": "Today"
+  },
+  "Privacy": {
+    "title": "Privacy",
+    "updated": "Updated November 2026",
+    "intro": "Memory Holder is a private diary. Here's everything it keeps, where that lives, and how to get rid of it. No small print.",
+    "back": "Back to the diary",
+    "what": {
+      "title": "What's stored",
+      "body": "Your account: email address, name, and password (encrypted — nobody can read it).\nWhat you write: diaries, memories, dates, categories, and the photos and videos you upload.\nNothing else. No location, no contacts, no tracking of what you do on other sites."
+    },
+    "where": {
+      "title": "Where it lives",
+      "body": "The database and the files are with Supabase, on servers in Singapore. The site itself runs on Vercel. Confirmation and password emails are sent through Resend.\nThose three handle the data so the app can work. It isn't sold or passed on for anything else."
+    },
+    "who": {
+      "title": "Who can see it",
+      "body": "Only the people in your diary. Each diary is walled off in the database: someone in another diary can't read your memories or open your photos, even with the link.\nWhoever maintains the app has technical access to the database, as with any service. Nobody reads anyone's diary, but you should know it's possible."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "body": "Only the ones the app can't work without: the one that keeps you signed in, the language you picked, which diary you're looking at, and light or dark mode.\nThere are no analytics or advertising cookies, and none from anyone else — which is why there's no cookie banner asking for permission."
+    },
+    "keep": {
+      "title": "How long",
+      "body": "For as long as you keep the account. Deleting a memory deletes its photos with it. Deleting your account removes everything of yours, and any diary only you were in goes too, photos included.\nDiaries you share stay with the people still in them: those memories are theirs as well."
+    },
+    "rights": {
+      "title": "Your rights",
+      "body": "You can delete your account whenever you like, from Admin panel → Account. No one to ask, nothing to wait for.\nYou can also ask for a copy of your data, have it corrected, or object to it being held, by writing to the address below."
+    },
+    "contact": {
+      "title": "Getting in touch",
+      "body": "Questions about any of this: hola@memory-holder.com"
+    }
   }
 }

@@ -7,12 +7,14 @@
     "admin": "管理面板",
     "signOut": "退出登录",
     "diary": "日记",
-    "newDiary": "新建或加入日记"
+    "newDiary": "新建或加入日记",
+    "privacy": "隐私"
   },
   "Common": {
     "adminPanel": "管理面板",
     "goToAdmin": "前往管理面板",
-    "back": "返回"
+    "back": "返回",
+    "privacy": "隐私"
   },
   "Language": {
     "label": "语言"
@@ -36,7 +38,9 @@
       "noAccount": "第一次使用？",
       "createAccount": "创建账号",
       "linkError": "该链接已过期或已被使用。请在下方登录，或重新注册以获取新链接。",
-      "notConfirmed": "登录前请先确认邮箱：查收我们发送的邮件，也请检查垃圾邮件文件夹。"
+      "notConfirmed": "登录前请先确认邮箱：查收我们发送的邮件，也请检查垃圾邮件文件夹。",
+      "forgot": "忘记密码了？",
+      "accountDeleted": "你的账号已删除，只有你能看到的内容也一并删除了。谢谢你曾在这里记录。"
     },
     "signup": {
       "subtitle": "创建账号",
@@ -54,6 +58,27 @@
       "errorEmailInvalid": "该邮箱地址似乎无效。",
       "errorRateLimit": "发送到该地址的邮件过多，请几分钟后再试。",
       "errorGeneric": "无法创建账号，请重试。"
+    },
+    "forgot": {
+      "subtitle": "重新进入你的日记",
+      "description": "填写注册时使用的邮箱，我们会发送设置新密码的链接。",
+      "email": "邮箱",
+      "submit": "发送链接",
+      "submitting": "发送中…",
+      "sent": "如果该邮箱已注册，链接就在路上了。链接 1 小时内有效，也请检查垃圾邮件文件夹。",
+      "back": "返回登录",
+      "errorEmail": "请填写你的邮箱地址。",
+      "errorRateLimit": "发送到该地址的邮件过多，请几分钟后再试。"
+    },
+    "password": {
+      "subtitle": "设置新密码",
+      "newPassword": "新密码",
+      "submit": "保存密码",
+      "submitting": "保存中…",
+      "back": "前往日记",
+      "errorLength": "密码至少需要 8 个字符。",
+      "errorSame": "这和原来的密码一样，请换一个。",
+      "errorGeneric": "无法修改密码，链接可能已过期，请重新获取。"
     }
   },
   "Onboarding": {
@@ -141,7 +166,8 @@
     "tabs": {
       "memories": "回忆",
       "categories": "分类",
-      "invite": "日记"
+      "invite": "日记",
+      "account": "账号"
     },
     "memoriesTab": {
       "countOne": "已保存 {count} 条回忆",
@@ -210,6 +236,20 @@
       "cancel": "取消",
       "errorConfirmName": "名称不一致。",
       "errorGeneric": "无法退出日记，请重试。"
+    },
+    "account": {
+      "title": "你的账号",
+      "changePassword": "修改密码",
+      "deleteTitle": "删除账号",
+      "deleteDescription": "与他人共享的日记会保留给对方，那些回忆也属于他们。没有其他成员的日记会被删除，照片也一并删除。",
+      "deleteButton": "删除账号",
+      "deleteWarning": "此操作无法撤销。你的账号、名字，以及只有你一人的所有日记都会永久消失。",
+      "passwordLabel": "输入密码以确认",
+      "deleteConfirm": "删除我的账号",
+      "deleting": "删除中…",
+      "cancel": "取消",
+      "errorPassword": "密码不正确。",
+      "errorGeneric": "无法删除账号，请重试。"
     }
   },
   "DatePicker": {
@@ -220,5 +260,39 @@
     "nextYear": "下一年",
     "chooseMonth": "选择年月",
     "today": "今天"
+  },
+  "Privacy": {
+    "title": "隐私",
+    "updated": "更新于 2026 年 11 月",
+    "intro": "Memory Holder 是一本私人日记。以下是它保存的全部内容、存放的位置，以及如何删除。没有附加条款。",
+    "back": "返回日记",
+    "what": {
+      "title": "保存了什么",
+      "body": "你的账号：邮箱地址、名字和密码（已加密，任何人都无法读取）。\n你写下的内容：日记本、回忆、日期、分类，以及你上传的照片和视频。\n仅此而已。不收集位置信息和通讯录，也不追踪你在其他网站上的行为。"
+    },
+    "where": {
+      "title": "存放在哪里",
+      "body": "数据库和文件存放在 Supabase 位于新加坡的服务器上。网站运行在 Vercel 上。确认邮件和密码邮件通过 Resend 发送。\n这三家公司处理数据只是为了让应用正常运行，数据不会被出售，也不会用于其他用途。"
+    },
+    "who": {
+      "title": "谁能看到",
+      "body": "只有和你在同一本日记里的人。每本日记在数据库中都是隔离的：其他日记的成员无法读取你的回忆或打开你的照片，即使拿到链接也不行。\n应用的维护者在技术上可以访问数据库，任何服务都是如此。没有人会去看别人的日记，但你应该知道这一点。"
+    },
+    "cookies": {
+      "title": "Cookie",
+      "body": "只有必需的那些：保持登录状态、你选择的语言、你正在查看的日记，以及浅色或深色主题。\n没有统计分析或广告 cookie，也没有第三方 cookie。因此你不会看到请求授权的 cookie 提示。"
+    },
+    "keep": {
+      "title": "保存多久",
+      "body": "在你保留账号期间。删除一段回忆时，它的照片也会一并删除。删除账号时，属于你的一切都会删除，只有你一人的日记连同照片一起消失。\n与他人共享的日记会留给仍在其中的人，那些回忆也属于他们。"
+    },
+    "rights": {
+      "title": "你的权利",
+      "body": "你可以随时在「管理面板 → 账号」中删除账号，无需申请，也无需等待。\n你也可以通过下方的邮箱联系我们，索取数据副本、更正数据，或反对处理你的数据。"
+    },
+    "contact": {
+      "title": "联系方式",
+      "body": "有任何疑问请联系：hola@memory-holder.com"
+    }
   }
 }

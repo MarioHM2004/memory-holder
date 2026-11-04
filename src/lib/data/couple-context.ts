@@ -13,6 +13,7 @@ export interface DiarySummary {
 export interface CoupleContext {
   userId: string;
   displayName: string;
+  email: string;
   /** The diary being viewed. Every page and action works on this one. */
   couple: Couple;
   role: "owner" | "member";
@@ -72,6 +73,7 @@ const loadContext = cache(async (): Promise<LoadedContext> => {
     context: {
       userId: user.id,
       displayName: profile?.display_name ?? user.email ?? "Tú",
+      email: user.email ?? "",
       couple: active.couple,
       role: active.role,
       diaries: rows.map((row) => ({ id: row.couple.id, name: row.couple.name })),

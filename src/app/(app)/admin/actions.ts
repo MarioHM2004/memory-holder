@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { ACTIVE_DIARY_COOKIE } from "@/lib/data/active-diary";
+import { removeStorageFolder } from "@/lib/data/media-storage";
 
 export type MemoryFormState = { error: string | null; memoryId: string | null };
 
@@ -195,26 +196,6 @@ export async function deleteCategoryAction(formData: FormData) {
 
 export type LeaveDiaryState = { error: string | null };
 
-/** Every object under a storage folder, descending into subfolders. */
-async function listStorageFolder(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  prefix: string,
-): Promise<string[]> {
-  const PAGE = 1000;
-  const paths: string[] = [];
-  for (let offset = 0; ; offset += PAGE) {
-    const { data, error } = await supabase.storage.from("media").list(prefix, { limit: PAGE, offset });
-    if (error) throw error;
-    for (const item of data) {
-      const path = `${prefix}/${item.name}`;
-      // Folders come back as entries with no id.
-      if (item.id === null) paths.push(...(await listStorageFolder(supabase, path)));
-      else paths.push(path);
-    }
-    if (data.length < PAGE) return paths;
-  }
-}
-
 export async function leaveDiaryAction(
   _prevState: LeaveDiaryState,
   formData: FormData,
@@ -239,14 +220,8 @@ export async function leaveDiaryAction(
     // The last member leaving deletes the diary, and its photos have to go
     // first: the database cascade can't reach Storage, and once this person
     // is out the storage policies no longer let them delete anything there.
-    // Walking the folder rather than the media rows also catches files from
-    // uploads that never got a row.
     try {
-      const paths = await listStorageFolder(supabase, coupleId);
-      for (let i = 0; i < paths.length; i += 500) {
-        const { error } = await supabase.storage.from("media").remove(paths.slice(i, i + 500));
-        if (error) throw error;
-      }
+      await removeStorageFolder(supabase, coupleId);
     } catch {
       // Nothing has been left yet, so it's safe to stop and let them retry.
       return { error: t("errorGeneric") };
@@ -263,4 +238,61 @@ export async function leaveDiaryAction(
 
   revalidatePath("/", "layout");
   redirect("/");
+}
+
+export type DeleteAccountState = { error: string | null };
+
+/**
+ * Closes the caller's account for good.
+ *
+ * Diaries shared with other people stay where they are — the memories belong
+ * to everyone in them — while a diary nobody else is in goes too, photos
+ * included. The database side is delete_account() in migration 0004.
+ */
+export async function deleteAccountAction(
+  _prevState: DeleteAccountState,
+  formData: FormData,
+): Promise<DeleteAccountState> {
+  const t = await getTranslations("Admin.account");
+  const context = await requireCoupleContext();
+  const supabase = await createClient();
+
+  const password = String(formData.get("password") ?? "");
+  if (!password) return { error: t("errorPassword") };
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.email) return { error: t("errorGeneric") };
+
+  // There is no undo, so ask for the password rather than trusting whoever
+  // happens to be in front of an open session.
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password,
+  });
+  if (signInError) return { error: t("errorPassword") };
+
+  // Photos first, while the account still exists and the storage policies
+  // still answer to it; afterwards nothing could reach them again.
+  try {
+    for (const diary of context.diaries) {
+      const { count } = await supabase
+        .from("couple_members")
+        .select("user_id", { count: "exact", head: true })
+        .eq("couple_id", diary.id);
+      if (count === 1) await removeStorageFolder(supabase, diary.id);
+    }
+  } catch {
+    // Nothing is deleted yet, so stopping here leaves the account intact.
+    return { error: t("errorGeneric") };
+  }
+
+  const { error } = await supabase.rpc("delete_account");
+  if (error) return { error: t("errorGeneric") };
+
+  await supabase.auth.signOut();
+  (await cookies()).delete(ACTIVE_DIARY_COOKIE);
+  revalidatePath("/", "layout");
+  redirect("/login?deleted=1");
 }
