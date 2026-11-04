@@ -229,7 +229,7 @@
       "button": "Leave diary",
       "warning": "You'll stop seeing {name} and its memories until someone invites you again.",
       "warningLast": "{name} will be deleted forever with all its memories, photos and categories. This can't be undone.",
-      "confirmNameLabel": "Type “{name}” to confirm",
+      "confirmNameLabel": "Type “<diary>{name}</diary>” to confirm",
       "confirm": "Yes, leave",
       "confirmLast": "Delete and leave",
       "leaving": "Leaving…",

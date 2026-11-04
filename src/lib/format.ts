@@ -14,3 +14,18 @@ export function formatDate(isoDate: string, locale: string): string {
     .toLocaleDateString(locale, { day: "2-digit", month: "short", year: "numeric" })
     .toLocaleUpperCase(locale);
 }
+
+/**
+ * Whether a typed diary name matches the stored one.
+ *
+ * Shared by the leave-diary confirmation on both sides, so the button the
+ * client enables and the check the server runs can't drift apart.
+ *
+ * Case and surrounding spaces are ignored on purpose. The label that says
+ * what to type is styled in small caps, so someone reading "DIARIO DE
+ * PRUEBA" and typing it back was stuck on a disabled button with nothing
+ * explaining why.
+ */
+export function diaryNameMatches(typed: string, name: string): boolean {
+  return typed.trim().toLocaleLowerCase() === name.trim().toLocaleLowerCase();
+}

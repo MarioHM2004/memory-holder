@@ -229,7 +229,7 @@
       "button": "Salir del diario",
       "warning": "Dejarás de ver {name} y sus recuerdos hasta que alguien vuelva a invitarte.",
       "warningLast": "{name} se borrará para siempre con todos sus recuerdos, fotos y categorías. No se puede deshacer.",
-      "confirmNameLabel": "Escribe «{name}» para confirmar",
+      "confirmNameLabel": "Escribe «<diary>{name}</diary>» para confirmar",
       "confirm": "Sí, salir",
       "confirmLast": "Borrar y salir",
       "leaving": "Saliendo…",

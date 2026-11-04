@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { ACTIVE_DIARY_COOKIE } from "@/lib/data/active-diary";
 import { removeStorageFolder } from "@/lib/data/media-storage";
+import { diaryNameMatches } from "@/lib/format";
 
 export type MemoryFormState = { error: string | null; memoryId: string | null };
 
@@ -213,7 +214,7 @@ export async function leaveDiaryAction(
 
   if (count === 1) {
     const name = context.diaries.find((item) => item.id === coupleId)?.name ?? "";
-    if (String(formData.get("confirmName") ?? "").trim() !== name.trim()) {
+    if (!diaryNameMatches(String(formData.get("confirmName") ?? ""), name)) {
       return { error: t("errorConfirmName") };
     }
 

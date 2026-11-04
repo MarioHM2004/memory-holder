@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { leaveDiaryAction, type LeaveDiaryState } from "./actions";
+import { diaryNameMatches } from "@/lib/format";
 
 const initialState: LeaveDiaryState = { error: null };
 
@@ -22,7 +23,7 @@ export function LeaveDiary({
   // Leaving as the last member deletes the diary for good, so that case asks
   // for the diary's name to be typed rather than a single click.
   const last = memberCount <= 1;
-  const nameMatches = typedName.trim() === diaryName.trim();
+  const nameMatches = diaryNameMatches(typedName, diaryName);
 
   return (
     <div className="sketch-soft max-w-md bg-surface-2 p-5 sm:p-7 md:flex-1">
@@ -48,7 +49,12 @@ export function LeaveDiary({
             // for the name to match.
             <label className="flex flex-col gap-1.5 text-sm">
               <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
-                {t("confirmNameLabel", { name: diaryName })}
+                {t.rich("confirmNameLabel", {
+                  name: diaryName,
+                  // The label is small caps; the name inside it is not, so it
+                  // reads with the capitalisation the diary actually has.
+                  diary: (chunks) => <span className="normal-case">{chunks}</span>,
+                })}
               </span>
               <input
                 name="confirmName"

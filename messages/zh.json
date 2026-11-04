@@ -229,7 +229,7 @@
       "button": "退出日记",
       "warning": "退出后你将看不到“{name}”和里面的回忆，除非有人再次邀请你。",
       "warningLast": "“{name}”及其所有回忆、照片和分类将被永久删除，无法恢复。",
-      "confirmNameLabel": "输入“{name}”以确认",
+      "confirmNameLabel": "输入“<diary>{name}</diary>”以确认",
       "confirm": "确定退出",
       "confirmLast": "删除并退出",
       "leaving": "正在退出…",
