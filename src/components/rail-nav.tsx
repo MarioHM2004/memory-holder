@@ -15,7 +15,7 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
   const t = useTranslations("Nav");
 
   const items = [
-    { href: "/", label: t("home") },
+    { href: "/home", label: t("home") },
     { href: "/roulette", label: t("roulette") },
     { href: "/timeline", label: t("timeline") },
     { href: "/categories", label: t("categories") },
@@ -38,7 +38,7 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 lg:mt-0 lg:flex-col lg:items-start lg:gap-0.5">
         {items.map((item) => {
-          const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const active = pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}

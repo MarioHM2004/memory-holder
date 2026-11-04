@@ -298,5 +298,30 @@
   "Meta": {
     "title": "Memory Holder — un diario de fotos compartido",
     "description": "Un diario privado para dos: fotos, fechas y los momentos pequeños, en un sitio que solo ven las personas que invites."
+  },
+  "Landing": {
+    "heading": "Vuestros recuerdos, en un sitio que es solo vuestro.",
+    "subheading": "Un diario compartido de fotos y de los días que merece la pena guardar. Lo escribís entre vosotros, y no lo ve nadie más.",
+    "ctaCreate": "Crear una cuenta",
+    "ctaLogin": "Ya tengo cuenta",
+    "languages": "English · Español · 中文",
+    "featuresTitle": "Qué vais a encontrar",
+    "timeline": {
+      "title": "Una línea de tiempo",
+      "body": "Cada recuerdo es un punto en la línea. Pasa el cursor por encima y se abre el día, con su foto."
+    },
+    "roulette": {
+      "title": "Una ruleta",
+      "body": "Gírala cuando no sepáis qué recordar y os devuelve un día cualquiera de los vuestros."
+    },
+    "categories": {
+      "title": "Categorías",
+      "body": "Viajes, primeras veces, cenas de los martes. Las que queráis, cada una con su color."
+    },
+    "privateTitle": "Privado de verdad",
+    "privateBody": "Solo entra quien recibe vuestro código. No hay muro público, ni perfiles, ni anuncios, ni rastreo. Las fotos se sirven únicamente a quien está dentro del diario, y puedes borrar tu cuenta, con todo lo que contiene, en dos clics.",
+    "privateLink": "Qué se guarda y cómo borrarlo",
+    "closingTitle": "Empezad hoy",
+    "closingBody": "Se tarda un minuto: creas el diario y le pasas el código a quien quieras que entre."
   }
 }

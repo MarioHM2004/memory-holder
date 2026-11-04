@@ -5,7 +5,12 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 
-export type SignUpActionState = { error: string | null; info: string | null };
+export type SignUpActionState = {
+  error: string | null;
+  /** Supabase's own wording, shown only when we have nothing better to say. */
+  detail: string | null;
+  info: string | null;
+};
 
 /** Supabase auth error codes worth explaining, mapped to our own messages. */
 const SIGNUP_ERRORS: Record<string, string> = {
@@ -27,10 +32,10 @@ export async function signUp(
   const displayName = String(formData.get("displayName") ?? "").trim();
 
   if (!email || !password || !displayName) {
-    return { error: t("errorFields"), info: null };
+    return { error: t("errorFields"), detail: null, info: null };
   }
   if (password.length < 8) {
-    return { error: t("errorPasswordLength"), info: null };
+    return { error: t("errorPasswordLength"), detail: null, info: null };
   }
 
   // Where the confirmation email should land. Taken from the request rather
@@ -52,13 +57,22 @@ export async function signUp(
     },
   });
 
-  // Supabase's own messages are English-only and worded for developers.
+  // Supabase's own messages are English-only and worded for developers, so
+  // the ones worth explaining get our wording. Anything else keeps the
+  // original alongside: a bare "try again" hides whether the problem is the
+  // person's to fix (and it is nearly always the mail sender misconfigured).
   if (error) {
-    return { error: t(SIGNUP_ERRORS[error.code ?? ""] ?? "errorGeneric"), info: null };
+    const known = SIGNUP_ERRORS[error.code ?? ""];
+    console.error("signUp failed", { code: error.code, status: error.status, message: error.message });
+    return {
+      error: t(known ?? "errorGeneric"),
+      detail: known ? null : error.message,
+      info: null,
+    };
   }
 
   if (!data.session) {
-    return { error: null, info: t("confirmEmail") };
+    return { error: null, detail: null, info: t("confirmEmail") };
   }
 
   redirect("/onboarding");

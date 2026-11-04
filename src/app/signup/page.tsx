@@ -9,7 +9,7 @@ import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { signUp, type SignUpActionState } from "./actions";
 
-const initialState: SignUpActionState = { error: null, info: null };
+const initialState: SignUpActionState = { error: null, detail: null, info: null };
 
 export default function SignUpPage() {
   const [state, formAction, pending] = useActionState(signUp, initialState);
@@ -35,9 +35,16 @@ export default function SignUpPage() {
             <Field label={t("password")} name="password" type="password" required minLength={8} />
 
             {state.error && (
-              <p className="border-l-2 border-accent-1 px-3 py-1.5 text-sm font-medium text-accent-1">
-                {state.error}
-              </p>
+              <div className="border-l-2 border-accent-1 px-3 py-1.5 text-accent-1">
+                <p className="text-sm font-medium">{state.error}</p>
+                {/* The raw reason is for us, not for them: it's what turns a
+                    screenshot into a diagnosis. */}
+                {state.detail && (
+                  <p className="mt-1 break-words font-mono text-[0.68rem] text-ink-soft">
+                    {state.detail}
+                  </p>
+                )}
+              </div>
             )}
 
             <button type="submit" disabled={pending} className="btn-ink mt-1">

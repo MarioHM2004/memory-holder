@@ -36,7 +36,7 @@ export function PasswordForm() {
 
       <p className="mt-7 text-center text-sm text-ink-soft">
         <Link
-          href="/"
+          href="/home"
           className="font-display text-lg font-bold text-ink underline decoration-accent-1 decoration-2 underline-offset-2"
         >
           {t("back")}

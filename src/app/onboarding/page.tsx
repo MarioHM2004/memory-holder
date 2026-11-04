@@ -35,7 +35,7 @@ export default async function OnboardingPage() {
         {context && (
           <p className="mt-6 text-center">
             <Link
-              href="/"
+              href="/home"
               className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-ink"
             >
               ← {t("back", { name: context.couple.name })}
