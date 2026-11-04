@@ -7,6 +7,38 @@ gets their own private, isolated diary they fill in themselves.
 
 Available in English, Spanish, and Chinese (switchable from the UI, no reload needed).
 
+## Demo
+
+The app is live at [memory-holder.com](https://memory-holder.com). It
+opens on the login screen: every diary is private to its own members, so there is no
+public content to land on before you are inside one. The screenshots below are what
+the app looks like once you are.
+
+<!-- TODO (delete these instruction lines, then uncomment the table under them):
+
+     Four PNGs under docs/screenshots/, taken from a diary seeded with
+     supabase/seed/demo-diary.sql, never from a real diary:
+       home.png      - the home page with the nav rail
+       roulette.png  - the roulette mid-spin or on a result
+       timeline.png  - the timeline with several years in view
+       memory.png    - one memory's detail page, the long-form kind
+
+     The seed creates no media rows, so the galleries come out empty: upload a
+     handful of clearly fictional photos by hand first if the shots should show
+     them. No photo of a real person.
+
+     Optional, and worth more than the screenshots: sign up a throwaway account,
+     seed it, and publish its credentials right here. That turns "trust the
+     screenshots" into "click and poke at it".
+-->
+
+<!--
+|  |  |
+| --- | --- |
+| ![Home](docs/screenshots/home.png) | ![Roulette](docs/screenshots/roulette.png) |
+| ![Timeline](docs/screenshots/timeline.png) | ![Memory detail](docs/screenshots/memory.png) |
+-->
+
 ## Stack
 
 - **Next.js 16** (App Router, Server Actions, Turbopack)
@@ -111,3 +143,8 @@ supabase/migrations/                 — SQL schema + RLS policies
   yet (the database rows cascade-delete, but the underlying Storage objects are left
   orphaned). Fine for a personal project at this stage, worth fixing before scaling up.
 - No automated tests yet.
+
+## License
+
+[MIT](LICENSE). The code is yours to reuse; the diaries people keep in a running
+instance are not.
