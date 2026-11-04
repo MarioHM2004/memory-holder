@@ -14,30 +14,14 @@ opens on the login screen: every diary is private to its own members, so there i
 public content to land on before you are inside one. The screenshots below are what
 the app looks like once you are.
 
-<!-- TODO (delete these instruction lines, then uncomment the table under them):
-
-     Four PNGs under docs/screenshots/, taken from a diary seeded with
-     supabase/seed/demo-diary.sql, never from a real diary:
-       home.png      - the home page with the nav rail
-       roulette.png  - the roulette mid-spin or on a result
-       timeline.png  - the timeline with several years in view
-       memory.png    - one memory's detail page, the long-form kind
-
-     The seed creates no media rows, so the galleries come out empty: upload a
-     handful of clearly fictional photos by hand first if the shots should show
-     them. No photo of a real person.
-
-     Optional, and worth more than the screenshots: sign up a throwaway account,
-     seed it, and publish its credentials right here. That turns "trust the
-     screenshots" into "click and poke at it".
--->
-
-<!--
-|  |  |
+| | |
 | --- | --- |
-| ![Home](docs/screenshots/home.png) | ![Roulette](docs/screenshots/roulette.png) |
-| ![Timeline](docs/screenshots/timeline.png) | ![Memory detail](docs/screenshots/memory.png) |
--->
+| ![Home, with the nav rail and the most recent memories](docs/screenshots/home.jpg) | ![The roulette, landed on one memory](docs/screenshots/roulette.jpg) |
+| ![The timeline, with one point expanded](docs/screenshots/timeline.jpg) | ![A memory's own page, with its photo](docs/screenshots/memory.jpg) |
+
+The diary in these shots is seeded with
+[`supabase/seed/demo-diary.sql`](supabase/seed/demo-diary.sql) and the photos are
+generated placeholders, not anyone's real ones.
 
 ## Stack
 
