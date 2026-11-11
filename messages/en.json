@@ -255,6 +255,17 @@
       "errorGeneric": "Couldn't delete the account. Try again.",
       "weeklyLabel": "A memory every Sunday",
       "weeklyHint": "One of your own, picked at random, by email."
+    },
+    "export": {
+      "title": "Take a copy with you",
+      "description": "Downloads the whole diary as a zip: every memory as JSON and as a readable document, with the photos beside them. Yours to keep, with or without this app.",
+      "button": "Download the diary",
+      "working": "Preparing…",
+      "listing": "Reading the diary…",
+      "downloading": "Photo {done} of {total}…",
+      "packing": "Packing it up…",
+      "done": "Done — check your downloads.",
+      "error": "The export stopped partway."
     }
   },
   "DatePicker": {

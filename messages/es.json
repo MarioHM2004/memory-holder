@@ -255,6 +255,17 @@
       "errorGeneric": "No se ha podido borrar la cuenta. Inténtalo de nuevo.",
       "weeklyLabel": "Un recuerdo cada domingo",
       "weeklyHint": "Uno vuestro, al azar, por correo."
+    },
+    "export": {
+      "title": "Llévate una copia",
+      "description": "Descarga el diario entero en un zip: cada recuerdo en JSON y en un documento legible, con las fotos al lado. Tuyo, con esta aplicación o sin ella.",
+      "button": "Descargar el diario",
+      "working": "Preparando…",
+      "listing": "Leyendo el diario…",
+      "downloading": "Foto {done} de {total}…",
+      "packing": "Empaquetando…",
+      "done": "Listo: míralo en tus descargas.",
+      "error": "La exportación se ha quedado a medias."
     }
   },
   "DatePicker": {

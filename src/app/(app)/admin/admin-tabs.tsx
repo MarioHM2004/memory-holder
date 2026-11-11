@@ -7,6 +7,7 @@ import { CategoriesPanel } from "./categories-panel";
 import { InvitePanel } from "./invite-panel";
 import { AccountPanel } from "./account-panel";
 import { LeaveDiary } from "./leave-diary";
+import { ExportPanel } from "./export-panel";
 import type { CategoryWithCount, MemoryForAdmin } from "@/lib/data/memories";
 
 type Tab = "memories" | "categories" | "invite" | "account";
@@ -77,9 +78,12 @@ export function AdminTabs({
       {/* The tab is labelled "Diary": inviting people in and leaving it.
           Side by side once there's room, stacked on a phone. */}
       {tab === "invite" && (
-        <div className="flex flex-col gap-6 md:flex-row md:items-start">
-          <InvitePanel inviteCode={inviteCode} />
-          <LeaveDiary coupleId={coupleId} diaryName={diaryName} memberCount={memberCount} />
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start">
+            <InvitePanel inviteCode={inviteCode} />
+            <LeaveDiary coupleId={coupleId} diaryName={diaryName} memberCount={memberCount} />
+          </div>
+          <ExportPanel diaryName={diaryName} />
         </div>
       )}
     </div>

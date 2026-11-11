@@ -255,6 +255,17 @@
       "errorGeneric": "无法删除账号，请重试。",
       "weeklyLabel": "每周日一段回忆",
       "weeklyHint": "从你们的日记里随机选一段，发到邮箱。"
+    },
+    "export": {
+      "title": "带走一份副本",
+      "description": "把整本日记打包下载：每段回忆都有 JSON 和可直接阅读的文档，照片也在里面。它属于你，有没有这个应用都一样。",
+      "button": "下载日记",
+      "working": "准备中…",
+      "listing": "正在读取日记…",
+      "downloading": "第 {done} / {total} 张照片…",
+      "packing": "正在打包…",
+      "done": "完成，请查看下载文件夹。",
+      "error": "导出中途停止了。"
     }
   },
   "DatePicker": {
