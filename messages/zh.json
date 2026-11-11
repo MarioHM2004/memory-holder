@@ -265,7 +265,8 @@
       "downloading": "第 {done} / {total} 张照片…",
       "packing": "正在打包…",
       "done": "完成，请查看下载文件夹。",
-      "error": "导出中途停止了。"
+      "error": "导出中途停止了。",
+      "fileSubtitle": "{count} 段回忆 · 导出于 {date}"
     }
   },
   "DatePicker": {

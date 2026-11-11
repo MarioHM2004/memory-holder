@@ -265,7 +265,8 @@
       "downloading": "Foto {done} de {total}…",
       "packing": "Empaquetando…",
       "done": "Listo: míralo en tus descargas.",
-      "error": "La exportación se ha quedado a medias."
+      "error": "La exportación se ha quedado a medias.",
+      "fileSubtitle": "{count, plural, one {# recuerdo} other {# recuerdos}} · exportado el {date}"
     }
   },
   "DatePicker": {

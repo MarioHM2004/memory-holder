@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { downloadZip } from "client-zip";
 import { useLocale, useTranslations } from "next-intl";
-import { renderDiaryMarkdown, slugify, type ExportManifest } from "@/lib/export";
+import { formatDate } from "@/lib/format";
+import { renderDiaryHtml, slugify, type ExportManifest } from "@/lib/export";
 
 type Status =
   | { step: "idle" }
@@ -51,7 +52,14 @@ export function ExportPanel({ diaryName }: { diaryName: string }) {
       const stamp = manifest.exportedAt.slice(0, 10);
       const zip = await downloadZip([
         { name: "diary.json", input: JSON.stringify(manifest, null, 2) },
-        { name: "diary.md", input: renderDiaryMarkdown(manifest, locale) },
+        {
+          name: "diary.html",
+          input: renderDiaryHtml(
+            manifest,
+            locale,
+            t("fileSubtitle", { count: manifest.memories.length, date: formatDate(stamp, locale) }),
+          ),
+        },
         ...downloaded,
       ]).blob();
 
