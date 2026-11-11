@@ -62,17 +62,19 @@ jobs:
               exit 1 ;;
           esac
 
-      - name: Install pg_dump and rclone
+      # Deliberately no apt. The runner's mirrors fail often enough to break a
+      # weekly job — they already did — and the PostgreSQL project's own
+      # repository is indexed by Ubuntu release name, so it lags behind
+      # whatever `ubuntu-latest` has just become. pg_dump comes from a pinned
+      # container instead, and rclone as the static binary its authors ship.
+      - name: Install rclone
         run: |
           set -euo pipefail
-          # The runner's bundled client is usually older than Supabase's
-          # server, and pg_dump refuses to dump a newer server than itself.
-          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /usr/share/keyrings/pgdg.gpg
-          sudo sed -i 's|deb http|deb [signed-by=/usr/share/keyrings/pgdg.gpg] http|' /etc/apt/sources.list.d/pgdg.list
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq postgresql-client-17 rclone
-          pg_dump --version
+          curl -fsSL -o rclone.zip https://downloads.rclone.org/rclone-current-linux-amd64.zip
+          unzip -q rclone.zip
+          sudo install -m 0755 rclone-*-linux-amd64/rclone /usr/local/bin/rclone
+          rm -rf rclone.zip rclone-*-linux-amd64
+          rclone version
 
       - name: Dump the database
         env:
@@ -82,11 +84,18 @@ jobs:
           set -euo pipefail
           stamp="$(date -u +%Y-%m-%d)"
 
+          # Pinned to the server's major version, because pg_dump refuses to
+          # dump a server newer than itself. Bump the tag if Supabase
+          # upgrades Postgres. The URL is passed as an environment variable
+          # rather than an argument so the password stays out of any process
+          # listing inside the container.
+          dump() {
+            docker run --rm -e DB_URL="${SUPABASE_DB_URL}" postgres:17-alpine \
+              sh -c "pg_dump \"\$DB_URL\" --no-owner --no-privileges $1"
+          }
+
           # The diary itself: every table, its policies, and the rows.
-          pg_dump "${SUPABASE_DB_URL}" \
-            --schema=public \
-            --no-owner --no-privileges \
-            --file=public.sql
+          dump "--schema=public" > public.sql
 
           size=$(stat -c%s public.sql)
           echo "public schema: ${size} bytes"
@@ -103,9 +112,8 @@ jobs:
           # into a different project is not something to count on. What this
           # is really for is knowing who existed and under which id, so the
           # memories can be reattached to people after they sign up again.
-          if pg_dump "${SUPABASE_DB_URL}" \
-              --schema=auth --table=auth.users --data-only \
-              --no-owner --no-privileges --file=auth-users.sql 2>auth-error.txt; then
+          if dump "--schema=auth --table=auth.users --data-only" \
+              > auth-users.sql 2>auth-error.txt; then
             echo "auth.users: $(stat -c%s auth-users.sql) bytes"
           else
             echo "::warning::Couldn't dump auth.users: $(head -c 200 auth-error.txt)"

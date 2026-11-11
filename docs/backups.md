@@ -201,6 +201,10 @@ worth recognising:
 - **"Network is unreachable"** with an IPv6 address — wrong connection string,
   see step 3.
 - **`server version mismatch`** — Supabase upgraded Postgres past the client
-  the workflow installs. Bump `postgresql-client-17` in the install step.
+  doing the dump. Bump the `postgres:17-alpine` tag in the dump step; a newer
+  client reads an older server fine, never the other way round.
+- **An `apt` or mirror error** — nothing here uses apt, on purpose, after the
+  runner's Ubuntu mirrors failed to resolve on the very first run. If one
+  reappears, something was added that shouldn't have been.
 - **The dump is only N bytes** — the dump ran and came back nearly empty. The
   job stops instead of overwriting a good backup with an empty one.
