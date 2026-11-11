@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import {
   Permanent_Marker,
@@ -60,6 +60,16 @@ const zhiMangXing = Zhi_Mang_Xing({
   variable: "--font-zhi-mang-xing",
   preload: false,
 });
+
+// Installed on a phone there is no address bar, so the status bar above the
+// page takes this colour. One value per scheme, matching --ground, keeps it
+// from being a white band over a dark diary.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
+    { media: "(prefers-color-scheme: dark)", color: "#171612" },
+  ],
+};
 
 // Built per request rather than as a constant, so the title and description
 // — the two lines a search result or a pasted link shows — come out in the

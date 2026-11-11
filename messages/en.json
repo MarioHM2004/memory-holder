@@ -275,7 +275,7 @@
     },
     "where": {
       "title": "Where it lives",
-      "body": "The database and the files are with Supabase, on servers in Singapore. The site itself runs on Vercel. Confirmation and password emails are sent through Resend.\nThose three handle the data so the app can work. It isn't sold or passed on for anything else."
+      "body": "The database and the files are with Supabase, on servers in Singapore. The site itself runs on Vercel. Confirmation and password emails are sent through Resend. A weekly backup is kept, encrypted, on Cloudflare R2 in Western Europe.\nThose four handle the data so the app can work. It isn't sold or passed on for anything else."
     },
     "who": {
       "title": "Who can see it",
@@ -287,7 +287,7 @@
     },
     "keep": {
       "title": "How long",
-      "body": "For as long as you keep the account. Deleting a memory deletes its photos with it. Deleting your account removes everything of yours, and any diary only you were in goes too, photos included.\nDiaries you share stay with the people still in them: those memories are theirs as well."
+      "body": "For as long as you keep the account. Deleting a memory deletes its photos with it. Deleting your account removes everything of yours, and any diary only you were in goes too, photos included.\nDiaries you share stay with the people still in them: those memories are theirs as well.\nBackups lag behind. Something deleted today can sit in one for up to 90 days, after which it's gone from there too."
     },
     "rights": {
       "title": "Your rights",

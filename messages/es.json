@@ -275,7 +275,7 @@
     },
     "where": {
       "title": "Dónde está",
-      "body": "La base de datos y los archivos están en Supabase, en servidores de Singapur. La web se sirve desde Vercel. Los correos de confirmación y de contraseña los envía Resend.\nEsas tres empresas tratan los datos para que la aplicación funcione. No se venden ni se ceden para ninguna otra cosa."
+      "body": "La base de datos y los archivos están en Supabase, en servidores de Singapur. La web se sirve desde Vercel. Los correos de confirmación y de contraseña los envía Resend. Una copia de seguridad semanal se guarda cifrada en Cloudflare R2, en Europa occidental.\nEsas cuatro empresas tratan los datos para que la aplicación funcione. No se venden ni se ceden para ninguna otra cosa."
     },
     "who": {
       "title": "Quién puede verlo",
@@ -287,7 +287,7 @@
     },
     "keep": {
       "title": "Cuánto tiempo",
-      "body": "Mientras tengas la cuenta. Al borrar un recuerdo se borran también sus fotos. Al borrar tu cuenta se borra todo lo tuyo, y los diarios en los que estabas solo desaparecen con sus fotos.\nLos diarios que compartes se quedan con quien siga en ellos: esos recuerdos también son suyos."
+      "body": "Mientras tengas la cuenta. Al borrar un recuerdo se borran también sus fotos. Al borrar tu cuenta se borra todo lo tuyo, y los diarios en los que estabas solo desaparecen con sus fotos.\nLos diarios que compartes se quedan con quien siga en ellos: esos recuerdos también son suyos.\nLas copias de seguridad van por detrás. Algo que borras hoy puede seguir en una copia hasta 90 días, y después desaparece también de ahí."
     },
     "rights": {
       "title": "Tus derechos",
