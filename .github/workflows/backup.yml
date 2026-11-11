@@ -1,0 +1,183 @@
+# Weekly off-site backup of the diary: the database and the photos.
+#
+# Supabase's own backups don't cover either on the Free Plan, and they never
+# cover Storage on any plan — so the photos, the part that can't be rewritten
+# from memory, are only as safe as this file. The copies go to Cloudflare R2
+# because a copy living inside Supabase disappears with the project it was
+# meant to survive.
+#
+# Setup, the restore procedure, and what to do when this fails:
+# docs/backups.md. Read the restore half before trusting this.
+#
+# Secrets, under Settings → Secrets and variables → Actions:
+#   SUPABASE_DB_URL               Session pooler string, port 5432 (see the doc)
+#   BACKUP_PASSPHRASE             Encrypts the dump — keep a copy OUTSIDE GitHub
+#   SUPABASE_S3_ENDPOINT          Storage → S3 Connection
+#   SUPABASE_S3_REGION            same panel
+#   SUPABASE_S3_ACCESS_KEY_ID     same panel
+#   SUPABASE_S3_SECRET_ACCESS_KEY same panel
+#   R2_ENDPOINT                   bucket → Settings → S3 API, without the bucket name
+#   R2_ACCESS_KEY_ID              R2 → Manage API tokens
+#   R2_SECRET_ACCESS_KEY          same token
+#   R2_BUCKET                     e.g. memory-holder-backup
+
+name: Backup
+
+on:
+  schedule:
+    # Sundays, off the hour: GitHub delays scheduled jobs most at :00.
+    - cron: "41 4 * * 0"
+  workflow_dispatch:
+
+jobs:
+  backup:
+    if: github.repository == 'MarioHM2004/memory-holder'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the secrets are set
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          SUPABASE_S3_ENDPOINT: ${{ secrets.SUPABASE_S3_ENDPOINT }}
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_DB_URL BACKUP_PASSPHRASE R2_BUCKET SUPABASE_S3_ENDPOINT; do
+            if [ -z "${!name}" ]; then
+              echo "::error::${name} is not set. See docs/backups.md."
+              exit 1
+            fi
+          done
+
+          # The direct connection is IPv6 and these runners are IPv4, which
+          # fails as "Network is unreachable" and sends you hunting for the
+          # wrong bug. Port 6543 is the transaction pooler, which breaks
+          # pg_dump's COPY. Both are worth catching before the dump starts.
+          case "${SUPABASE_DB_URL}" in
+            *:6543*)
+              echo "::error::That's the transaction pooler (6543); pg_dump needs the session pooler on 5432."
+              exit 1 ;;
+            *db.*.supabase.co*)
+              echo "::error::That's the direct connection, which is IPv6-only. Use the session pooler string."
+              exit 1 ;;
+          esac
+
+      - name: Install pg_dump and rclone
+        run: |
+          set -euo pipefail
+          # The runner's bundled client is usually older than Supabase's
+          # server, and pg_dump refuses to dump a newer server than itself.
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /usr/share/keyrings/pgdg.gpg
+          sudo sed -i 's|deb http|deb [signed-by=/usr/share/keyrings/pgdg.gpg] http|' /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17 rclone
+          pg_dump --version
+
+      - name: Dump the database
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          stamp="$(date -u +%Y-%m-%d)"
+
+          # The diary itself: every table, its policies, and the rows.
+          pg_dump "${SUPABASE_DB_URL}" \
+            --schema=public \
+            --no-owner --no-privileges \
+            --file=public.sql
+
+          size=$(stat -c%s public.sql)
+          echo "public schema: ${size} bytes"
+
+          # A dump that uploads cleanly and holds nothing is the failure that
+          # only shows up on the day you need it.
+          if [ "${size}" -lt 10000 ]; then
+            echo "::error::The dump is only ${size} bytes — that isn't a diary. Not uploading it."
+            exit 1
+          fi
+
+          # Best effort, and allowed to fail. Accounts live in a schema these
+          # credentials may not read, and even when they do, restoring them
+          # into a different project is not something to count on. What this
+          # is really for is knowing who existed and under which id, so the
+          # memories can be reattached to people after they sign up again.
+          if pg_dump "${SUPABASE_DB_URL}" \
+              --schema=auth --table=auth.users --data-only \
+              --no-owner --no-privileges --file=auth-users.sql 2>auth-error.txt; then
+            echo "auth.users: $(stat -c%s auth-users.sql) bytes"
+          else
+            echo "::warning::Couldn't dump auth.users: $(head -c 200 auth-error.txt)"
+            echo "-- not available at backup time" > auth-users.sql
+          fi
+
+          tar czf "db-${stamp}.tar.gz" public.sql auth-users.sql
+
+          # The photos sit in a private bucket, same as they do in Supabase.
+          # This is different: one portable file with everyone's writing in
+          # it, so it doesn't leave here in the clear.
+          gpg --batch --yes --symmetric --cipher-algo AES256 \
+            --passphrase "${BACKUP_PASSPHRASE}" \
+            --output "db-${stamp}.tar.gz.gpg" "db-${stamp}.tar.gz"
+          rm -f public.sql auth-users.sql "db-${stamp}.tar.gz"
+
+          echo "STAMP=${stamp}" >> "$GITHUB_ENV"
+
+      - name: Copy both to R2
+        env:
+          RCLONE_CONFIG_SUPABASE_TYPE: s3
+          RCLONE_CONFIG_SUPABASE_PROVIDER: Other
+          RCLONE_CONFIG_SUPABASE_ENDPOINT: ${{ secrets.SUPABASE_S3_ENDPOINT }}
+          RCLONE_CONFIG_SUPABASE_REGION: ${{ secrets.SUPABASE_S3_REGION }}
+          RCLONE_CONFIG_SUPABASE_ACCESS_KEY_ID: ${{ secrets.SUPABASE_S3_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_SUPABASE_SECRET_ACCESS_KEY: ${{ secrets.SUPABASE_S3_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          set -euo pipefail
+
+          rclone copy "db-${STAMP}.tar.gz.gpg" "r2:${R2_BUCKET}/db/" --s3-no-check-bucket
+
+          # sync, not copy: it mirrors deletions too, so the backup reflects
+          # the diary rather than growing forever with files nobody kept.
+          # Photo keys are random UUIDs, so an unchanged file is never
+          # re-uploaded and a weekly run costs almost nothing.
+          rclone sync supabase:media "r2:${R2_BUCKET}/media" \
+            --s3-no-check-bucket --transfers 8 --stats-one-line --stats 30s
+
+      - name: Drop dumps older than 90 days
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          set -euo pipefail
+          # Only the dumps. The photo mirror is never pruned by age: a photo
+          # that hasn't changed in a year is still the only copy of that day.
+          rclone delete "r2:${R2_BUCKET}/db" --min-age 90d --s3-no-check-bucket
+
+      - name: Say what landed
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          set -euo pipefail
+          echo "Dumps kept:"
+          rclone lsl "r2:${R2_BUCKET}/db" --s3-no-check-bucket
+          echo "Photos mirrored:"
+          rclone size "r2:${R2_BUCKET}/media" --s3-no-check-bucket
