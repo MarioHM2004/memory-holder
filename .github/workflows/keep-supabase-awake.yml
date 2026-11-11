@@ -27,6 +27,7 @@ on:
 
 jobs:
   ping:
+    if: github.repository == 'MarioHM2004/memory-holder'
     runs-on: ubuntu-latest
     steps:
       - name: Query the database
