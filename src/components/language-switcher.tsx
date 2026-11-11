@@ -63,7 +63,7 @@ export function LanguageSwitcher({ showLabel = true }: { showLabel?: boolean } =
   }
 
   return (
-    <div ref={rootRef} className="relative flex flex-col gap-1.5">
+    <div ref={rootRef} className="relative flex shrink-0 flex-col gap-1.5">
       {/* The heading is dropped where the control sits in a crowded row —
           the phone header — but kept for screen readers either way. */}
       <span
@@ -86,7 +86,11 @@ export function LanguageSwitcher({ showLabel = true }: { showLabel?: boolean } =
         aria-label={`${t("label")}: ${localeNames[locale as Locale]}`}
         className="flex items-center gap-1.5 px-1 font-display text-base text-ink-soft hover:text-ink disabled:opacity-50"
       >
-        <span className="highlighted font-bold text-ink">{localeNames[locale as Locale]}</span>
+        {/* nowrap because Chinese breaks between any two characters: squeezed
+            by the row, 中文 split across two lines and the header grew. */}
+        <span className="highlighted whitespace-nowrap font-bold text-ink">
+          {localeNames[locale as Locale]}
+        </span>
         <span aria-hidden className={`text-muted transition-transform ${open ? "rotate-180" : ""}`}>
           ▾
         </span>
