@@ -7,6 +7,7 @@ import { signOut } from "@/app/(app)/actions";
 import type { DiarySummary } from "@/lib/data/couple-context";
 import { DiarySwitcher } from "@/components/diary-switcher";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { NavIcon, type NavIconName } from "@/components/nav-icons";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -14,13 +15,13 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
   const pathname = usePathname();
   const t = useTranslations("Nav");
 
-  const items = [
-    { href: "/home", label: t("home") },
-    { href: "/search", label: t("search") },
-    { href: "/roulette", label: t("roulette") },
-    { href: "/timeline", label: t("timeline") },
-    { href: "/categories", label: t("categories") },
-    { href: "/admin", label: t("admin") },
+  const items: { href: string; label: string; icon: NavIconName }[] = [
+    { href: "/home", label: t("home"), icon: "home" },
+    { href: "/search", label: t("search"), icon: "search" },
+    { href: "/roulette", label: t("roulette"), icon: "roulette" },
+    { href: "/timeline", label: t("timeline"), icon: "timeline" },
+    { href: "/categories", label: t("categories"), icon: "categories" },
+    { href: "/admin", label: t("admin"), icon: "admin" },
   ];
 
   return (
@@ -45,11 +46,14 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`w-fit px-1 py-1.5 font-display text-lg leading-tight transition-transform hover:translate-x-0.5 ${
-                active ? "highlighted font-bold text-ink" : "text-ink-soft hover:text-ink"
+              className={`flex w-fit items-center gap-2 px-1 py-1.5 font-display text-lg leading-tight transition-transform hover:translate-x-0.5 ${
+                active ? "font-bold text-ink" : "text-ink-soft hover:text-ink"
               }`}
             >
-              {item.label}
+              <NavIcon name={item.icon} />
+              {/* The marker stays under the word alone. Stretched behind the
+                  icon too it reads as a highlighted box, not a pen stroke. */}
+              <span className={active ? "highlighted" : undefined}>{item.label}</span>
             </Link>
           );
         })}
