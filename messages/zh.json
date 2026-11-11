@@ -252,7 +252,9 @@
       "deleting": "删除中…",
       "cancel": "取消",
       "errorPassword": "密码不正确。",
-      "errorGeneric": "无法删除账号，请重试。"
+      "errorGeneric": "无法删除账号，请重试。",
+      "weeklyLabel": "每周日一段回忆",
+      "weeklyHint": "从你们的日记里随机选一段，发到邮箱。"
     }
   },
   "DatePicker": {
@@ -338,5 +340,23 @@
     "countOne": "1 段回忆",
     "countOther": "{count} 段回忆",
     "truncated": "只显示最近的 50 条。再加一个词可以缩小范围。"
+  },
+  "WeeklyEmail": {
+    "subject": "{title} — 来自你们日记的一段回忆",
+    "greeting": "{name}，你好：",
+    "from": "来自《{diary}》",
+    "open": "查看这段回忆",
+    "why": "你收到这封邮件，是因为你开启了周日回忆。",
+    "unsubscribe": "不再接收"
+  },
+  "Unsubscribe": {
+    "subtitle": "周日回忆",
+    "question": "要停止接收每周一封、带有日记回忆的邮件吗？其他都不会改变，日记本身也保持原样。",
+    "confirm": "停止接收",
+    "submitting": "保存中…",
+    "keep": "不，继续发送",
+    "done": "已停止，不会再收到周日邮件。",
+    "backOn": "你可以随时在「管理面板 → 账号」中重新开启。",
+    "error": "出了点问题。请重试，或在「管理面板 → 账号」中关闭。"
   }
 }

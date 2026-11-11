@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import { isLocale, LOCALE_COOKIE, type Locale } from "./locales";
 
 // Setting the cookie here (inside a Server Action) makes Next.js re-render the
@@ -14,4 +15,14 @@ export async function setLocaleAction(locale: Locale) {
     maxAge: 60 * 60 * 24 * 365,
     sameSite: "lax",
   });
+
+  // Mirrored onto the profile for anything that runs without a browser —
+  // the weekly email, which otherwise has no way of knowing which language
+  // its reader picked. Best effort: a signed-out visitor has no profile, and
+  // choosing a language shouldn't fail because a write did.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) await supabase.from("profiles").update({ locale }).eq("id", user.id);
 }

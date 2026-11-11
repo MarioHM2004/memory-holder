@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { signOut } from "@/app/(app)/actions";
 import { deleteAccountAction, type DeleteAccountState } from "./actions";
+import { WeeklyEmailToggle } from "./weekly-email-toggle";
 
 const initialState: DeleteAccountState = { error: null };
 
 /** Everything about the person rather than the diary: password, and leaving for good. */
-export function AccountPanel({ email }: { email: string }) {
+export function AccountPanel({ email, weeklyEmail }: { email: string; weeklyEmail: boolean }) {
   const t = useTranslations("Admin.account");
   const tNav = useTranslations("Nav");
   const tCommon = useTranslations("Common");
@@ -21,6 +22,10 @@ export function AccountPanel({ email }: { email: string }) {
       <div className="sketch max-w-md bg-surface p-5 sm:p-7 md:flex-1">
         <h3 className="font-display text-2xl font-bold leading-none">{t("title")}</h3>
         <p className="mt-2 break-all text-sm text-ink-soft">{email}</p>
+
+        <div className="mt-5 border-t border-line pt-5">
+          <WeeklyEmailToggle enabled={weeklyEmail} />
+        </div>
 
         <Link href="/account/password" className="btn-quiet mt-5 inline-block">
           {t("changePassword")}

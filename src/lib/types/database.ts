@@ -11,6 +11,11 @@ export interface Database {
           display_name: string;
           avatar_url: string | null;
           created_at: string;
+          weekly_email: boolean;
+          unsubscribe_token: string;
+          // The interface language, mirrored from the cookie so a cron job
+          // knows which one to write an email in.
+          locale: string;
         };
         Insert: {
           id: string;
@@ -20,6 +25,8 @@ export interface Database {
         Update: {
           display_name?: string;
           avatar_url?: string | null;
+          weekly_email?: boolean;
+          locale?: string;
         };
         Relationships: [];
       };
@@ -174,6 +181,26 @@ export interface Database {
       };
       leave_couple: {
         Args: { p_couple_id: string };
+        Returns: boolean;
+      };
+      weekly_digest: {
+        Args: Record<string, never>;
+        Returns: {
+          user_id: string;
+          email: string;
+          locale: string;
+          display_name: string;
+          unsubscribe_token: string;
+          memory_id: string;
+          diary_name: string;
+          title: string;
+          description: string;
+          memory_date: string;
+          cover_path: string | null;
+        }[];
+      };
+      unsubscribe_weekly: {
+        Args: { p_token: string };
         Returns: boolean;
       };
       signup_slots_left: {

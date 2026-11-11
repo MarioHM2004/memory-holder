@@ -252,7 +252,9 @@
       "deleting": "Deleting…",
       "cancel": "Cancel",
       "errorPassword": "That password isn't right.",
-      "errorGeneric": "Couldn't delete the account. Try again."
+      "errorGeneric": "Couldn't delete the account. Try again.",
+      "weeklyLabel": "A memory every Sunday",
+      "weeklyHint": "One of your own, picked at random, by email."
     }
   },
   "DatePicker": {
@@ -338,5 +340,23 @@
     "countOne": "1 memory",
     "countOther": "{count} memories",
     "truncated": "Only the 50 most recent are shown. Add a word to narrow it down."
+  },
+  "WeeklyEmail": {
+    "subject": "{title} — a memory from your diary",
+    "greeting": "Hello {name},",
+    "from": "From {diary}",
+    "open": "Open the memory",
+    "why": "You get this because the Sunday memory is switched on in your diary.",
+    "unsubscribe": "Stop sending it"
+  },
+  "Unsubscribe": {
+    "subtitle": "The Sunday memory",
+    "question": "Stop sending the weekly email with a memory from your diary? Nothing else changes, and your diary stays exactly as it is.",
+    "confirm": "Stop sending it",
+    "submitting": "Saving…",
+    "keep": "No, keep sending it",
+    "done": "Done — no more Sunday emails.",
+    "backOn": "You can turn it back on any time from Admin panel → Account.",
+    "error": "Something went wrong. Try again, or turn it off from Admin panel → Account."
   }
 }

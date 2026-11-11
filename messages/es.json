@@ -252,7 +252,9 @@
       "deleting": "Borrando…",
       "cancel": "Cancelar",
       "errorPassword": "Esa contraseña no es correcta.",
-      "errorGeneric": "No se ha podido borrar la cuenta. Inténtalo de nuevo."
+      "errorGeneric": "No se ha podido borrar la cuenta. Inténtalo de nuevo.",
+      "weeklyLabel": "Un recuerdo cada domingo",
+      "weeklyHint": "Uno vuestro, al azar, por correo."
     }
   },
   "DatePicker": {
@@ -338,5 +340,23 @@
     "countOne": "1 recuerdo",
     "countOther": "{count} recuerdos",
     "truncated": "Solo se muestran los 50 más recientes. Añade una palabra para afinar."
+  },
+  "WeeklyEmail": {
+    "subject": "{title} — un recuerdo de vuestro diario",
+    "greeting": "Hola, {name}:",
+    "from": "De {diary}",
+    "open": "Ver el recuerdo",
+    "why": "Recibes esto porque tienes activado el recuerdo de los domingos.",
+    "unsubscribe": "Dejar de recibirlo"
+  },
+  "Unsubscribe": {
+    "subtitle": "El recuerdo de los domingos",
+    "question": "¿Dejamos de enviarte el correo semanal con un recuerdo de tu diario? No cambia nada más, y tu diario se queda tal cual.",
+    "confirm": "Dejar de recibirlo",
+    "submitting": "Guardando…",
+    "keep": "No, que siga llegando",
+    "done": "Hecho: no volverás a recibirlo.",
+    "backOn": "Puedes volver a activarlo cuando quieras en Panel admin → Cuenta.",
+    "error": "Algo ha ido mal. Inténtalo otra vez, o desactívalo desde Panel admin → Cuenta."
   }
 }

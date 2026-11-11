@@ -15,6 +15,7 @@ export function AdminTabs({
   coupleId,
   userId,
   email,
+  weeklyEmail,
   displayName,
   inviteCode,
   diaryName,
@@ -25,6 +26,7 @@ export function AdminTabs({
   coupleId: string;
   userId: string;
   email: string;
+  weeklyEmail: boolean;
   displayName: string;
   inviteCode: string;
   diaryName: string;
@@ -71,7 +73,7 @@ export function AdminTabs({
         />
       )}
       {tab === "categories" && <CategoriesPanel coupleId={coupleId} categories={categories} />}
-      {tab === "account" && <AccountPanel email={email} />}
+      {tab === "account" && <AccountPanel email={email} weeklyEmail={weeklyEmail} />}
       {/* The tab is labelled "Diary": inviting people in and leaving it.
           Side by side once there's room, stacked on a phone. */}
       {tab === "invite" && (

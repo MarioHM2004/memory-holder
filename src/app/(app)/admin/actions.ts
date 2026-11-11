@@ -297,3 +297,14 @@ export async function deleteAccountAction(
   revalidatePath("/", "layout");
   redirect("/login?deleted=1");
 }
+
+/** Turns the Sunday email on or off for whoever is signed in. */
+export async function setWeeklyEmailAction(enabled: boolean) {
+  const context = await requireCoupleContext();
+  const supabase = await createClient();
+
+  // RLS lets someone update only their own profile row, so the id is a
+  // filter rather than a check.
+  await supabase.from("profiles").update({ weekly_email: enabled }).eq("id", context.userId);
+  revalidatePath("/admin");
+}
