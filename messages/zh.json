@@ -8,7 +8,8 @@
     "signOut": "退出登录",
     "diary": "日记",
     "newDiary": "新建或加入日记",
-    "privacy": "隐私"
+    "privacy": "隐私",
+    "search": "搜索"
   },
   "Common": {
     "adminPanel": "管理面板",
@@ -325,5 +326,16 @@
     "closingTitle": "今天就开始",
     "closingBody": "只要一分钟：建好日记，再把邀请码发给你想邀请的人。",
     "full": "Memory Holder 由一个人维护，因此账号数量有上限。目前名额已满——写信到 hola@memory-holder.com，我会为你腾出位置。"
+  },
+  "Search": {
+    "eyebrow": "整本日记",
+    "heading": "找一段回忆",
+    "placeholder": "一个词、一个地方、一个名字…",
+    "submit": "搜索",
+    "prompt": "在上面输入内容，包含这些词的回忆就会出现，三种语言都可以。",
+    "noResults": "没有找到与“{query}”匹配的内容。试试更少的词，或者换一个。",
+    "countOne": "1 段回忆",
+    "countOther": "{count} 段回忆",
+    "truncated": "只显示最近的 50 条。再加一个词可以缩小范围。"
   }
 }

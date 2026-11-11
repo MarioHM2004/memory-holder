@@ -16,6 +16,7 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
 
   const items = [
     { href: "/home", label: t("home") },
+    { href: "/search", label: t("search") },
     { href: "/roulette", label: t("roulette") },
     { href: "/timeline", label: t("timeline") },
     { href: "/categories", label: t("categories") },

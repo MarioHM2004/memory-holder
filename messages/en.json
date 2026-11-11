@@ -8,7 +8,8 @@
     "signOut": "Sign out",
     "diary": "Diary",
     "newDiary": "New diary or join one",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "search": "Search"
   },
   "Common": {
     "adminPanel": "admin panel",
@@ -325,5 +326,16 @@
     "closingTitle": "Start today",
     "closingBody": "It takes a minute: make the diary, then share the code with whoever you want in it.",
     "full": "Memory Holder is kept running by one person, so the number of accounts is capped. There's no room right now — write to hola@memory-holder.com and I'll make some."
+  },
+  "Search": {
+    "eyebrow": "The whole diary",
+    "heading": "Find a memory",
+    "placeholder": "A word, a place, a name…",
+    "submit": "Search",
+    "prompt": "Type something above and every memory holding those words will show up — in any of your languages.",
+    "noResults": "Nothing matches “{query}”. Try fewer words, or a different one.",
+    "countOne": "1 memory",
+    "countOther": "{count} memories",
+    "truncated": "Only the 50 most recent are shown. Add a word to narrow it down."
   }
 }

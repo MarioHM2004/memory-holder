@@ -8,7 +8,8 @@
     "signOut": "Cerrar sesión",
     "diary": "Diario",
     "newDiary": "Nuevo diario o unirse a uno",
-    "privacy": "Privacidad"
+    "privacy": "Privacidad",
+    "search": "Buscar"
   },
   "Common": {
     "adminPanel": "panel admin",
@@ -325,5 +326,16 @@
     "closingTitle": "Empezad hoy",
     "closingBody": "Se tarda un minuto: creas el diario y le pasas el código a quien quieras que entre.",
     "full": "Memory Holder lo mantengo yo solo, así que el número de cuentas está limitado. Ahora mismo no quedan plazas: escríbeme a hola@memory-holder.com y te hago sitio."
+  },
+  "Search": {
+    "eyebrow": "Todo el diario",
+    "heading": "Encuentra un recuerdo",
+    "placeholder": "Una palabra, un lugar, un nombre…",
+    "submit": "Buscar",
+    "prompt": "Escribe algo arriba y aparecerán los recuerdos que contengan esas palabras, en cualquiera de vuestros idiomas.",
+    "noResults": "No hay nada que coincida con «{query}». Prueba con menos palabras, o con otra.",
+    "countOne": "1 recuerdo",
+    "countOther": "{count} recuerdos",
+    "truncated": "Solo se muestran los 50 más recientes. Añade una palabra para afinar."
   }
 }

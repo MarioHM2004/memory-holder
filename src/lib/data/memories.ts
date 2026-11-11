@@ -178,6 +178,56 @@ export async function getRecentMemories(coupleId: string, limit = 20): Promise<R
   return withCover((data as unknown as (MemoryWithCategory & { media: EmbeddedMedia[] })[]) ?? []);
 }
 
+/** Past a handful, extra words stop narrowing anything and just cost time. */
+const MAX_SEARCH_TERMS = 5;
+const SEARCH_LIMIT = 50;
+
+/**
+ * Folds a typed word the same way the database folded `search_text` when it
+ * stored it: lowercased and stripped of accents, so "cumpleanos" and
+ * "cumpleanos" are the same search. Chinese and other unaccented scripts
+ * pass through untouched.
+ *
+ * Wildcards go rather than get escaped. Nobody searches a diary for a
+ * literal underscore, and dropping them is one fewer way to build a pattern
+ * that matches everything.
+ */
+function foldSearchTerm(term: string) {
+  return term
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/[%_*\\]/g, "");
+}
+
+/**
+ * Memories whose title, description or body contain every word typed —
+ * anywhere, in any order. Newest first, because with a diary the recent one
+ * is nearly always the one being looked for.
+ */
+export async function searchMemories(coupleId: string, query: string): Promise<RecentMemory[]> {
+  const terms = query
+    .trim()
+    .split(/\s+/)
+    .map(foldSearchTerm)
+    .filter(Boolean)
+    .slice(0, MAX_SEARCH_TERMS);
+  if (terms.length === 0) return [];
+
+  const supabase = await createClient();
+  let request = supabase
+    .from("memories")
+    .select(`*, categories(name, color), ${MEDIA_EMBED}`)
+    .eq("couple_id", coupleId);
+
+  // Chained filters are ANDed, so each word has to appear somewhere in the
+  // memory — not necessarily next to the others.
+  for (const term of terms) request = request.ilike("search_text", `%${term}%`);
+
+  const { data } = await request.order("memory_date", { ascending: false }).limit(SEARCH_LIMIT);
+  return withCover((data as unknown as (MemoryWithCategory & { media: EmbeddedMedia[] })[]) ?? []);
+}
+
 /** `url` drives the main viewer, `thumbUrl` the filmstrip beside it. */
 export type GalleryItem = Media & { url: string | null; thumbUrl: string | null };
 
