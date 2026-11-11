@@ -13,7 +13,7 @@ import { useDismiss } from "@/lib/use-dismiss";
  * or fifth would start wrapping under the theme button in the rail and in the
  * footer of every signed-out card.
  */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ showLabel = true }: { showLabel?: boolean } = {}) {
   const locale = useLocale();
   const t = useTranslations("Language");
   const [open, setOpen] = useState(false);
@@ -64,7 +64,15 @@ export function LanguageSwitcher() {
 
   return (
     <div ref={rootRef} className="relative flex flex-col gap-1.5">
-      <span className="px-1 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-muted">
+      {/* The heading is dropped where the control sits in a crowded row —
+          the phone header — but kept for screen readers either way. */}
+      <span
+        className={
+          showLabel
+            ? "px-1 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-muted"
+            : "sr-only"
+        }
+      >
         {t("label")}
       </span>
 
@@ -90,9 +98,13 @@ export function LanguageSwitcher() {
           role="menu"
           aria-label={t("label")}
           onKeyDown={onMenuKeyDown}
-          // Capped and scrollable so a long list stays on screen whichever
-          // way it opens.
-          className={`sketch-soft absolute left-0 z-30 flex max-h-[45vh] w-40 flex-col gap-0.5 overflow-y-auto bg-surface p-3 ${
+          // Only as wide as the longest language name. Capped and scrollable
+          // so a long list stays on screen whichever way it opens.
+          // Anchored to its right edge on the phone header, where the
+          // control sits near the end of the row and a left-anchored panel
+          // would hang off it; from lg it's at the foot of the rail with
+          // room to its right.
+          className={`sketch-soft absolute right-0 z-30 flex max-h-[45vh] w-max min-w-[6.5rem] flex-col gap-0.5 overflow-y-auto bg-surface p-2 lg:left-0 lg:right-auto ${
             openUp ? "bottom-full mb-2" : "top-full mt-2"
           }`}
           style={{ rotate: "-0.4deg" }}
@@ -106,7 +118,7 @@ export function LanguageSwitcher() {
                 role="menuitemradio"
                 aria-checked={current}
                 onClick={() => choose(item)}
-                className={`w-fit max-w-full truncate px-1 py-1.5 text-left font-display text-lg leading-tight outline-none transition-transform hover:translate-x-0.5 focus-visible:translate-x-0.5 focus-visible:text-ink ${
+                className={`w-fit max-w-full truncate px-1.5 py-1 text-left font-display text-base leading-tight outline-none transition-transform hover:translate-x-0.5 focus-visible:translate-x-0.5 focus-visible:text-ink ${
                   current ? "highlighted font-bold text-ink" : "text-ink-soft hover:text-ink"
                 }`}
               >

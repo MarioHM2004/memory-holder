@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { signOut } from "@/app/(app)/actions";
 import { deleteAccountAction, type DeleteAccountState } from "./actions";
 
 const initialState: DeleteAccountState = { error: null };
@@ -10,6 +11,8 @@ const initialState: DeleteAccountState = { error: null };
 /** Everything about the person rather than the diary: password, and leaving for good. */
 export function AccountPanel({ email }: { email: string }) {
   const t = useTranslations("Admin.account");
+  const tNav = useTranslations("Nav");
+  const tCommon = useTranslations("Common");
   const [state, formAction, pending] = useActionState(deleteAccountAction, initialState);
   const [confirming, setConfirming] = useState(false);
 
@@ -22,6 +25,29 @@ export function AccountPanel({ email }: { email: string }) {
         <Link href="/account/password" className="btn-quiet mt-5 inline-block">
           {t("changePassword")}
         </Link>
+
+        {/* Phone only: the rail holds these from lg up. Language and theme
+            stay in the phone header instead — they get touched; these two
+            are looked for once. */}
+        <div className="mt-7 lg:hidden">
+          <div className="drawn-rule h-2 w-full" aria-hidden />
+          <div className="mt-4 flex items-center gap-4">
+            <Link
+              href="/privacy"
+              className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-ink"
+            >
+              {tCommon("privacy")}
+            </Link>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-accent-1"
+              >
+                {tNav("signOut")}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
 
       <div className="sketch-soft max-w-md bg-surface-2 p-5 sm:p-7 md:flex-1">

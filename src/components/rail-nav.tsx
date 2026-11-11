@@ -35,10 +35,24 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
           rather than stacked, to keep the header shallow on a phone. */}
       <div className="flex items-center justify-between gap-3 px-1 lg:block">
         <Wordmark size="sm" />
-        <DiarySwitcher diaries={diaries} activeId={activeDiaryId} />
+        {/* Language and theme join the diary name on the phone header. They
+            belong in reach: someone opening the diary for the first time in
+            a language they don't read has to find the switcher without being
+            able to read the way there. Compact, so all three fit one line. */}
+        <div className="flex items-center gap-3 lg:block">
+          <DiarySwitcher diaries={diaries} activeId={activeDiaryId} />
+          <span className="lg:hidden">
+            <LanguageSwitcher showLabel={false} />
+          </span>
+          <span className="lg:hidden">
+            <ThemeToggle />
+          </span>
+        </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 lg:mt-0 lg:flex-col lg:items-start lg:gap-0.5">
+      {/* Only from lg. On a phone these live in the bar along the bottom,
+          where a thumb reaches them. */}
+      <div className="hidden lg:flex lg:flex-col lg:items-start lg:gap-0.5">
         {items.map((item) => {
           const active = pathname.startsWith(item.href);
           return (
@@ -59,11 +73,12 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
         })}
       </div>
 
-      <div className="drawn-rule mt-3 h-2 w-full lg:mt-5" aria-hidden />
+      <div className="drawn-rule hidden h-2 w-full lg:mt-5 lg:block" aria-hidden />
 
-      {/* Language, theme and sign out share one row on the bar; on the rail
-          they stack as before. */}
-      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 pt-3 lg:block">
+      {/* Also rail-only. Language, privacy and signing out are rare enough
+          to live in the admin panel's Account tab on a phone, which keeps
+          this header to a single line. */}
+      <div className="hidden pt-3 lg:block">
         <div className="flex items-end gap-3">
           <LanguageSwitcher />
           <ThemeToggle />

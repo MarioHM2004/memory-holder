@@ -79,9 +79,11 @@ export function DiarySwitcher({ diaries, activeId }: { diaries: DiarySummary[]; 
           role="menu"
           aria-label={t("diary")}
           onKeyDown={onMenuKeyDown}
-          // Right-aligned on the phone bar, where the name sits at the right
-          // edge and a left-aligned menu would run off the screen.
-          className="sketch-soft absolute right-0 top-full z-30 mt-2 flex w-60 flex-col gap-0.5 bg-surface p-3 lg:left-0 lg:right-auto"
+          // Grows rightwards from the trigger, and only as wide as the
+          // longest diary name needs. Anchored to the right it reached back
+          // past the left edge of the header card; capped, it can't run off
+          // the other side either, and a long name truncates instead.
+          className="sketch-soft absolute left-0 top-full z-30 mt-2 flex w-max min-w-[9rem] max-w-56 flex-col gap-0.5 bg-surface p-2"
           style={{ rotate: "-0.4deg" }}
         >
           {diaries.map((diary) => {
@@ -93,7 +95,7 @@ export function DiarySwitcher({ diaries, activeId }: { diaries: DiarySummary[]; 
                 role="menuitemradio"
                 aria-checked={current}
                 onClick={() => choose(diary.id)}
-                className={`w-fit max-w-full truncate px-1 py-1.5 text-left font-display text-lg leading-tight outline-none transition-transform hover:translate-x-0.5 focus-visible:translate-x-0.5 focus-visible:text-ink ${
+                className={`w-fit max-w-full truncate px-1.5 py-1 text-left font-display text-base leading-tight outline-none transition-transform hover:translate-x-0.5 focus-visible:translate-x-0.5 focus-visible:text-ink ${
                   current ? "highlighted font-bold text-ink" : "text-ink-soft hover:text-ink"
                 }`}
               >
