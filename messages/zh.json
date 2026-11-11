@@ -57,7 +57,8 @@
       "errorExists": "该邮箱已注册，请直接用密码登录。",
       "errorEmailInvalid": "该邮箱地址似乎无效。",
       "errorRateLimit": "发送到该地址的邮件过多，请几分钟后再试。",
-      "errorGeneric": "无法创建账号，请重试。"
+      "errorGeneric": "无法创建账号，请重试。",
+      "full": "Memory Holder 由一个人维护，因此账号数量有上限。目前名额已满——写信到 hola@memory-holder.com，我会为你腾出位置。"
     },
     "forgot": {
       "subtitle": "重新进入你的日记",
@@ -322,6 +323,7 @@
     "privateBody": "只有拿到邀请码的人才能进入。没有公开的时间线，没有个人主页，没有广告，也没有追踪。照片只提供给日记里的人，而且你可以两步删除账号及其中的全部内容。",
     "privateLink": "保存了什么，以及如何删除",
     "closingTitle": "今天就开始",
-    "closingBody": "只要一分钟：建好日记，再把邀请码发给你想邀请的人。"
+    "closingBody": "只要一分钟：建好日记，再把邀请码发给你想邀请的人。",
+    "full": "Memory Holder 由一个人维护，因此账号数量有上限。目前名额已满——写信到 hola@memory-holder.com，我会为你腾出位置。"
   }
 }

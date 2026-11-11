@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { signupSlotsLeft } from "@/lib/data/signup-slots";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -22,6 +23,7 @@ export default async function LandingPage() {
   if (user) redirect("/home");
 
   const t = await getTranslations("Landing");
+  const open = (await signupSlotsLeft()) > 0;
   const features = ["timeline", "roulette", "categories"] as const;
   // Each card wears a different hand-drawn border, as everywhere else.
   const borders = ["sketch", "sketch-3", "sketch-soft-2"];
@@ -36,13 +38,21 @@ export default async function LandingPage() {
         <p className="mx-auto mt-5 max-w-lg text-pretty text-lg text-ink-soft">{t("subheading")}</p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/signup" className="btn-ink">
-            {t("ctaCreate")}
-          </Link>
-          <Link href="/login" className="btn-quiet">
+          {open && (
+            <Link href="/signup" className="btn-ink">
+              {t("ctaCreate")}
+            </Link>
+          )}
+          <Link href="/login" className={open ? "btn-quiet" : "btn-ink"}>
             {t("ctaLogin")}
           </Link>
         </div>
+
+        {!open && (
+          <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-ink-soft">
+            {t("full")}
+          </p>
+        )}
 
         <p className="mt-7 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-muted">
           {t("languages")}
@@ -78,10 +88,14 @@ export default async function LandingPage() {
 
       <section className="mt-14 text-center">
         <h2 className="font-marker text-2xl leading-tight">{t("closingTitle")}</h2>
-        <p className="mx-auto mt-3 max-w-md text-ink-soft">{t("closingBody")}</p>
-        <Link href="/signup" className="btn-ink mt-6 inline-block">
-          {t("ctaCreate")}
-        </Link>
+        <p className="mx-auto mt-3 max-w-md text-ink-soft">
+          {open ? t("closingBody") : t("full")}
+        </p>
+        {open && (
+          <Link href="/signup" className="btn-ink mt-6 inline-block">
+            {t("ctaCreate")}
+          </Link>
+        )}
       </section>
 
       <footer className="mt-16">

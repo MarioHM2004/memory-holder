@@ -173,6 +173,10 @@ export interface Database {
         Args: { p_couple_id: string };
         Returns: boolean;
       };
+      signup_slots_left: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
       delete_account: {
         Args: Record<string, never>;
         Returns: undefined;

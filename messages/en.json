@@ -57,7 +57,8 @@
       "errorExists": "There's already an account with that email. Sign in with your password instead.",
       "errorEmailInvalid": "That email address doesn't look valid.",
       "errorRateLimit": "Too many emails have gone to that address. Wait a few minutes and try again.",
-      "errorGeneric": "Couldn't create the account. Try again."
+      "errorGeneric": "Couldn't create the account. Try again.",
+      "full": "Memory Holder is kept running by one person, so the number of accounts is capped. There's no room right now — write to hola@memory-holder.com and I'll make some."
     },
     "forgot": {
       "subtitle": "Get back into your diary",
@@ -322,6 +323,7 @@
     "privateBody": "Only the people you hand the code to get in. There's no public wall, no profiles, no ads and no tracking. Photos are served to the people in the diary and nobody else, and you can delete your account, and everything in it, in two clicks.",
     "privateLink": "What's stored and how to remove it",
     "closingTitle": "Start today",
-    "closingBody": "It takes a minute: make the diary, then share the code with whoever you want in it."
+    "closingBody": "It takes a minute: make the diary, then share the code with whoever you want in it.",
+    "full": "Memory Holder is kept running by one person, so the number of accounts is capped. There's no room right now — write to hola@memory-holder.com and I'll make some."
   }
 }

@@ -57,7 +57,8 @@
       "errorExists": "Ya hay una cuenta con ese correo. Entra con tu contraseña.",
       "errorEmailInvalid": "Ese correo no parece válido.",
       "errorRateLimit": "Se han enviado demasiados correos a esa dirección. Espera unos minutos y vuelve a intentarlo.",
-      "errorGeneric": "No se ha podido crear la cuenta. Inténtalo de nuevo."
+      "errorGeneric": "No se ha podido crear la cuenta. Inténtalo de nuevo.",
+      "full": "Memory Holder lo mantengo yo solo, así que el número de cuentas está limitado. Ahora mismo no quedan plazas: escríbeme a hola@memory-holder.com y te hago sitio."
     },
     "forgot": {
       "subtitle": "Vuelve a entrar en tu diario",
@@ -322,6 +323,7 @@
     "privateBody": "Solo entra quien recibe vuestro código. No hay muro público, ni perfiles, ni anuncios, ni rastreo. Las fotos se sirven únicamente a quien está dentro del diario, y puedes borrar tu cuenta, con todo lo que contiene, en dos clics.",
     "privateLink": "Qué se guarda y cómo borrarlo",
     "closingTitle": "Empezad hoy",
-    "closingBody": "Se tarda un minuto: creas el diario y le pasas el código a quien quieras que entre."
+    "closingBody": "Se tarda un minuto: creas el diario y le pasas el código a quien quieras que entre.",
+    "full": "Memory Holder lo mantengo yo solo, así que el número de cuentas está limitado. Ahora mismo no quedan plazas: escríbeme a hola@memory-holder.com y te hago sitio."
   }
 }

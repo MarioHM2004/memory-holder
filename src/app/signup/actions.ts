@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { signupSlotsLeft } from "@/lib/data/signup-slots";
 
 export type SignUpActionState = {
   error: string | null;
@@ -36,6 +37,13 @@ export async function signUp(
   }
   if (password.length < 8) {
     return { error: t("errorPasswordLength"), detail: null, info: null };
+  }
+
+  // Checked again here, not just before the form was drawn: the page may
+  // have been open a while. The trigger in migration 0005 is what actually
+  // holds the line; this only turns it into a sentence.
+  if ((await signupSlotsLeft()) <= 0) {
+    return { error: t("full"), detail: null, info: null };
   }
 
   // Where the confirmation email should land. Taken from the request rather

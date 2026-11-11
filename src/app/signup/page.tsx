@@ -1,20 +1,17 @@
-"use client";
-
-import { useActionState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { Field } from "@/components/ui/field";
+import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { signUp, type SignUpActionState } from "./actions";
+import { signupSlotsLeft } from "@/lib/data/signup-slots";
+import { SignUpForm } from "./signup-form";
 
-const initialState: SignUpActionState = { error: null, detail: null, info: null };
-
-export default function SignUpPage() {
-  const [state, formAction, pending] = useActionState(signUp, initialState);
-  const t = useTranslations("Auth.signup");
-  const tCommon = useTranslations("Common");
+export default async function SignUpPage() {
+  const t = await getTranslations("Auth.signup");
+  const tCommon = await getTranslations("Common");
+  // Asked before the form is drawn: being told there's no room beats filling
+  // in three fields to find out.
+  const slots = await signupSlotsLeft();
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -24,33 +21,12 @@ export default function SignUpPage() {
           <p className="mt-2 font-display text-lg text-ink-soft">{t("subtitle")}</p>
         </div>
 
-        {state.info ? (
-          <p className="border-l-2 border-accent-2 px-3 py-2 text-sm font-medium text-ink">
-            {state.info}
-          </p>
+        {slots > 0 ? (
+          <SignUpForm />
         ) : (
-          <form action={formAction} className="flex flex-col gap-5">
-            <Field label={t("name")} name="displayName" required />
-            <Field label={t("email")} name="email" type="email" required />
-            <Field label={t("password")} name="password" type="password" required minLength={8} />
-
-            {state.error && (
-              <div className="border-l-2 border-accent-1 px-3 py-1.5 text-accent-1">
-                <p className="text-sm font-medium">{state.error}</p>
-                {/* The raw reason is for us, not for them: it's what turns a
-                    screenshot into a diagnosis. */}
-                {state.detail && (
-                  <p className="mt-1 break-words font-mono text-[0.68rem] text-ink-soft">
-                    {state.detail}
-                  </p>
-                )}
-              </div>
-            )}
-
-            <button type="submit" disabled={pending} className="btn-ink mt-1">
-              {pending ? t("submitting") : t("submit")}
-            </button>
-          </form>
+          <p className="whitespace-pre-line border-l-2 border-accent-2 px-3 py-2 text-sm leading-relaxed text-ink">
+            {t("full")}
+          </p>
         )}
 
         <p className="mt-7 text-center text-sm text-ink-soft">
