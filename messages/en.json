@@ -9,7 +9,8 @@
     "diary": "Diary",
     "newDiary": "New diary or join one",
     "privacy": "Privacy",
-    "search": "Search"
+    "search": "Search",
+    "sections": "Sections"
   },
   "Common": {
     "adminPanel": "admin panel",
