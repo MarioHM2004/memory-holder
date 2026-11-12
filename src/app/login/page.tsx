@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/field";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ServiceWorker } from "@/components/service-worker";
 import { LoginNotice } from "./login-notice";
 import { login, type AuthActionState } from "./actions";
 
@@ -59,6 +60,10 @@ export default function LoginPage() {
             {t("createAccount")}
           </Link>
         </p>
+
+        {/* Signing out lands here, which is where the worker is told to
+            drop the photos it kept on this phone. */}
+        <ServiceWorker signedOut />
 
         <div className="drawn-rule mt-7 h-2 w-full" aria-hidden />
         <div className="mt-4 flex items-end justify-center gap-4">

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { RailNav } from "@/components/rail-nav";
 import { BottomNav } from "@/components/bottom-nav";
+import { ServiceWorker } from "@/components/service-worker";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const context = await requireCoupleContext();
@@ -20,6 +21,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <BottomNav />
+      <ServiceWorker />
     </div>
   );
 }
