@@ -69,14 +69,22 @@ they change nothing.
 Providers. Without this the button returns an error.
 
 **3. Create the template account** at `/signup` like any other, with an
-address you own. Create its diary and fill it with invented memories, photos
-and categories — whatever you'd want a stranger to judge the app by. Do this
+address you own, and fill its diary with invented memories, photos and
+categories — whatever you'd want a stranger to judge the app by. Do this
 *before* step 4, while it can still be written to.
 
-[`supabase/seed/demo-diary.sql`](../supabase/seed/demo-diary.sql) fills a
-diary with years of invented memories in one go, which is what makes the
-timeline and the roulette worth looking at. It seeds no photos, so upload a
-handful by hand afterwards: those are the ones every sandbox will show.
+[`supabase/seed/demo-diary.sql`](../supabase/seed/demo-diary.sql) does the
+writing for you: four years of memories in one go, which is what makes the
+timeline and the roulette worth looking at. It needs the account to exist
+already (put its address in the one line it asks for) and to have no diary
+yet, because it creates the diary itself and refuses to seed into a real
+one. So sign up and stop there — don't create a diary in the app first.
+
+Either way it seeds no photos, so upload a handful by hand afterwards: those
+are the ones every sandbox will show. The seeded text is Spanish, so a
+visitor reading in English or Chinese gets a translated interface around a
+Spanish diary; a few hand-written memories in the other two languages fix
+the first impression if it bothers you.
 
 **4. Mark both**, in the SQL editor:
 

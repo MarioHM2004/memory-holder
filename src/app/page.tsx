@@ -36,8 +36,10 @@ export default async function LandingPage({
   const demoFailed = (await searchParams).error === "demo";
   const open = (await signupSlotsLeft()) > 0;
   const features = ["timeline", "roulette", "categories"] as const;
-  // Each card wears a different hand-drawn border, as everywhere else.
-  const borders = ["sketch", "sketch-3", "sketch-soft-2"];
+  // Each card wears a different hand-drawn border, as everywhere else. All
+  // three inked: the pencil-weight variants are for boxes that shouldn't
+  // shout, and next to two inked neighbours one of those reads as unfinished.
+  const borders = ["sketch", "sketch-3", "sketch-2"];
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-16">

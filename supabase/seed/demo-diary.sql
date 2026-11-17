@@ -27,7 +27,7 @@
 do $$
 declare
   -- ↓↓↓ THE ONE LINE YOU MUST CHANGE ↓↓↓
-  v_email      text := 'example@example.com';
+  v_email      text := 'testing.user2425@gmail.com';
 
   v_memories   int  := 120;   -- how many memories to create
 
