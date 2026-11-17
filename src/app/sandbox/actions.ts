@@ -31,11 +31,26 @@ export async function startSandboxAction() {
 
   if (!user) {
     const { error } = await supabase.auth.signInAnonymously();
-    if (error) redirect("/?error=demo");
+    // The visitor gets one sentence; the reason goes to the server log,
+    // where it can be read. Otherwise every cause — anonymous sign-ins
+    // switched off, migration not run, no diary to copy — looks the same
+    // from outside, which is a bad half-hour for whoever has to fix it.
+    if (error) {
+      console.error("[sandbox] anonymous sign-in failed:", error.message, error);
+      redirect("/?error=demo");
+    }
   }
 
   const { error } = await supabase.rpc("start_sandbox");
-  if (error) redirect("/?error=demo");
+  if (error) {
+    console.error("[sandbox] start_sandbox failed:", error.message, error);
+    // Hand the session back before bowing out. A visitor left signed in with
+    // no diary is sent from the front page to /home to /onboarding — a form
+    // for creating a diary the database won't let them create — and never
+    // sees why. Signed out, the front page can say it plainly.
+    await supabase.auth.signOut();
+    redirect("/?error=demo");
+  }
 
   redirect("/home");
 }

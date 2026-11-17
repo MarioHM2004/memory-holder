@@ -15,6 +15,15 @@ export default async function OnboardingPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  // A try-it visitor has no address, and the database refuses to let them
+  // create or join a diary — so this page is a dead end for them. They reach
+  // it when their diary was deleted overnight while the session lived on, or
+  // when one failed to be built. Hand the session back and start them over.
+  if (!user.email) {
+    await supabase.auth.signOut();
+    redirect("/");
+  }
+
   // Reachable with diaries already: this is also where another one is
   // created or joined, e.g. one with family alongside one with a partner.
   const context = await getCoupleContext();
