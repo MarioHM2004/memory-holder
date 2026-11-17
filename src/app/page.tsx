@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { signupSlotsLeft } from "@/lib/data/signup-slots";
+import { startSandboxAction } from "@/app/sandbox/actions";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -14,7 +15,11 @@ import { ThemeToggle } from "@/components/theme-toggle";
  * visitor nothing and left a search engine with a page of two input fields
  * to judge the whole site by. Signed in, it hands over to the diary.
  */
-export default async function LandingPage() {
+export default async function LandingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -23,6 +28,12 @@ export default async function LandingPage() {
   if (user) redirect("/home");
 
   const t = await getTranslations("Landing");
+  const tDemo = await getTranslations("Demo");
+  // Switched on once the diary the sandboxes are copied from exists, so the
+  // front page never offers a door that opens onto an error.
+  const demoEnabled = process.env.DEMO_ENABLED === "true";
+  // startSandboxAction sends anyone it couldn't let in back here.
+  const demoFailed = (await searchParams).error === "demo";
   const open = (await signupSlotsLeft()) > 0;
   const features = ["timeline", "roulette", "categories"] as const;
   // Each card wears a different hand-drawn border, as everywhere else.
@@ -74,6 +85,27 @@ export default async function LandingPage() {
           ))}
         </div>
       </section>
+
+      {demoEnabled && (
+        <section className="sketch-3 mt-14 bg-surface p-7 sm:p-10">
+          <h2 className="font-display text-2xl font-bold leading-none">{tDemo("title")}</h2>
+          <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">{tDemo("body")}</p>
+
+          {demoFailed && (
+            <p className="sketch-soft-2 mt-5 bg-surface-2 px-4 py-2.5 text-sm text-ink-soft">
+              {tDemo("error")}
+            </p>
+          )}
+
+          {/* A form, not a link: the diary is built on the way in, and a
+              crawler following a link shouldn't create one. */}
+          <form action={startSandboxAction}>
+            <button type="submit" className="btn-ink mt-6">
+              {tDemo("cta")}
+            </button>
+          </form>
+        </section>
+      )}
 
       <section className="sketch-soft mt-14 bg-surface-2 p-7 sm:p-10">
         <h2 className="font-display text-2xl font-bold leading-none">{t("privateTitle")}</h2>

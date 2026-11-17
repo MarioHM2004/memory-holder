@@ -81,7 +81,8 @@
       "back": "Go to the diary",
       "errorLength": "The password must be at least 8 characters.",
       "errorSame": "That's the password you already had. Choose a different one.",
-      "errorGeneric": "Couldn't change the password. The link may have expired — ask for a new one."
+      "errorGeneric": "Couldn't change the password. The link may have expired — ask for a new one.",
+      "errorDemo": "The demo account's password can't be changed."
     }
   },
   "Onboarding": {
@@ -370,5 +371,14 @@
     "done": "Done — no more Sunday emails.",
     "backOn": "You can turn it back on any time from Admin panel → Account.",
     "error": "Something went wrong. Try again, or turn it off from Admin panel → Account."
+  },
+  "Demo": {
+    "banner": "You're looking at the demo diary. Everything here is made up, and nothing can be changed — the database refuses it.",
+    "sandboxBanner": "This is a try-it diary of your own, started from a set of invented memories. Change whatever you like — it's deleted tonight, and nobody else can see it.",
+    "title": "Try it yourself",
+    "body": "No account, no email. Press the button and you get your own copy of a diary full of invented memories: write new ones, edit them, delete them, see how it all works. You can add two or three photos, and the whole thing is wiped overnight.",
+    "cta": "See how it works",
+    "error": "The try-it diary couldn't be opened just now. Try again in a moment.",
+    "photoLimit": "The try-it diary only holds a few photos — remove one to add another. A real diary has no limit."
   }
 }

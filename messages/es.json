@@ -81,7 +81,8 @@
       "back": "Ir al diario",
       "errorLength": "La contraseña debe tener al menos 8 caracteres.",
       "errorSame": "Esa es la contraseña que ya tenías. Elige otra distinta.",
-      "errorGeneric": "No se ha podido cambiar la contraseña. Puede que el enlace haya caducado: pide uno nuevo."
+      "errorGeneric": "No se ha podido cambiar la contraseña. Puede que el enlace haya caducado: pide uno nuevo.",
+      "errorDemo": "La contraseña de la cuenta de demostración no se puede cambiar."
     }
   },
   "Onboarding": {
@@ -370,5 +371,14 @@
     "done": "Hecho: no volverás a recibirlo.",
     "backOn": "Puedes volver a activarlo cuando quieras en Panel admin → Cuenta.",
     "error": "Algo ha ido mal. Inténtalo otra vez, o desactívalo desde Panel admin → Cuenta."
+  },
+  "Demo": {
+    "banner": "Estás viendo el diario de demostración. Todo lo que hay es inventado, y no se puede modificar nada: la base de datos lo impide.",
+    "sandboxBanner": "Este es un diario de prueba tuyo, hecho a partir de unos recuerdos inventados. Cambia lo que quieras: se borra esta noche y nadie más lo ve.",
+    "title": "Pruébalo tú mismo",
+    "body": "Sin cuenta y sin correo. Pulsa el botón y tendrás tu propia copia de un diario lleno de recuerdos inventados: escribe nuevos, editálos, bórralos y mira cómo funciona todo. Puedes añadir dos o tres fotos, y por la noche se borra entero.",
+    "cta": "Ver cómo funciona",
+    "error": "Ahora mismo no se ha podido abrir el diario de prueba. Inténtalo dentro de un momento.",
+    "photoLimit": "El diario de prueba solo guarda unas pocas fotos: quita una para añadir otra. Un diario de verdad no tiene límite."
   }
 }

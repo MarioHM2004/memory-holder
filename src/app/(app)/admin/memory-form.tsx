@@ -166,7 +166,16 @@ export function MemoryForm({
             previewPath: preview ? storagePath : null,
             mediaType: isVideo ? "video" : "image",
           });
-          if (attached.error) throw new Error(attached.error);
+          if (attached.error) {
+            // The files are already in the bucket but no row points at them,
+            // so nothing will ever come back for them. Clearing them keeps a
+            // rejected upload — a sandbox over its photo limit, say — from
+            // leaving litter behind on every retry.
+            await supabase.storage
+              .from("media")
+              .remove([storagePath, thumbnailPath].filter((path): path is string => Boolean(path)));
+            throw new Error(attached.error);
+          }
         } catch (err) {
           stillPending.push(file);
           failures.push({ name: file.name, reason: err instanceof Error ? err.message : String(err) });

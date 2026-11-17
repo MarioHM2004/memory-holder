@@ -1,0 +1,47 @@
+# Nightly housekeeping for the public demo.
+#
+# Deletes the try-it diaries whose day is up, along with the anonymous
+# accounts behind them and the photos their visitors uploaded.
+#
+# Needs SITE_URL and CRON_SECRET, the same two the weekly email uses.
+# See docs/demo.md.
+
+name: Nightly
+
+on:
+  schedule:
+    - cron: "37 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  housekeeping:
+    if: github.repository == 'MarioHM2004/memory-holder'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear the try-it diaries
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SITE_URL}" ] || [ -z "${CRON_SECRET}" ]; then
+            echo "::error::SITE_URL or CRON_SECRET is not set."
+            exit 1
+          fi
+
+          status=$(curl -s -S -o response.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            --max-time 120 \
+            "${SITE_URL}/api/sandbox-cleanup")
+
+          echo "HTTP ${status}"
+          cat response.json
+          echo
+
+          # A folder that refuses to empty leaves photos behind that nothing
+          # will ever come back for, so this has to be loud.
+          if [ "${status}" != "200" ]; then
+            echo "::error::The cleanup reported a problem: $(head -c 300 response.json)"
+            exit 1
+          fi

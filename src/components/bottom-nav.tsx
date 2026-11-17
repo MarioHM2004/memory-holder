@@ -24,9 +24,10 @@ const ITEMS: { href: string; label: "home" | "search" | "timeline" | "categories
   { href: "/admin", label: "admin", icon: "admin" },
 ];
 
-export function BottomNav() {
+export function BottomNav({ isDemo }: { isDemo: boolean }) {
   const pathname = usePathname();
   const t = useTranslations("Nav");
+  const items = isDemo ? ITEMS.filter((item) => item.href !== "/admin") : ITEMS;
 
   return (
     <nav
@@ -36,7 +37,7 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-ink bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
     >
       <ul className="flex items-stretch">
-        {ITEMS.map((item) => {
+        {items.map((item) => {
           const active = pathname.startsWith(item.href);
           return (
             <li key={item.href} className="flex-1">

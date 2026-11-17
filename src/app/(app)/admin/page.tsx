@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { requireCoupleContext } from "@/lib/data/couple-context";
 import { getAllMemoriesForAdmin, getCategories, getDiaryMemberCount } from "@/lib/data/memories";
@@ -7,6 +8,8 @@ import { PageHeading } from "@/components/page-heading";
 
 export default async function AdminPage() {
   const context = await requireCoupleContext();
+  // The link is hidden, but the address still works without this.
+  if (context.isDemo) redirect("/home");
   const supabase = await createClient();
   const [memories, categories, memberCount, { data: profile }] = await Promise.all([
     getAllMemoriesForAdmin(context.couple.id),
@@ -25,6 +28,7 @@ export default async function AdminPage() {
           userId={context.userId}
           email={context.email}
           weeklyEmail={profile?.weekly_email ?? true}
+          isSandbox={context.isSandbox}
           displayName={context.displayName}
           inviteCode={context.couple.invite_code}
           diaryName={context.couple.name}

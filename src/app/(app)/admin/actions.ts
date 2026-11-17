@@ -129,6 +129,15 @@ export async function attachMediaAction(input: {
     media_type: input.mediaType,
   });
   revalidatePath("/", "layout");
+
+  // The try-it diary allows only a few photos, enforced by a trigger whose
+  // raw wording ("sandbox_photo_limit") would reach the visitor as the
+  // reason the upload failed.
+  if (error?.message.includes("sandbox_photo_limit")) {
+    const t = await getTranslations("Demo");
+    return { error: t("photoLimit") };
+  }
+
   return { error: error?.message ?? null };
 }
 
@@ -136,7 +145,7 @@ export async function deleteMediaAction(mediaId: string) {
   const supabase = await createClient();
   const { data: media } = await supabase
     .from("media")
-    .select("storage_path, thumbnail_path, preview_path")
+    .select("storage_path, thumbnail_path, preview_path, memories(couple_id)")
     .eq("id", mediaId)
     .single();
 
@@ -145,13 +154,20 @@ export async function deleteMediaAction(mediaId: string) {
     // orphaned in the bucket.
     // Deduplicated: preview_path points at storage_path for anything stored
     // downscaled, which is most photos.
+    //
+    // And only files under this diary's own folder. A demo sandbox copies
+    // the media rows without copying the files, so several diaries can point
+    // at one object; deleting a copied photo there must leave the original
+    // where the other rows still expect it.
+    const coupleId = (media as unknown as { memories: { couple_id: string } | null }).memories
+      ?.couple_id;
     const paths = [
       ...new Set(
         [media.storage_path, media.thumbnail_path, media.preview_path].filter(
           (path): path is string => Boolean(path),
         ),
       ),
-    ];
+    ].filter((path) => coupleId && path.startsWith(`${coupleId}/`));
     await supabase.storage.from("media").remove(paths);
     await supabase.from("media").delete().eq("id", mediaId);
   }

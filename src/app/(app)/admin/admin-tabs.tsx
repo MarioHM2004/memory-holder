@@ -17,6 +17,7 @@ export function AdminTabs({
   userId,
   email,
   weeklyEmail,
+  isSandbox,
   displayName,
   inviteCode,
   diaryName,
@@ -28,6 +29,7 @@ export function AdminTabs({
   userId: string;
   email: string;
   weeklyEmail: boolean;
+  isSandbox: boolean;
   displayName: string;
   inviteCode: string;
   diaryName: string;
@@ -41,8 +43,14 @@ export function AdminTabs({
   const tabs: { id: Tab; label: string }[] = [
     { id: "memories", label: t("memories") },
     { id: "categories", label: t("categories") },
-    { id: "invite", label: t("invite") },
-    { id: "account", label: t("account") },
+    // Inviting, leaving and the account itself mean nothing in a diary that
+    // disappears tonight, behind a session with no address attached.
+    ...(isSandbox
+      ? []
+      : [
+          { id: "invite" as const, label: t("invite") },
+          { id: "account" as const, label: t("account") },
+        ]),
   ];
 
   return (

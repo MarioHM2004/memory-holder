@@ -14,6 +14,10 @@ export interface CoupleContext {
   userId: string;
   displayName: string;
   email: string;
+  /** A shared, read-only account: the database refuses every write it makes. */
+  isDemo: boolean;
+  /** A throwaway diary someone is trying out. Deleted tonight. */
+  isSandbox: boolean;
   /** The diary being viewed. Every page and action works on this one. */
   couple: Couple;
   role: "owner" | "member";
@@ -53,7 +57,7 @@ const loadContext = cache(async (): Promise<LoadedContext> => {
       // breaks ties between diaries joined in the same instant.
       .order("joined_at", { ascending: true })
       .order("couple_id", { ascending: true }),
-    supabase.from("profiles").select("display_name").eq("id", user.id).single(),
+    supabase.from("profiles").select("display_name, is_demo").eq("id", user.id).single(),
     cookies(),
   ]);
 
@@ -74,6 +78,8 @@ const loadContext = cache(async (): Promise<LoadedContext> => {
       userId: user.id,
       displayName: profile?.display_name ?? user.email ?? "Tú",
       email: user.email ?? "",
+      isDemo: profile?.is_demo ?? false,
+      isSandbox: active.couple.sandbox_expires_at !== null,
       couple: active.couple,
       role: active.role,
       diaries: rows.map((row) => ({ id: row.couple.id, name: row.couple.name })),

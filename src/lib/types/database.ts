@@ -13,6 +13,7 @@ export interface Database {
           created_at: string;
           weekly_email: boolean;
           unsubscribe_token: string;
+          is_demo: boolean;
           // The interface language, mirrored from the cookie so a cron job
           // knows which one to write an email in.
           locale: string;
@@ -35,6 +36,9 @@ export interface Database {
           id: string;
           name: string;
           invite_code: string;
+          is_demo: boolean;
+          /** Non-null only on throwaway diaries; see migration 0009. */
+          sandbox_expires_at: string | null;
           created_by: string;
           created_at: string;
         };
@@ -202,6 +206,18 @@ export interface Database {
       unsubscribe_weekly: {
         Args: { p_token: string };
         Returns: boolean;
+      };
+      start_sandbox: {
+        Args: Record<string, never>;
+        Returns: string;
+      };
+      expired_sandboxes: {
+        Args: Record<string, never>;
+        Returns: { couple_id: string }[];
+      };
+      delete_expired_sandboxes: {
+        Args: Record<string, never>;
+        Returns: number;
       };
       signup_slots_left: {
         Args: Record<string, never>;

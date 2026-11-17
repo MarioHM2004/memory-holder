@@ -11,7 +11,15 @@ import { NavIcon, type NavIconName } from "@/components/nav-icons";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; activeDiaryId: string }) {
+export function RailNav({
+  diaries,
+  activeDiaryId,
+  isDemo,
+}: {
+  diaries: DiarySummary[];
+  activeDiaryId: string;
+  isDemo: boolean;
+}) {
   const pathname = usePathname();
   const t = useTranslations("Nav");
 
@@ -21,7 +29,9 @@ export function RailNav({ diaries, activeDiaryId }: { diaries: DiarySummary[]; a
     { href: "/roulette", label: t("roulette"), icon: "roulette" },
     { href: "/timeline", label: t("timeline"), icon: "timeline" },
     { href: "/categories", label: t("categories"), icon: "categories" },
-    { href: "/admin", label: t("admin"), icon: "admin" },
+    // Hidden rather than disabled for the demo: a panel of buttons that
+    // all refuse is a worse first impression than one fewer link.
+    ...(isDemo ? [] : [{ href: "/admin", label: t("admin"), icon: "admin" as const }]),
   ];
 
   return (
