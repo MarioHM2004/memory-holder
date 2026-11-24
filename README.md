@@ -1,18 +1,26 @@
 # Memory Holder
 
-A shared digital diary for couples - a roulette of unique memories, a timeline, and
-topic categories (work, studies, hobbies, sports...) for photos and videos. Built to
-be generic: the app ships with no content of its own, and every couple that signs up
-gets their own private, isolated diary they fill in themselves.
+A shared digital diary — a roulette of memories, a timeline, and topic categories
+(trips, work, hobbies, sport…) for photos and videos. One account can hold several
+diaries: one with a partner, one with family, one with friends, each private to its
+own members and invisible to everyone else.
 
-Available in English, Spanish, and Chinese (switchable from the UI, no reload needed).
+Built to be generic: the app ships with no content of its own, and everyone who
+signs up fills their own.
 
-## Demo
+Available in English, Spanish, and Chinese (switchable from the UI, no reload
+needed).
 
-The app is live at [memory-holder.com](https://memory-holder.com). It
-opens on the login screen: every diary is private to its own members, so there is no
-public content to land on before you are inside one. The screenshots below are what
-the app looks like once you are.
+## Try it
+
+The app is live at [memory-holder.com](https://memory-holder.com). The front page
+has a **see how it works** button that hands you a diary of your own, copied from
+one full of invented memories: no account, no email, write and delete whatever you
+like. It is deleted that night. See [`docs/demo.md`](docs/demo.md) for how it is
+built and why the limits are in the database rather than in the interface.
+
+Everything else is private to its members, so the screenshots below are what the
+app looks like once you're inside one.
 
 | | |
 | --- | --- |
@@ -23,13 +31,29 @@ The diary in these shots is seeded with
 [`supabase/seed/demo-diary.sql`](supabase/seed/demo-diary.sql) and the photos are
 generated placeholders, not anyone's real ones.
 
+## What's in it
+
+- **Roulette, timeline and categories** — three ways into the same memories. The
+  timeline magnifies under the cursor and opens cards without a click.
+- **Full-text search** across titles, descriptions and bodies, accent-insensitive
+  and working in Chinese, which a Postgres text search parser can't split.
+- **Several diaries per account**, with an invite code each, and a way out of one.
+- **Installable on a phone**, with an offline shell and a photo cache, so a diary
+  opened before the signal went still opens.
+- **A memory every Sunday by email**, one per diary, with a working unsubscribe.
+- **Export the whole diary** as a zip: a readable HTML page, the photos, and the
+  raw JSON.
+- **Weekly off-site backups** of both the database and the photos, encrypted.
+- **An account cap** you raise by hand, because one person pays for the thing.
+
 ## Stack
 
 - **Next.js 16** (App Router, Server Actions, Turbopack)
 - **Supabase** — Postgres, Auth, and Storage, with Row Level Security enforcing that
   a diary's data is only ever visible to its own members
 - **Tailwind CSS v4** for styling, **next-intl** for translations
-- Deploy target: Vercel (app) + Supabase (database/auth/storage)
+- Deploy target: Vercel (app) + Supabase (database/auth/storage), with GitHub
+  Actions as the scheduler for everything that has to happen on a timer
 
 See [`docs/architecture.md`](docs/architecture.md) for how these fit together, and
 [`docs/data-model.md`](docs/data-model.md) for the database schema.
@@ -39,22 +63,27 @@ See [`docs/architecture.md`](docs/architecture.md) for how these fit together, a
 ### 1. Create a Supabase project
 
 Create a project at [supabase.com](https://supabase.com), then open the SQL Editor
-and run the migration in [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql).
-It creates every table, the Row Level Security policies, the `create_couple` /
-`join_couple_by_code` functions used by onboarding, and the private `media` storage
-bucket used for photos and videos.
+and run the files in [`supabase/migrations/`](supabase/migrations) **in order**,
+0001 to 0009. Each one is a step the app depends on:
 
-Then run [`supabase/migrations/0002_editing_presence.sql`](supabase/migrations/0002_editing_presence.sql)
-as well. It lets members of a diary join the realtime channel that stops two
-people from editing the same memory at once.
+| | |
+| --- | --- |
+| `0001_init.sql` | Every table, the RLS policies, the `create_couple` / `join_couple_by_code` functions behind onboarding, and the private `media` bucket. |
+| `0002_editing_presence.sql` | The realtime channel that stops two people editing one memory at once. |
+| `0003_leave_diary.sql` | Leaving a diary, and what happens to it when the last member goes. |
+| `0004_delete_account.sql` | Closing an account and taking its data with it. |
+| `0005_account_limit.sql` | The cap on how many accounts may exist. |
+| `0006_search.sql` | Trigram index and the accent-folding needed to search. |
+| `0007_weekly_email.sql` | Who is due a Sunday email, and the unsubscribe token. |
+| `0008_demo_account.sql` | The read-only account that owns the demo's template diary. |
+| `0009_sandbox.sql` | The try-it diaries: building them, limiting them, deleting them. |
 
-And [`supabase/migrations/0003_leave_diary.sql`](supabase/migrations/0003_leave_diary.sql),
-the function behind leaving a diary, then
-[`supabase/migrations/0004_delete_account.sql`](supabase/migrations/0004_delete_account.sql),
-the one behind closing an account.
+The last two are only needed if you want the public demo. If you do, read
+[`docs/demo.md`](docs/demo.md) first — there's an order to it, and a Supabase
+setting to switch on.
 
 If you have the [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
-set up instead, `supabase db push` applies the same migration.
+set up instead, `supabase db push` applies them all.
 
 ### 2. Configure environment variables
 
@@ -62,8 +91,11 @@ set up instead, `supabase db push` applies the same migration.
 cp .env.example .env.local
 ```
 
-Fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from your
-Supabase project's **Settings → API** page.
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` come from your
+Supabase project's **Settings → API** page, and are all you need to run the app
+locally. The rest of [`.env.example`](.env.example) is for the pieces that run on a
+schedule — the Sunday email, the backups, the nightly demo cleanup — and each is
+documented where it is used.
 
 ### 3. Set up the auth emails
 
@@ -101,32 +133,46 @@ with a code someone shared with you.
 ```
 src/
   app/
-    login/, signup/, onboarding/     — auth + first-run flow (own layout, no nav rail)
+    page.tsx                         — the front page, signed out
+    login/, signup/, onboarding/     — auth + first-run flow (own layout, no nav)
+    account/password/, auth/confirm/ — password change and email confirmation
+    sandbox/actions.ts               — starts a try-it diary (docs/demo.md)
     (app)/                           — everything behind requireCoupleContext()
-      layout.tsx                     — the nav rail shell + auth/couple guard
-      page.tsx                       — home
-      roulette/, timeline/, categories/, categories/[categoryId]/
-      memories/[memoryId]/           — memory detail; reachable only from roulette,
-                                        timeline or a category, never from the nav rail
-      admin/                         — memories/categories CRUD + invite code
-  components/                        — shared UI (nav rail, carousels, form fields...)
+      layout.tsx                     — nav rail / bottom bar shell + auth guard
+      home/, roulette/, timeline/, categories/, search/
+      memories/[memoryId]/           — memory detail; reachable from roulette,
+                                        timeline, search or a category, never nav
+      admin/                         — memories/categories CRUD, invite code,
+                                        account, export, leaving a diary
+    api/
+      export/                        — the whole diary as a zip
+      weekly-digest/                 — the Sunday email, called by GitHub Actions
+      unsubscribe/[token]/           — one-click unsubscribe (RFC 8058)
+      sandbox-cleanup/               — deletes last night's try-it diaries
+    media/[mediaId]/                 — signed URLs for private photos
+    manifest.ts, app-icon/, icon.svg — installable-app metadata
+  components/                        — shared UI (nav, carousels, form fields…)
   lib/
-    supabase/                        — browser/server Supabase clients
+    supabase/                        — browser/server/admin Supabase clients
     data/                            — data-access helpers (Server Component-only)
     types/database.ts                — hand-written types matching the SQL schema
   i18n/                              — locale cookie, next-intl request config
 messages/{en,es,zh}.json             — UI strings (en is the source language)
+public/sw.js, offline.html           — service worker: app shell + photo cache
 supabase/migrations/                 — SQL schema + RLS policies
+.github/workflows/                   — the scheduled jobs (backup, Sunday email,
+                                       nightly demo cleanup, keeping Supabase awake)
+docs/                                — architecture, data model, deployment,
+                                       backups, the Sunday email, the demo
 ```
 
 ## Notes on the current state
 
-- Visual design (colors, spacing, component styling) is a first pass — expect to
-  revisit it; it isn't meant to be final.
-- Deleting a memory's photos/videos from Storage on memory delete isn't implemented
-  yet (the database rows cascade-delete, but the underlying Storage objects are left
-  orphaned). Fine for a personal project at this stage, worth fixing before scaling up.
+- Deleting a single memory leaves its photos in Storage. The database rows cascade,
+  but nothing removes the files, and SQL can't reach the bucket. Deleting a photo
+  on its own does clean up, as do closing an account and leaving the last diary.
 - No automated tests yet.
+- `public/` still carries a few SVGs from the Next.js starter that nothing uses.
 
 ## License
 

@@ -40,3 +40,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent tooling — AGENTS.md stays, it's tool-neutral and next dev rewrites it
+CLAUDE.md
+.claude/
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+
+# a restored backup, if the drill is run from inside the repo. These hold
+# every diary in the database, so losing one into a commit is the mistake
+# worth spending five lines on.
+*.gpg
+db-*.tar.gz
+/public.sql
+/auth-users.sql
